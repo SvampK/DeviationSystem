@@ -1,0 +1,87 @@
+TEST As screen:
+    LoadingSpinnerColor: =RGBA(105, 121, 126, 1)
+
+    debug As toggleSwitch:
+        BorderColor: =RGBA(0, 0, 0, 0)
+        BorderStyle: =BorderStyle.None
+        Color: =RGBA(51, 51, 51, 1)
+        Default: =varDebug
+        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+        FalseFill: =RGBA(102, 102, 102, 1)
+        FalseHoverFill: =RGBA(33, 33, 33, 1)
+        FalseText: ="Debug"
+        FocusedBorderThickness: =4
+        Font: =Font.'Segoe UI'
+        HandleFill: =RGBA(255, 255, 255, 1)
+        Height: =52
+        HoverBorderColor: =RGBA(0, 0, 0, 0)
+        OnCheck: =Set(varDebug, true)
+        OnUncheck: =Set(varDebug, false)
+        PressedBorderColor: =RGBA(0, 0, 0, 0)
+        Size: =13
+        TrueFill: =RGBA(221, 79, 14, 1)
+        TrueHoverFill: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+        TrueText: ="Debug"
+        Width: =185
+        X: =40
+        Y: =40
+        ZIndex: =14
+
+    Label15 As label:
+        BorderColor: =RGBA(0, 0, 0, 0)
+        BorderStyle: =BorderStyle.None
+        BorderThickness: =2
+        Color: =RGBA(51, 51, 51, 1)
+        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        FocusedBorderThickness: =4
+        Font: =Font.'Segoe UI'
+        Height: =90
+        Size: =13
+        Text: |-
+            =//Concat(Sequence(Split(varParentDepartment, "|")), If(Mod(Result, 2) = 0, Result, ""))
+            Concat(varParentDepartment2, Location & " " & Text(ID), ";")
+        Width: =749
+        X: =300
+        Y: =308
+        ZIndex: =15
+
+    Button10 As button:
+        BorderColor: =RGBA(0, 0, 0, 0)
+        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        DisabledFill: =RGBA(244, 244, 244, 1)
+        Fill: =RGBA(105, 121, 126, 1)
+        FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+        Font: =Font.'Segoe UI'
+        FontWeight: =FontWeight.Semibold
+        HoverBorderColor: =RGBA(0, 0, 0, 0)
+        HoverColor: =RGBA(255, 255, 255, 1)
+        HoverFill: =ColorFade(RGBA(105, 121, 126, 1), -10%)
+        OnSelect: |-
+            =Set(
+                varParentDepartment2,
+                ForAll(
+                    Filter(
+                        colData,
+                        'Parent' = LookUp(
+                            colData,
+                            Location = varUserDirectReport.department
+                        ).'Parent'
+                    ),
+                    {Location: Location, ID: ID}
+                )
+            )
+        PressedBorderColor: =ColorFade(RGBA(105, 121, 126, 1), -50%)
+        PressedColor: =RGBA(255, 255, 255, 1)
+        PressedFill: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+        RadiusBottomLeft: =0
+        RadiusBottomRight: =0
+        RadiusTopLeft: =0
+        RadiusTopRight: =0
+        Size: =15
+        Text: ="Button"
+        X: =348
+        Y: =212
+        ZIndex: =16
+

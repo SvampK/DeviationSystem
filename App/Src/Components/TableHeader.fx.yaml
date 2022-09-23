@@ -1,0 +1,97 @@
+TableHeader As CanvasComponent:
+    ButtonIsSelected: =false
+    ButtonOnSelect: ="Text"
+    ButtonSortValue: ="Text"
+    ButtonText: ="Text"
+    Fill: =RGBA(0, 0, 0, 0)
+    FilterIsSelected: =false
+    FilterOnSelect: ="Text"
+    Height: =40
+    SortRotate: ="Text"
+    Width: =150
+    X: =0
+    Y: =0
+    ZIndex: =1
+
+    Button12 As button:
+        Align: =Align.Left
+        BorderColor: =RGBA(0, 0, 0, 0)
+        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        DisabledFill: =RGBA(244, 244, 244, 1)
+        Fill: |-
+            =If(TableHeader.ButtonIsSelected,  RGBA(105, 121, 126, 1), ColorValue("#0082C4"))
+        FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+        FocusedBorderThickness: =0
+        Font: =Font.'Segoe UI'
+        FontWeight: =FontWeight.Semibold
+        Height: =Parent.Height
+        HoverBorderColor: =RGBA(0, 0, 0, 0)
+        HoverColor: =RGBA(255, 255, 255, 1)
+        HoverFill: =ColorFade(RGBA(105, 121, 126, 1), -10%)
+        OnSelect: =TableHeader.ButtonOnSelect()
+        PaddingLeft: =10
+        PressedBorderColor: =ColorFade(RGBA(105, 121, 126, 1), -50%)
+        PressedColor: =RGBA(255, 255, 255, 1)
+        PressedFill: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+        RadiusBottomLeft: =0
+        RadiusBottomRight: =0
+        RadiusTopLeft: =0
+        RadiusTopRight: =0
+        Size: =10
+        Text: =TableHeader.ButtonText
+        Width: =Parent.Width
+        X: =0   
+        Y: =0   
+        ZIndex: =1
+
+    Icon6_3 As icon.ChevronDown:
+        BorderColor: =RGBA(166, 166, 166, 1)
+        Color: =RGBA(255, 255, 255, 1)
+        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+        DisabledColor: =RGBA(220, 220, 220, 1)
+        DisabledFill: =RGBA(0, 0, 0, 0)
+        FocusedBorderThickness: =4
+        Height: =40
+        HoverBorderColor: =RGBA(0, 0, 0, 0)
+        HoverColor: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+        HoverFill: =RGBA(0, 0, 0, 0)
+        Icon: =Icon.ChevronDown
+        OnSelect: =TableHeader.ButtonOnSelect()
+        PaddingBottom: =10
+        PaddingLeft: =10
+        PaddingRight: =10
+        PaddingTop: =10
+        PressedBorderColor: =RGBA(0, 0, 0, 0)
+        PressedColor: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+        PressedFill: =RGBA(0, 0, 0, 0)
+        Rotation: =TableHeader.SortRotate
+        Visible: =TableHeader.ButtonIsSelected
+        Width: =40
+        X: =Icon6_4.X - Self.Width
+        ZIndex: =3
+
+    Icon6_4 As icon.ChevronDown:
+        BorderColor: =RGBA(166, 166, 166, 1)
+        Color: =RGBA(255, 255, 255, 1)
+        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+        DisabledColor: =RGBA(255, 255, 255, 1)
+        DisabledFill: =RGBA(0, 0, 0, 0)
+        FocusedBorderThickness: =0
+        Height: =40
+        HoverBorderColor: =RGBA(0, 0, 0, 0)
+        HoverColor: =RGBA(219, 219, 219, 1)
+        HoverFill: =RGBA(0, 0, 0, 0)
+        Icon: =If(TableHeader.FilterIsSelected, Icon.FilterFlatFilled, Icon.FilterFlat)
+        OnSelect: =TableHeader.FilterOnSelect()
+        PaddingBottom: =10
+        PaddingLeft: =10
+        PaddingRight: =10
+        PaddingTop: =10
+        PressedBorderColor: =RGBA(0, 0, 0, 0)
+        PressedColor: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+        PressedFill: =RGBA(0, 0, 0, 0)
+        Width: =40
+        X: =Parent.Width - Self.Width
+        ZIndex: =4
+

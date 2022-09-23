@@ -1,0 +1,207 @@
+{
+  "ComponentAllowCustomization": true,
+  "ComponentChangedSinceFileImport": true,
+  "ComponentManifest": {
+    "AllowAccessToGlobals": false,
+    "AllowCustomization": true,
+    "Description": "",
+    "Name": "cmpProcessFlow",
+    "TemplateGuid": "4ab5a712f06b4792812ebc53b8b0d7ed"
+  },
+  "ComponentType": "CanvasComponent",
+  "CustomGroupControlTemplateName": "",
+  "CustomProperties": [
+    {
+      "Category": 0,
+      "DisplayName": "inputCountValue1",
+      "Hidden": false,
+      "Name": "inputCountValue1",
+      "PropertyDataTypeKey": "Number",
+      "Tooltip": "En anpassad egenskap",
+      "Type": "{\"Version\":\"1.326\",\"Type\":{\"Name\":\"Root\",\"Kind\":\"Number\",\"EnumString\":\"\",\"Type\":[]}}"
+    },
+    {
+      "Category": 0,
+      "DisplayName": "outputPhaseName1",
+      "Hidden": true,
+      "Name": "outputPhaseName1",
+      "PropertyDataTypeKey": "String",
+      "Tooltip": "En anpassad egenskap",
+      "Type": "{\"Version\":\"1.326\",\"Type\":{\"Name\":\"Root\",\"Kind\":\"String\",\"EnumString\":\"\",\"Type\":[]}}"
+    },
+    {
+      "Category": 0,
+      "DisplayName": "inputCountValue1_2",
+      "Hidden": false,
+      "Name": "inputCountValue1_2",
+      "PropertyDataTypeKey": "Number",
+      "Tooltip": "En anpassad egenskap",
+      "Type": "{\"Version\":\"1.326\",\"Type\":{\"Name\":\"Root\",\"Kind\":\"Number\",\"EnumString\":\"\",\"Type\":[]}}"
+    },
+    {
+      "Category": 0,
+      "DisplayName": "inputCountValue1_3",
+      "Hidden": false,
+      "Name": "inputCountValue1_3",
+      "PropertyDataTypeKey": "Number",
+      "Tooltip": "En anpassad egenskap",
+      "Type": "{\"Version\":\"1.326\",\"Type\":{\"Name\":\"Root\",\"Kind\":\"Number\",\"EnumString\":\"\",\"Type\":[]}}"
+    },
+    {
+      "Category": 0,
+      "DisplayName": "inputCountValue2",
+      "Hidden": false,
+      "Name": "inputCountValue2",
+      "PropertyDataTypeKey": "Number",
+      "Tooltip": "En anpassad egenskap",
+      "Type": "{\"Version\":\"1.326\",\"Type\":{\"Name\":\"Root\",\"Kind\":\"Number\",\"EnumString\":\"\",\"Type\":[]}}"
+    },
+    {
+      "Category": 0,
+      "DisplayName": "inputCountValue2_2",
+      "Hidden": false,
+      "Name": "inputCountValue2_2",
+      "PropertyDataTypeKey": "Number",
+      "Tooltip": "En anpassad egenskap",
+      "Type": "{\"Version\":\"1.326\",\"Type\":{\"Name\":\"Root\",\"Kind\":\"Number\",\"EnumString\":\"\",\"Type\":[]}}"
+    },
+    {
+      "Category": 0,
+      "DisplayName": "outputPhaseName2",
+      "Hidden": true,
+      "Name": "outputPhaseName2",
+      "PropertyDataTypeKey": "String",
+      "Tooltip": "En anpassad egenskap",
+      "Type": "{\"Version\":\"1.326\",\"Type\":{\"Name\":\"Root\",\"Kind\":\"String\",\"EnumString\":\"\",\"Type\":[]}}"
+    },
+    {
+      "Category": 0,
+      "DisplayName": "outputPhaseName3",
+      "Hidden": true,
+      "Name": "outputPhaseName3",
+      "PropertyDataTypeKey": "String",
+      "Tooltip": "En anpassad egenskap",
+      "Type": "{\"Version\":\"1.326\",\"Type\":{\"Name\":\"Root\",\"Kind\":\"String\",\"EnumString\":\"\",\"Type\":[]}}"
+    },
+    {
+      "Category": 0,
+      "DisplayName": "outputPhaseName4",
+      "Hidden": true,
+      "Name": "outputPhaseName4",
+      "PropertyDataTypeKey": "String",
+      "Tooltip": "En anpassad egenskap",
+      "Type": "{\"Version\":\"1.326\",\"Type\":{\"Name\":\"Root\",\"Kind\":\"String\",\"EnumString\":\"\",\"Type\":[]}}"
+    },
+    {
+      "Category": 0,
+      "DisplayName": "outputPhaseName5",
+      "Hidden": true,
+      "Name": "outputPhaseName5",
+      "PropertyDataTypeKey": "String",
+      "Tooltip": "En anpassad egenskap",
+      "Type": "{\"Version\":\"1.326\",\"Type\":{\"Name\":\"Root\",\"Kind\":\"String\",\"EnumString\":\"\",\"Type\":[]}}"
+    },
+    {
+      "Category": 0,
+      "DisplayName": "inputCountValue2_3",
+      "Hidden": false,
+      "Name": "inputCountValue2_3",
+      "PropertyDataTypeKey": "Number",
+      "Tooltip": "En anpassad egenskap",
+      "Type": "{\"Version\":\"1.326\",\"Type\":{\"Name\":\"Root\",\"Kind\":\"Number\",\"EnumString\":\"\",\"Type\":[]}}"
+    },
+    {
+      "Category": 0,
+      "DisplayName": "inputCountValue3",
+      "Hidden": false,
+      "Name": "inputCountValue3",
+      "PropertyDataTypeKey": "Number",
+      "Tooltip": "En anpassad egenskap",
+      "Type": "{\"Version\":\"1.326\",\"Type\":{\"Name\":\"Root\",\"Kind\":\"Number\",\"EnumString\":\"\",\"Type\":[]}}"
+    },
+    {
+      "Category": 0,
+      "DisplayName": "inputCountValue3_2",
+      "Hidden": false,
+      "Name": "inputCountValue3_2",
+      "PropertyDataTypeKey": "Number",
+      "Tooltip": "En anpassad egenskap",
+      "Type": "{\"Version\":\"1.326\",\"Type\":{\"Name\":\"Root\",\"Kind\":\"Number\",\"EnumString\":\"\",\"Type\":[]}}"
+    },
+    {
+      "Category": 0,
+      "DisplayName": "inputCountValue3_3",
+      "Hidden": false,
+      "Name": "inputCountValue3_3",
+      "PropertyDataTypeKey": "Number",
+      "Tooltip": "En anpassad egenskap",
+      "Type": "{\"Version\":\"1.326\",\"Type\":{\"Name\":\"Root\",\"Kind\":\"Number\",\"EnumString\":\"\",\"Type\":[]}}"
+    },
+    {
+      "Category": 0,
+      "DisplayName": "inputCountValue4",
+      "Hidden": false,
+      "Name": "inputCountValue4",
+      "PropertyDataTypeKey": "Number",
+      "Tooltip": "En anpassad egenskap",
+      "Type": "{\"Version\":\"1.326\",\"Type\":{\"Name\":\"Root\",\"Kind\":\"Number\",\"EnumString\":\"\",\"Type\":[]}}"
+    },
+    {
+      "Category": 0,
+      "DisplayName": "inputCountValue4_2",
+      "Hidden": false,
+      "Name": "inputCountValue4_2",
+      "PropertyDataTypeKey": "Number",
+      "Tooltip": "En anpassad egenskap",
+      "Type": "{\"Version\":\"1.326\",\"Type\":{\"Name\":\"Root\",\"Kind\":\"Number\",\"EnumString\":\"\",\"Type\":[]}}"
+    },
+    {
+      "Category": 0,
+      "DisplayName": "inputCountValue4_3",
+      "Hidden": false,
+      "Name": "inputCountValue4_3",
+      "PropertyDataTypeKey": "Number",
+      "Tooltip": "En anpassad egenskap",
+      "Type": "{\"Version\":\"1.326\",\"Type\":{\"Name\":\"Root\",\"Kind\":\"Number\",\"EnumString\":\"\",\"Type\":[]}}"
+    },
+    {
+      "Category": 0,
+      "DisplayName": "inputCountValue5",
+      "Hidden": false,
+      "Name": "inputCountValue5",
+      "PropertyDataTypeKey": "Number",
+      "Tooltip": "En anpassad egenskap",
+      "Type": "{\"Version\":\"1.326\",\"Type\":{\"Name\":\"Root\",\"Kind\":\"Number\",\"EnumString\":\"\",\"Type\":[]}}"
+    },
+    {
+      "Category": 0,
+      "DisplayName": "inputCountValue5_2",
+      "Hidden": false,
+      "Name": "inputCountValue5_2",
+      "PropertyDataTypeKey": "Number",
+      "Tooltip": "En anpassad egenskap",
+      "Type": "{\"Version\":\"1.326\",\"Type\":{\"Name\":\"Root\",\"Kind\":\"Number\",\"EnumString\":\"\",\"Type\":[]}}"
+    },
+    {
+      "Category": 0,
+      "DisplayName": "inputCountValue5_3",
+      "Hidden": false,
+      "Name": "inputCountValue5_3",
+      "PropertyDataTypeKey": "Number",
+      "Tooltip": "En anpassad egenskap",
+      "Type": "{\"Version\":\"1.326\",\"Type\":{\"Name\":\"Root\",\"Kind\":\"Number\",\"EnumString\":\"\",\"Type\":[]}}"
+    }
+  ],
+  "FirstParty": true,
+  "Id": "http://microsoft.com/appmagic/Component",
+  "IsComponentLocked": false,
+  "IsComponentTemplate": true,
+  "IsCustomGroupControlTemplate": false,
+  "IsPcfControl": false,
+  "IsPremiumPcfControl": false,
+  "IsWidgetTemplate": false,
+  "LastModifiedTimestamp": "637995344326385547",
+  "Name": "4ab5a712f06b4792812ebc53b8b0d7ed",
+  "OverridableProperties": {},
+  "Version": "637725869228789280"
+}

@@ -1,0 +1,2169 @@
+Start As screen:
+    LoadingSpinnerColor: =RGBA(105, 121, 126, 1)
+    OnVisible: |-
+        =UpdateContext({varPreLoader: true});
+        Set(
+            varScreenParam,
+            Blank()
+        );
+        /*ClearCollect(
+            colUser;
+            {
+                Image: User().Image;
+                DisplayName: 'Office365-användare'.MyProfileV2().displayName;
+                Department: 'Office365-användare'.MyProfileV2().department;
+                City: 'Office365-användare'.MyProfileV2().city;
+                Country: 'Office365-användare'.MyProfileV2().country
+            }
+        );;*//*
+        Concurrent(
+            ClearCollect(
+                colFilterMainReported,
+                Filter(
+                    colSystem,
+                    'Created By'.DisplayName = First(colUser).DisplayName
+                )
+            ),
+            ClearCollect(
+                colFilterMainAssigned,
+                Filter(
+                    colSystem,
+                    Responsible.DisplayName = First(colUser).DisplayName,
+                    Phase.Value = "Ongoing"
+                )
+            ),/*
+            ClearCollect(
+                colFilterMainOwner,
+                Filter(
+                    ClinicsDeviationSystem,
+                    Owner.DisplayName = First(colUser).DisplayName Or 'Default Responsible'.DisplayName = First(colUser).DisplayName Or 'Operations Manager'.DisplayName = First(colUser).DisplayName
+                )
+            ),*//*
+            ClearCollect(
+                colFilterMainDrafts,
+                Filter(
+                    colSystem,
+                    'Modified By'.DisplayName = First(colUser).DisplayName,
+                    Phase.Value = "DraftNew" Or Phase.Value = "DraftEdit"
+                )
+            )
+        );*/
+        Select(collectCounters);
+        Concurrent(
+            ClearCollect(
+                colNewSubmitted,
+                ForAll(
+                    colSystem,
+                    If(
+                        'Created By'.DisplayName = First(colUser).DisplayName And !IsBlank('Process Feedback') And Finished = false,
+                        {Messages: 'Process Feedback'}
+                    )
+                )
+            ),
+            ClearCollect(
+                colNewAssignee,
+                ForAll(
+                    colSystem,
+                    If(
+                        Responsible.DisplayName = First(colUser).DisplayName And !IsBlank('Process Feedback') And Finished = false,
+                        {Messages: 'Process Feedback'}
+                    )
+                )
+            )
+        );
+        UpdateContext({varPreLoader: false});
+        /*
+        Set(
+            varPreLoader;
+            false
+        )
+        *****************************/
+
+    DEVTEST As groupContainer:
+        Height: =494
+        Visible: =false
+        Width: =711
+        ZIndex: =1
+
+        TEST_Reset As button:
+            BorderColor: =RGBA(0, 0, 0, 0)
+            DisabledBorderColor: =RGBA(0, 0, 0, 0)
+            DisabledColor: =RGBA(166, 166, 166, 1)
+            DisabledFill: =RGBA(244, 244, 244, 1)
+            Fill: =RGBA(105, 121, 126, 1)
+            FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+            Font: =Font.'Segoe UI'
+            FontWeight: =FontWeight.Semibold
+            HoverBorderColor: =RGBA(0, 0, 0, 0)
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(105, 121, 126, 1), -10%)
+            OnSelect: |-
+                =//UpdateContext({varCounterVisibility: false});;
+                Reset(DELETE_TimerUserCollect);
+                UpdateContext({varTimerStartUser: true});
+                Set(varPreLoader, true)
+            PressedBorderColor: =ColorFade(RGBA(105, 121, 126, 1), -50%)
+            PressedColor: =RGBA(255, 255, 255, 1)
+            PressedFill: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+            RadiusBottomLeft: =0
+            RadiusBottomRight: =0
+            RadiusTopLeft: =0
+            RadiusTopRight: =0
+            Size: =15
+            Text: ="Knapp"
+            X: =511
+            Y: =203
+            ZIndex: =1
+
+        TEST_ClearAndReset As button:
+            BorderColor: =RGBA(0, 0, 0, 0)
+            DisabledBorderColor: =RGBA(0, 0, 0, 0)
+            DisabledColor: =RGBA(166, 166, 166, 1)
+            DisabledFill: =RGBA(244, 244, 244, 1)
+            Fill: =RGBA(105, 121, 126, 1)
+            FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+            Font: =Font.'Segoe UI'
+            FontWeight: =FontWeight.Semibold
+            HoverBorderColor: =RGBA(0, 0, 0, 0)
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(105, 121, 126, 1), -10%)
+            OnSelect: |-
+                =Set(varUserEmail, "");
+                Clear(colUser);
+                Clear(colFilterMainAssigned);
+                Clear(colFilterMainReported);
+                Clear(colFilterMainDrafts);
+                Set(varPreLoader, true);
+                UpdateContext({varCounterVisibility: false});
+                Reset(DELETE_TimerUserCollect);
+                UpdateContext({varTimerStartUser: true})
+            PressedBorderColor: =ColorFade(RGBA(105, 121, 126, 1), -50%)
+            PressedColor: =RGBA(255, 255, 255, 1)
+            PressedFill: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+            RadiusBottomLeft: =0
+            RadiusBottomRight: =0
+            RadiusTopLeft: =0
+            RadiusTopRight: =0
+            Size: =15
+            Text: ="Knapp"
+            X: =319
+            Y: =203
+            ZIndex: =2
+
+        Label22 As label:
+            Align: =Align.Center
+            BorderColor: =RGBA(0, 0, 0, 0)
+            BorderStyle: =BorderStyle.None
+            BorderThickness: =2
+            Color: =RGBA(51, 51, 51, 1)
+            DisabledBorderColor: =RGBA(0, 0, 0, 0)
+            DisabledColor: =RGBA(166, 166, 166, 1)
+            FocusedBorderThickness: =4
+            Font: =Font.'Segoe UI'
+            Height: =414
+            Size: =13
+            Text: |-
+                =/*" Start: " & varTimerStart & ", StartUser: " & varTimerStartUser & ", Repeat: " & DELETE_TimerUserCollect.Repeat & ", colUser: " & IsBlank(Coalesce(colUser)) & ", colUser2: " & Coalesce(First(colUser).DisplayName, "Empty") & ", UserEmail: " & varUserEmail*/
+            Width: =257
+            X: =40
+            Y: =40
+            ZIndex: =3
+
+    DELETE_TimerUserCollect As timer:
+        AutoPause: =false
+        AutoStart: =true
+        BorderColor: =RGBA(105, 121, 126, 1)
+        BorderStyle: =BorderStyle.None
+        DisabledBorderColor: =RGBA(244, 244, 244, 1)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        DisabledFill: =RGBA(244, 244, 244, 1)
+        DisplayMode: =DisplayMode.View
+        Duration: =2000
+        Fill: =RGBA(105, 121, 126, 1)
+        Font: =Font.'Segoe UI'
+        HoverBorderColor: =ColorFade(RGBA(105, 121, 126, 1), -10%)
+        HoverColor: =RGBA(255, 255, 255, 1)
+        HoverFill: =ColorFade(RGBA(105, 121, 126, 1), -10%)
+        OnTimerEnd: |-
+            =//Get filters for counters
+            /*Concurrent(
+                ClearCollect(
+                    colFilterMainReported,
+                    Filter(
+                        ClinicsDeviationSystem,
+                        'Created By'.DisplayName = First(colUser).DisplayName
+                    )
+                ),
+                ClearCollect(
+                    colFilterMainAssigned,
+                    Filter(
+                        ClinicsDeviationSystem,
+                        Responsible.DisplayName = First(colUser).DisplayName Or 'Prev. Responsible'.DisplayName = First(colUser).DisplayName
+                    )
+                ),
+                ClearCollect(
+                    colFilterMainOwner,
+                    Filter(
+                        ClinicsDeviationSystem,
+                        Owner.DisplayName = First(colUser).DisplayName Or 'Default Responsible'.DisplayName = First(colUser).DisplayName
+                    )
+                ),
+                ClearCollect(
+                    colFilterMainDrafts,
+                    Filter(
+                        ClinicsDeviationSystem,
+                        'Modified By'.DisplayName = First(colUser).DisplayName,
+                        Phase.Value = "DraftNew" Or Phase.Value = "DraftEdit"
+                    )
+                )
+            );
+            If(
+                Coalesce(First(colUser).DisplayName, "Empty") = "Empty",
+                UpdateContext({varCounterVisibility: false}),
+                UpdateContext({varCounterVisibility: true});
+                UpdateContext({varTimerStart: false});
+                Set(varPreLoader, false)
+                
+            )*/
+        OnTimerStart: |-
+            =/*If(
+                Coalesce(First(colUser).DisplayName, "Empty") = "Empty",
+                ClearCollect(
+                    colUser,
+                    {
+                        Image: User().Image,
+                        DisplayName: 'Office365-användare'.MyProfileV2().displayName,
+                        Department: 'Office365-användare'.MyProfileV2().department,
+                        City: 'Office365-användare'.MyProfileV2().city,
+                        Country: 'Office365-användare'.MyProfileV2().country
+                    }
+                )
+            )*//*If(
+                Coalesce(First(colUser).DisplayName; "Empty") = "Empty";
+                ClearCollect(
+                    colUser;
+                    {
+                        Image: If(
+                            'Office365-användare'.UserPhotoMetadata(Label9.Text).HasPhoto = false;
+                            SampleImage;
+                            'Office365-användare'.UserPhoto(Label9.Text)
+                        );
+                        DisplayName: 'Office365-användare'.UserProfileV2(Label9.Text).displayName;
+                        Department: 'Office365-användare'.UserProfileV2(Label9.Text).department;
+                        City: 'Office365-användare'.UserProfileV2(Label9.Text).city;
+                        Country: 'Office365-användare'.UserProfileV2(Label9.Text).country
+                    }
+                )
+            )*/
+        PressedBorderColor: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+        PressedColor: =RGBA(255, 255, 255, 1)
+        PressedFill: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+        Repeat: =true
+        Reset: =true
+        Start: =//varTimerStart
+        Visible: =false
+        X: =163
+        Y: =577
+        ZIndex: =2
+
+    DELETE_TimerUserEmail As timer:
+        AutoStart: =true
+        BorderColor: =RGBA(105, 121, 126, 1)
+        BorderStyle: =BorderStyle.None
+        DisabledBorderColor: =RGBA(244, 244, 244, 1)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        DisabledFill: =RGBA(244, 244, 244, 1)
+        Duration: =500
+        Fill: =RGBA(105, 121, 126, 1)
+        Font: =Font.'Segoe UI'
+        HoverBorderColor: =ColorFade(RGBA(105, 121, 126, 1), -10%)
+        HoverColor: =RGBA(255, 255, 255, 1)
+        HoverFill: =ColorFade(RGBA(105, 121, 126, 1), -10%)
+        OnTimerEnd: |-
+            =//UpdateContext({varTimerStart: true});UpdateContext({varTimerStartUser: false})
+        OnTimerStart: =//Set(varUserEmail, User().Email)
+        PressedBorderColor: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+        PressedColor: =RGBA(255, 255, 255, 1)
+        PressedFill: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+        Repeat: =true
+        Start: =varTimerStartUser
+        Visible: =false
+        X: =36
+        Y: =561
+        ZIndex: =3
+
+    Image6_4 As image:
+        BorderColor: =RGBA(0, 0, 0, 0)
+        BorderStyle: =BorderStyle.None
+        BorderThickness: =2
+        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+        DisabledFill: =RGBA(0, 0, 0, 0)
+        FocusedBorderThickness: =4
+        Height: =Menu2.Height
+        HoverBorderColor: =RGBA(0, 0, 0, 0)
+        HoverFill: =RGBA(0, 0, 0, 0)
+        Image: =yellow_blue
+        ImagePosition: =ImagePosition.Fill
+        PressedBorderColor: =RGBA(0, 0, 0, 0)
+        PressedFill: =RGBA(0, 0, 0, 0)
+        Transparency: =0.8
+        Visible: =false
+        Width: =Menu2.Width
+        X: =Menu2.X
+        Y: =Menu2.Y
+        ZIndex: =4
+
+    Image6 As image:
+        BorderColor: =RGBA(0, 0, 0, 0)
+        BorderStyle: =BorderStyle.None
+        BorderThickness: =2
+        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+        DisabledFill: =RGBA(0, 0, 0, 0)
+        FocusedBorderThickness: =4
+        Height: =Parent.Height - Button8.Height + 1//Menu2.Height
+        HoverBorderColor: =RGBA(0, 0, 0, 0)
+        HoverFill: =RGBA(0, 0, 0, 0)
+        Image: =yellow_blue
+        ImagePosition: =ImagePosition.Fill
+        PressedBorderColor: =RGBA(0, 0, 0, 0)
+        PressedFill: =RGBA(0, 0, 0, 0)
+        Transparency: =0.5
+        Width: =Parent.Width
+        X: =0//Menu2.X
+        Y: =Button8.Height//Menu2.Y
+        ZIndex: =5
+
+    Image3 As image:
+        BorderColor: =RGBA(0, 0, 0, 0)
+        BorderStyle: =BorderStyle.None
+        BorderThickness: =2
+        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+        DisabledFill: =RGBA(0, 0, 0, 0)
+        FocusedBorderThickness: =4
+        Height: =79
+        HoverBorderColor: =RGBA(0, 0, 0, 0)
+        HoverFill: =RGBA(0, 0, 0, 0)
+        Image: ='ossur-logo-no-tagline-blue'
+        OnSelect: =If(varAdminMode < 5, Set(varAdminMode, varAdminMode + 1))
+        PressedBorderColor: =RGBA(0, 0, 0, 0)
+        PressedFill: =RGBA(0, 0, 0, 0)
+        Visible: =If(App.Width > App.Height, true, false)
+        Width: =161.5
+        X: =35.57
+        Y: =Parent.Height - Self.Height
+        ZIndex: =6
+
+    Button7 As button:
+        BorderColor: =RGBA(0, 0, 0, 0)
+        BorderStyle: =BorderStyle.None
+        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        DisabledFill: =RGBA(244, 244, 244, 1)
+        DisplayMode: =DisplayMode.View
+        Fill: =RGBA(255, 199, 88, 1)
+        Font: =Font.'Segoe UI'
+        FontWeight: =FontWeight.Semibold
+        Height: =Parent.Height
+        HoverBorderColor: =RGBA(0, 0, 0, 0)
+        HoverColor: =RGBA(255, 255, 255, 1)
+        HoverFill: =ColorFade(RGBA(105, 121, 126, 1), -10%)
+        PaddingRight: =3.56
+        PaddingTop: =3.56
+        PressedBorderColor: =ColorFade(RGBA(105, 121, 126, 1), -50%)
+        PressedColor: =RGBA(255, 255, 255, 1)
+        PressedFill: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+        RadiusBottomLeft: =0
+        RadiusBottomRight: =0
+        RadiusTopLeft: =0
+        RadiusTopRight: =0
+        Size: =10.67
+        Text: =""
+        Visible: =false
+        Width: =Parent.Width / 2
+        X: =Parent.Width / 2
+        ZIndex: =7
+
+    Button8 As button:
+        BorderColor: =RGBA(0, 0, 0, 0)
+        BorderStyle: =BorderStyle.None
+        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        DisabledFill: =RGBA(244, 244, 244, 1)
+        DisplayMode: =DisplayMode.View
+        Fill: =RGBA(0, 130, 196, 1)
+        Font: =Font.'Segoe UI'
+        FontWeight: =FontWeight.Semibold
+        Height: =((Parent.Height * 0.08) + (Parent.Height * 0.06) / 2)
+        HoverBorderColor: =RGBA(0, 0, 0, 0)
+        HoverColor: =RGBA(255, 255, 255, 1)
+        HoverFill: =ColorFade(RGBA(105, 121, 126, 1), -10%)
+        PaddingRight: =3.56
+        PaddingTop: =3.56
+        PressedBorderColor: =ColorFade(RGBA(105, 121, 126, 1), -50%)
+        PressedColor: =RGBA(255, 255, 255, 1)
+        PressedFill: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+        RadiusBottomLeft: =0
+        RadiusBottomRight: =0
+        RadiusTopLeft: =0
+        RadiusTopRight: =0
+        Size: =10.67
+        Text: =""
+        Width: =Parent.Width
+        ZIndex: =8
+
+    Menu2 As fluidGrid.fluidGridWithBlankCard:
+        BorderStyle: =BorderStyle.None
+        BorderThickness: =0
+        Fill: =RGBA(105, 121, 126, 0.14)
+        Height: =Parent.Height - Self.Y + 1
+        Width: =If(App.Width > App.Height, Parent.Width / 2, Parent.Width)
+        X: =If(App.Width > App.Height, Parent.Width / 2, Parent.Width / 2 - Self.Width / 2)
+        Y: =If(App.Width > App.Height, Button8.Height, Menu1.Y + Menu1.Height)
+        ZIndex: =9
+
+        DataCard3 As dataCard.blankCard:
+            BorderColor: =RGBA(0, 0, 0, 1)
+            BorderStyle: =BorderStyle.Solid
+            DisplayMode: =DisplayMode.Edit
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =If(App.Width > App.Height, Parent.Height / 2, If(App.Height < 700, Parent.Height / 1.5, Parent.Height / 2))
+            Visible: =true
+            Width: =Parent.Width
+            X: =0
+            Y: =0
+            ZIndex: =1
+
+            Button1_46 As button:
+                BorderColor: =RGBA(128, 128, 128, 1)
+                BorderThickness: =0
+                Color: =RGBA(0, 0, 0, 1)
+                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisabledFill: =RGBA(153, 153, 153, 0.2)
+                DisplayMode: =DisplayMode.Disabled
+                Fill: =RGBA(116, 116, 116, 1)
+                Font: =Font.'Segoe UI'
+                Height: =If(Parent.Height / 4 <= 70, Parent.Height / 4, 70)
+                HoverBorderColor: =RGBA(0, 0, 0, 0)
+                HoverColor: =RGBA(255, 255, 255, 1)
+                HoverFill: =ColorFade(RGBA(105, 121, 126, 1), -10%)
+                PaddingRight: =3.56
+                PaddingTop: =3.56
+                PressedBorderColor: =ColorFade(RGBA(105, 121, 126, 1), -50%)
+                PressedColor: =RGBA(255, 255, 255, 1)
+                PressedFill: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+                Size: =14.23
+                Text: =""
+                Width: =291.7
+                X: =Button1_26.X + 2
+                Y: =Button1_26.Y + 2
+                ZIndex: =1
+
+            Button1_43 As button:
+                BorderColor: =RGBA(128, 128, 128, 1)
+                BorderThickness: =0
+                Color: =RGBA(0, 0, 0, 1)
+                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisabledFill: =RGBA(153, 153, 153, 0.2)
+                DisplayMode: =DisplayMode.Disabled
+                Fill: =RGBA(116, 116, 116, 1)
+                Font: =Font.'Segoe UI'
+                Height: =If(Parent.Height / 4 <= 70, Parent.Height / 4, 70)
+                HoverBorderColor: =RGBA(0, 0, 0, 0)
+                HoverColor: =RGBA(255, 255, 255, 1)
+                HoverFill: =ColorFade(RGBA(105, 121, 126, 1), -10%)
+                PaddingRight: =3.56
+                PaddingTop: =3.56
+                PressedBorderColor: =ColorFade(RGBA(105, 121, 126, 1), -50%)
+                PressedColor: =RGBA(255, 255, 255, 1)
+                PressedFill: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+                Size: =14.23
+                Text: =""
+                Width: =291.7
+                X: =Button1_24.X + 2
+                Y: =Button1_24.Y + 2
+                ZIndex: =2
+
+            Label1_14 As label:
+                BorderColor: =RGBA(0, 0, 0, 0)
+                BorderStyle: =BorderStyle.None
+                BorderThickness: =2
+                Color: =RGBA(51, 51, 51, 1)
+                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                FocusedBorderThickness: =4
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Semibold
+                Height: =38
+                PaddingBottom: =10
+                PaddingRight: =3.56
+                PaddingTop: =3.56
+                Size: =12.81
+                Text: =LookUp(colTranslations, language.Value = varLanguage And key = "label_byme").Title
+                VerticalAlign: =VerticalAlign.Bottom
+                Width: =291.7
+                X: =Parent.Width / 2 - Self.Width / 2
+                Y: =If(App.Width > App.Height, Parent.Height / 4, Parent.Height / 8)
+                ZIndex: =3
+
+            Button1_24 As button:
+                BorderColor: =RGBA(128, 128, 128, 1)
+                BorderStyle: =BorderStyle.None
+                BorderThickness: =0
+                Color: =RGBA(0, 0, 0, 1)
+                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisabledFill: =RGBA(244, 244, 244, 1)
+                Fill: =RGBA(255, 255, 255, 1)
+                Font: =Font.'Segoe UI'
+                Height: =70//If(Parent.Height / 4 <= 70, Parent.Height / 4, 70) 
+                HoverBorderColor: =RGBA(0, 0, 0, 0)
+                HoverColor: =RGBA(255, 255, 255, 1)
+                HoverFill: =ColorFade(RGBA(105, 121, 126, 1), -10%)
+                OnSelect: |-
+                    =Set(varFormMode, "Edit");
+                    If(varCollectDataCheck = false,
+                    Navigate(Mgmt_My_Reports,None,{varPreLoader: true}),
+                    Navigate(Mgmt_My_Reports,None,{varPreLoader: false})
+                    );
+                    Set(
+                        varSubtitleReports,
+                        "In Progress"
+                    );
+                    Set(varPhaseDraft, Blank())
+                    ;
+                    Set(varArea, Blank())
+                    ;
+                    Set(varClosedView, 0)
+                    /*Set(
+                        varFilter;
+                        Filter(
+                            AvvikelseForbattringssystem;
+                            Closed = false;
+                            'Skapades av'.DisplayName = Title1.Text)
+                    );;
+                    ClearCollect(
+                        colReportedByMe;
+                        varFilter
+                    )*/
+                PaddingRight: =3.56
+                PaddingTop: =3.56
+                PressedBorderColor: =ColorFade(RGBA(105, 121, 126, 1), -50%)
+                PressedColor: =RGBA(255, 255, 255, 1)
+                PressedFill: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+                Size: =14.23
+                Text: =LookUp(colTranslations, language.Value = varLanguage And key = "button_inprogress").Title
+                Width: =291.7
+                X: =Parent.Width / 2 - Self.Width / 2
+                Y: =Label1_14.Y + Label1_14.Height
+                ZIndex: =4
+
+            Button1_26 As button:
+                BorderColor: =RGBA(128, 128, 128, 1)
+                BorderStyle: =BorderStyle.None
+                BorderThickness: =0
+                Color: =RGBA(0, 0, 0, 1)
+                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisabledFill: =RGBA(244, 244, 244, 1)
+                Fill: =RGBA(255, 255, 255, 1)
+                Font: =Font.'Segoe UI'
+                Height: =70
+                HoverBorderColor: =RGBA(0, 0, 0, 0)
+                HoverColor: =RGBA(255, 255, 255, 1)
+                HoverFill: =ColorFade(RGBA(105, 121, 126, 1), -10%)
+                OnSelect: |-
+                    =Set(varFormMode, "View");
+                    If(varCollectDataCheck = false,
+                    Navigate(Mgmt_My_Reports,None,{varPreLoader: true}),
+                    Navigate(Mgmt_My_Reports,None,{varPreLoader: false})
+                    );
+                    Set(
+                        varSubtitleReports,
+                        "Closed"
+                    );
+                    Set(varPhaseDraft, Blank())
+                    ;
+                    Set(varClosedView, 1)
+                    /*
+                    Set(
+                        varFilter;
+                        Filter(
+                            AvvikelseForbattringssystem;
+                            Closed = 1;
+                            'Skapades av'.DisplayName = Title1.Text
+                        )
+                    );;
+                    ClearCollect(
+                        colReportedByMe;
+                        varFilter
+                    )*/
+                PaddingRight: =3.56
+                PaddingTop: =3.56
+                PressedBorderColor: =ColorFade(RGBA(105, 121, 126, 1), -50%)
+                PressedColor: =RGBA(255, 255, 255, 1)
+                PressedFill: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+                Size: =14.23
+                Text: =LookUp(colTranslations, language.Value = varLanguage And key = "button_closed").Title
+                Width: =291.7
+                X: =Parent.Width / 2 - Self.Width / 2
+                Y: =Button1_24.Y + Button1_24.Height + 20
+                ZIndex: =5
+
+            Button4 As button:
+                BorderColor: =RGBA(0, 0, 0, 0)
+                BorderStyle: =BorderStyle.None
+                BorderThickness: =1
+                Color: =RGBA(179, 179, 179, 1)
+                DisabledBorderColor: =RGBA(255, 255, 255, 1)
+                DisabledColor: =RGBA(255, 255, 255, 1)
+                DisabledFill: =RGBA(221, 79, 14, 1)
+                DisplayMode: =If(Value(Self.Text) <= 0, DisplayMode.View, DisplayMode.Disabled)
+                Fill: =RGBA(244, 244, 244, 1)
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Semibold
+                HoverBorderColor: =RGBA(0, 0, 0, 0)
+                HoverColor: =RGBA(255, 255, 255, 1)
+                HoverFill: =ColorFade(RGBA(105, 121, 126, 1), -10%)
+                PressedBorderColor: =ColorFade(RGBA(105, 121, 126, 1), -50%)
+                PressedColor: =RGBA(255, 255, 255, 1)
+                PressedFill: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+                RadiusBottomLeft: =360
+                RadiusBottomRight: =360
+                RadiusTopLeft: =360
+                RadiusTopRight: =360
+                Text: =CountIf(colFilterMainReported, Finished = false, Phase.Value = "Ongoing")
+                Visible: |-
+                    =//varCounterVisibility And If(Self.X - 5 < Parent.X, false, true)
+                    If(Self.X - 5 < Parent.X, false, true)
+                Width: =Self.Height
+                X: =Button1_24.X - Self.Width * 1.5
+                Y: =Button1_24.Y + Button1_24.Height / 2 - Self.Height / 2
+                ZIndex: =6
+
+            Button4_2 As button:
+                BorderColor: =RGBA(0, 0, 0, 0)
+                BorderStyle: =BorderStyle.None
+                BorderThickness: =1
+                Color: =RGBA(179, 179, 179, 1)
+                DisabledBorderColor: =RGBA(255, 255, 255, 1)
+                DisabledColor: =RGBA(255, 255, 255, 1)
+                DisabledFill: =RGBA(251, 188, 159, 1)
+                DisplayMode: =If(Value(Self.Text) <= 0, DisplayMode.View, DisplayMode.Disabled)
+                Fill: =RGBA(244, 244, 244, 1)
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Semibold
+                HoverBorderColor: =RGBA(0, 0, 0, 0)
+                HoverColor: =RGBA(255, 255, 255, 1)
+                HoverFill: =ColorFade(RGBA(105, 121, 126, 1), -10%)
+                PressedBorderColor: =ColorFade(RGBA(105, 121, 126, 1), -50%)
+                PressedColor: =RGBA(255, 255, 255, 1)
+                PressedFill: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+                RadiusBottomLeft: =360
+                RadiusBottomRight: =360
+                RadiusTopLeft: =360
+                RadiusTopRight: =360
+                Text: =CountIf(colFilterMainReported, Finished = true)
+                Visible: =false//varCounterVisibility And If(Self.X - 5 < Parent.X; false; true)
+                Width: =Self.Height
+                X: =Button1_26.X - Self.Width * 1.5
+                Y: =Button1_26.Y + Button1_26.Height / 2 - Self.Height / 2
+                ZIndex: =7
+
+        DataCard4 As dataCard.blankCard:
+            BorderColor: =RGBA(0, 0, 0, 1)
+            BorderStyle: =BorderStyle.Solid
+            DisplayMode: =DisplayMode.Edit
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =If(App.Width > App.Height, Parent.Height / 2, Parent.Height / 2.65)
+            Width: =Parent.Width
+            X: =0
+            Y: =1
+            ZIndex: =2
+
+            Button1_48 As button:
+                BorderColor: =RGBA(128, 128, 128, 1)
+                BorderThickness: =0
+                Color: =RGBA(0, 0, 0, 1)
+                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisabledFill: =RGBA(153, 153, 153, 0.2)
+                DisplayMode: =DisplayMode.Disabled
+                Fill: =RGBA(116, 116, 116, 1)
+                Font: =Font.'Segoe UI'
+                Height: =If(Parent.Height / 4 <= 70, Parent.Height / 4, 70)
+                HoverBorderColor: =RGBA(0, 0, 0, 0)
+                HoverColor: =RGBA(255, 255, 255, 1)
+                HoverFill: =ColorFade(RGBA(105, 121, 126, 1), -10%)
+                PaddingRight: =3.56
+                PaddingTop: =3.56
+                PressedBorderColor: =ColorFade(RGBA(105, 121, 126, 1), -50%)
+                PressedColor: =RGBA(255, 255, 255, 1)
+                PressedFill: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+                Size: =14.23
+                Text: =""
+                Width: =291.7
+                X: =Button1_27.X + 2
+                Y: =Button1_27.Y + 2
+                ZIndex: =1
+
+            Button1_47 As button:
+                BorderColor: =RGBA(128, 128, 128, 1)
+                BorderThickness: =0
+                Color: =RGBA(0, 0, 0, 1)
+                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisabledFill: =RGBA(153, 153, 153, 0.2)
+                DisplayMode: =DisplayMode.Disabled
+                Fill: =RGBA(116, 116, 116, 1)
+                Font: =Font.'Segoe UI'
+                Height: =If(Parent.Height / 4 <= 70, Parent.Height / 4, 70)
+                HoverBorderColor: =RGBA(0, 0, 0, 0)
+                HoverColor: =RGBA(255, 255, 255, 1)
+                HoverFill: =ColorFade(RGBA(105, 121, 126, 1), -10%)
+                PaddingRight: =3.56
+                PaddingTop: =3.56
+                PressedBorderColor: =ColorFade(RGBA(105, 121, 126, 1), -50%)
+                PressedColor: =RGBA(255, 255, 255, 1)
+                PressedFill: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+                Size: =14.23
+                Text: =""
+                Width: =291.7
+                X: =Button1_25.X + 2
+                Y: =Button1_25.Y + 2
+                ZIndex: =2
+
+            Button1_25 As button:
+                BorderColor: =RGBA(128, 128, 128, 1)
+                BorderStyle: =BorderStyle.None
+                BorderThickness: =0
+                Color: =RGBA(0, 0, 0, 1)
+                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisabledFill: =RGBA(244, 244, 244, 1)
+                Fill: =RGBA(255, 255, 255, 1)
+                Font: =Font.'Segoe UI'
+                Height: =70//If(Parent.Height / 4 <= 70, Parent.Height / 4, 70) 
+                HoverBorderColor: =RGBA(0, 0, 0, 0)
+                HoverColor: =RGBA(255, 255, 255, 1)
+                HoverFill: =ColorFade(RGBA(105, 121, 126, 1), -10%)
+                OnSelect: |-
+                    =Set(varFormMode, "Edit");
+                    Set(
+                        varSubtitleReports,
+                        "In Progress"
+                    );
+                    Set(varPhaseDraft, Blank())
+                    ;
+                    Set(
+                        varArea,
+                        Blank()
+                    );
+                    Set(varClosedView, 0);
+                    If(varCollectDataCheck = false,
+                    Navigate(Mgmt_My_Department,None,{varPreLoader: true}),
+                    Navigate(Mgmt_My_Department,None,{varPreLoader: false})
+                    )
+                    /*
+                    Set(
+                        varFilter;
+                        Filter(
+                            AvvikelseForbattringssystem;
+                            Closed = false;
+                            Assignee.DisplayName = Title1.Text Or 'Prev. Assignee'.DisplayName = Title1.Text        
+                        )
+                    );;
+                    ClearCollect(
+                        colReportedByMe;
+                        varFilter
+                    )*/
+                PaddingRight: =3.56
+                PaddingTop: =3.56
+                PressedBorderColor: =ColorFade(RGBA(105, 121, 126, 1), -50%)
+                PressedColor: =RGBA(255, 255, 255, 1)
+                PressedFill: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+                Size: =14.23
+                Text: =LookUp(colTranslations, language.Value = varLanguage And key = "button_inprogress").Title
+                Width: =291.7
+                X: =Parent.Width / 2 - Self.Width / 2
+                Y: =Label1_15.Y + Label1_15.Height
+                ZIndex: =3
+
+            Button1_27 As button:
+                BorderColor: =RGBA(128, 128, 128, 1)
+                BorderStyle: =BorderStyle.None
+                BorderThickness: =0
+                Color: =RGBA(0, 0, 0, 1)
+                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisabledFill: =RGBA(244, 244, 244, 1)
+                Fill: =RGBA(255, 255, 255, 1)
+                Font: =Font.'Segoe UI'
+                Height: =70
+                HoverBorderColor: =RGBA(0, 0, 0, 0)
+                HoverColor: =RGBA(255, 255, 255, 1)
+                HoverFill: =ColorFade(RGBA(105, 121, 126, 1), -10%)
+                OnSelect: |-
+                    =Set(varFormMode, "View");
+                    If(varCollectDataCheck = false,
+                    Navigate(Mgmt_My_Department,None,{varPreLoader: true}),
+                    Navigate(Mgmt_My_Department,None,{varPreLoader: false})
+                    );
+                    Set(
+                        varSubtitleReports,
+                        "Closed"
+                    );
+                    Set(
+                        varAreaDraft,
+                        Blank()
+                    );
+                    Set(varPhase, Blank())
+                    ;
+                    Set(varClosedView, 1)
+                    /*
+                    Set(
+                        varFilter;
+                        Filter(
+                            AvvikelseForbattringssystem;
+                            Closed = 1;
+                            Assignee.DisplayName = Title1.Text Or 'Prev. Assignee'.DisplayName = Title1.Text 
+                        )
+                    );;
+                    ClearCollect(
+                        colReportedByMe;
+                        varFilter
+                    )*/
+                PaddingRight: =3.56
+                PaddingTop: =3.56
+                PressedBorderColor: =ColorFade(RGBA(105, 121, 126, 1), -50%)
+                PressedColor: =RGBA(255, 255, 255, 1)
+                PressedFill: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+                Size: =14.23
+                Text: =LookUp(colTranslations, language.Value = varLanguage And key = "button_closed").Title
+                Width: =291.7
+                X: =Parent.Width / 2 - Self.Width / 2
+                Y: =Button1_25.Y + Button1_25.Height + 20
+                ZIndex: =4
+
+            Label1_15 As label:
+                BorderColor: =RGBA(0, 0, 0, 0)
+                BorderStyle: =BorderStyle.None
+                BorderThickness: =2
+                Color: =RGBA(51, 51, 51, 1)
+                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                FocusedBorderThickness: =4
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Semibold
+                Height: =38
+                PaddingBottom: =10
+                PaddingRight: =3.56
+                PaddingTop: =3.56
+                Size: =12.81
+                Text: =LookUp(colTranslations, language.Value = varLanguage And key = "label_reportedmydepartment").Title
+                VerticalAlign: =VerticalAlign.Bottom
+                Width: =291.7
+                X: =Parent.Width / 2 - Self.Width / 2
+                Y: =10
+                ZIndex: =5
+
+            Button4_3 As button:
+                BorderColor: =RGBA(0, 0, 0, 0)
+                BorderStyle: =BorderStyle.None
+                BorderThickness: =1
+                Color: =RGBA(179, 179, 179, 1)
+                DisabledBorderColor: =RGBA(255, 255, 255, 1)
+                DisabledColor: =White
+                DisabledFill: =RGBA(221, 79, 14, 1)
+                DisplayMode: =If(Value(Self.Text) <= 0, DisplayMode.View, DisplayMode.Disabled)
+                Fill: =RGBA(244, 244, 244, 1)
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Semibold
+                HoverBorderColor: =RGBA(0, 0, 0, 0)
+                HoverColor: =RGBA(255, 255, 255, 1)
+                HoverFill: =ColorFade(RGBA(105, 121, 126, 1), -10%)
+                PressedBorderColor: =ColorFade(RGBA(105, 121, 126, 1), -50%)
+                PressedColor: =RGBA(255, 255, 255, 1)
+                PressedFill: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+                RadiusBottomLeft: =360
+                RadiusBottomRight: =360
+                RadiusTopLeft: =360
+                RadiusTopRight: =360
+                Text: =CountIf(colFilterMainAssigned,Finished= false , Phase.Value = "Ongoing")
+                Visible: |-
+                    =//varCounterVisibility And If(Self.X - 5 < Parent.X, false, true)
+                    If(Self.X - 5 < Parent.X, false, true)
+                Width: =Self.Height
+                X: =Button1_25.X - Self.Width * 1.5
+                Y: =Button1_25.Y + Button1_25.Height / 2 - Self.Height / 2
+                ZIndex: =6
+
+            Button4_4 As button:
+                BorderColor: =RGBA(255, 255, 255, 1)
+                BorderStyle: =BorderStyle.None
+                BorderThickness: =1
+                Color: =RGBA(179, 179, 179, 1)
+                DisabledBorderColor: =RGBA(255, 255, 255, 1)
+                DisabledColor: =White
+                DisabledFill: =RGBA(251, 188, 159, 1)
+                DisplayMode: =If(Value(Self.Text) <= 0, DisplayMode.View, DisplayMode.Disabled)
+                Fill: =RGBA(244, 244, 244, 1)
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Semibold
+                HoverBorderColor: =RGBA(0, 0, 0, 0)
+                HoverColor: =RGBA(255, 255, 255, 1)
+                HoverFill: =ColorFade(RGBA(105, 121, 126, 1), -10%)
+                PressedBorderColor: =ColorFade(RGBA(105, 121, 126, 1), -50%)
+                PressedColor: =RGBA(255, 255, 255, 1)
+                PressedFill: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+                RadiusBottomLeft: =360
+                RadiusBottomRight: =360
+                RadiusTopLeft: =360
+                RadiusTopRight: =360
+                Text: =CountIf(colFilterMainAssigned, Finished = true)
+                Visible: =false//varCounterVisibility And If(Self.X - 5 < Parent.X; false; true)
+                Width: =Self.Height
+                X: =Button1_27.X - Self.Width * 1.5
+                Y: =Button1_27.Y + Button1_27.Height / 2 - Self.Height / 2
+                ZIndex: =7
+
+            Label13 As label:
+                BorderColor: =RGBA(0, 0, 0, 0)
+                BorderStyle: =BorderStyle.None
+                Color: =RGBA(255, 255, 255, 1)
+                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                Font: =Font.'Segoe UI'
+                Size: =10
+                Text: ="220524 1010 v. 1.3.07"
+                Visible: =If(App.Width > App.Height, true, false)
+                Width: =160
+                X: =Parent.Width - Self.Width
+                Y: =Parent.Height - Self.Height
+                ZIndex: =8
+
+        DataCard6 As dataCard.blankCard:
+            BorderColor: =RGBA(0, 0, 0, 1)
+            BorderStyle: =BorderStyle.None
+            DisplayMode: =DisplayMode.Edit
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =100
+            Visible: =If(App.Width > App.Height, false, true)
+            Width: =Parent.Width
+            X: =0
+            Y: =3
+            ZIndex: =4
+
+            Image3_1 As image:
+                BorderColor: =RGBA(0, 0, 0, 0)
+                BorderStyle: =BorderStyle.None
+                BorderThickness: =2
+                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                DisabledFill: =RGBA(0, 0, 0, 0)
+                FocusedBorderThickness: =4
+                HoverBorderColor: =RGBA(0, 0, 0, 0)
+                HoverFill: =RGBA(0, 0, 0, 0)
+                Image: ='ossur-logo-no-tagline-blue'
+                OnSelect: =If(varAdminMode < 5, Set(varAdminMode, varAdminMode + 1))
+                PressedBorderColor: =RGBA(0, 0, 0, 0)
+                PressedFill: =RGBA(0, 0, 0, 0)
+                Width: =161.5
+                X: =40
+                Y: =Parent.Height - Self.Height
+                ZIndex: =1
+
+            Label13_1 As label:
+                BorderColor: =RGBA(0, 0, 0, 0)
+                BorderStyle: =BorderStyle.None
+                Color: =RGBA(255, 255, 255, 1)
+                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                Font: =Font.'Segoe UI'
+                Height: =100
+                Size: =10
+                Text: =Label13.Text
+                VerticalAlign: =VerticalAlign.Bottom
+                Width: =160
+                X: =Parent.Width - Self.Width
+                Y: =Parent.Height - Self.Height
+                ZIndex: =2
+
+    Menu1 As groupContainer:
+        Height: =220
+        Width: =If(App.Width > App.Height, Parent.Width / 2, Parent.Width)
+        X: =If(App.Width > App.Height, Parent.Width / 2 - Self.Width, Parent.Width / 2 - Self.Width / 2)
+        Y: =If(App.Width > App.Height, Parent.Height / 2 - Self.Height / 2, Gallery2.Y + Gallery2.Height)
+        ZIndex: =10
+
+        Button1_53 As button:
+            BorderColor: =RGBA(128, 128, 128, 1)
+            BorderThickness: =0
+            Color: =RGBA(0, 0, 0, 1)
+            DisabledBorderColor: =RGBA(0, 0, 0, 0)
+            DisabledColor: =RGBA(166, 166, 166, 1)
+            DisabledFill: =RGBA(158, 158, 158, 0.2)
+            DisplayMode: =DisplayMode.Disabled
+            Fill: =RGBA(116, 116, 116, 1)
+            Font: =Font.'Segoe UI'
+            Height: =70
+            HoverBorderColor: =RGBA(0, 0, 0, 0)
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(105, 121, 126, 1), -10%)
+            PaddingRight: =3.56
+            PaddingTop: =3.56
+            PressedBorderColor: =ColorFade(RGBA(105, 121, 126, 1), -50%)
+            PressedColor: =RGBA(255, 255, 255, 1)
+            PressedFill: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+            Size: =14.23
+            Text: =""
+            Width: =270.35
+            X: =Button1_22.X + 2
+            Y: =Button1_22.Y + 2
+            ZIndex: =1
+
+        Button1_52 As button:
+            BorderColor: =RGBA(128, 128, 128, 1)
+            BorderThickness: =0
+            Color: =RGBA(0, 0, 0, 1)
+            DisabledBorderColor: =RGBA(0, 0, 0, 0)
+            DisabledColor: =RGBA(166, 166, 166, 1)
+            DisabledFill: =RGBA(153, 153, 153, 0.2)
+            DisplayMode: =DisplayMode.Disabled
+            Fill: =RGBA(116, 116, 116, 1)
+            Font: =Font.'Segoe UI'
+            Height: =70
+            HoverBorderColor: =RGBA(0, 0, 0, 0)
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(105, 121, 126, 1), -10%)
+            PaddingRight: =3.56
+            PaddingTop: =3.56
+            PressedBorderColor: =ColorFade(RGBA(105, 121, 126, 1), -50%)
+            PressedColor: =RGBA(255, 255, 255, 1)
+            PressedFill: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+            Size: =14.23
+            Text: =""
+            Width: =270.35
+            X: =Button1_21.X + 2
+            Y: =Button1_21.Y + 2
+            ZIndex: =2
+
+        Button1_21 As button:
+            BorderColor: =RGBA(0, 0, 0, 0)
+            BorderStyle: =BorderStyle.None
+            BorderThickness: =0
+            DisabledBorderColor: =RGBA(0, 0, 0, 0)
+            DisabledColor: =RGBA(166, 166, 166, 1)
+            DisabledFill: =RGBA(244, 244, 244, 1)
+            Fill: =RGBA(0, 130, 196, 1)
+            Font: =Font.'Segoe UI'
+            Height: =70
+            HoverBorderColor: =RGBA(0, 0, 0, 0)
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(105, 121, 126, 1), -10%)
+            OnSelect: |-
+                =Set(
+                    varFormMode,
+                    "New"
+                );
+                Set(SetVarFormType,
+                    "Deviation Report"
+                );
+                Set(
+                    SetVarFormTypeName,
+                    LookUp(colTranslations, language.Value = varLanguage And key = "button_newdeviation").Title
+                );
+                Set(
+                    varPhaseDraft,
+                    Blank()
+                );
+                Set(
+                    varBack,
+                    Start
+                );
+                NewForm(Form1);
+                Navigate(Form,None,{varPreLoader: true});
+                //Collect Manager Departments
+                /*If(
+                    !IsEmpty(First(colUser)),
+                    ClearCollect(
+                        colReportsDepartments,
+                        'Office365-användare'.DirectReportsV2(First(colUser).Email).value.department
+                    )
+                );
+                Set(
+                    varManagerDepartment,
+                    First(
+                        Filter(
+                            Choices(ClinicsDeviationSystem.MyDepartment),
+                            Value = If(
+                                IsEmpty('Office365-användare'.DirectReportsV2(First(colUser).Email).value),
+                                LookUp(
+                                    AvvikelseForbattringssystemDATA,
+                                    Location = First(colUser).Department,
+                                    Location
+                                ),
+                                First('Office365-användare'.DirectReportsV2(First(colUser).Email).value).department
+                            )
+                        )
+                    )
+                )*/
+            PaddingRight: =3.56
+            PaddingTop: =3.56
+            PressedBorderColor: =ColorFade(RGBA(105, 121, 126, 1), -50%)
+            PressedColor: =RGBA(255, 255, 255, 1)
+            PressedFill: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+            Size: =14.23
+            Text: =LookUp(colTranslations, language.Value = varLanguage And key = "button_newdeviation").Title
+            Width: =270.35
+            X: =Parent.Width / 2 - Self.Width / 2
+            Y: =Label1_13.Height
+            ZIndex: =3
+
+        Button1_22 As button:
+            BorderColor: =RGBA(0, 0, 0, 0)
+            BorderStyle: =BorderStyle.None
+            BorderThickness: =0
+            DisabledBorderColor: =RGBA(0, 0, 0, 0)
+            DisabledColor: =RGBA(166, 166, 166, 1)
+            DisabledFill: =RGBA(244, 244, 244, 1)
+            Fill: =RGBA(0, 130, 196, 1)
+            Font: =Font.'Segoe UI'
+            Height: =70  
+            HoverBorderColor: =RGBA(0, 0, 0, 0)
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(105, 121, 126, 1), -10%)
+            OnSelect: |-
+                =Set(
+                    varFormMode,
+                    "New"
+                );
+                Set(SetVarFormType,
+                    "Improvement suggestion"
+                );
+                Set(
+                    SetVarFormTypeName,
+                    LookUp(DeviationSystemTranslations, language.Value = varLanguage And key = "button_newimprovement").Title
+                );
+                Set(
+                    varPhaseDraft,
+                    Blank()
+                );
+                Set(
+                    varBack,
+                    Start
+                );
+                NewForm(Form1);
+                Navigate(Form,None,{varPreLoader: true});
+                //Collect Manager Departments
+                /*If(
+                    !IsEmpty(First(colUser)),
+                    ClearCollect(
+                        colReportsDepartments,
+                        'Office365-användare'.DirectReportsV2(First(colUser).Email).value.department
+                    )
+                );
+                Set(
+                    varManagerDepartment,
+                    First(
+                        Filter(
+                            Choices(ClinicsDeviationSystem.MyDepartment),
+                            Value = If(
+                                IsEmpty('Office365-användare'.DirectReportsV2(First(colUser).Email).value),
+                                LookUp(
+                                    AvvikelseForbattringssystemDATA,
+                                    Location = First(colUser).Department,
+                                    Location
+                                ),
+                                First('Office365-användare'.DirectReportsV2(First(colUser).Email).value).department
+                            )
+                        )
+                    )
+                )*/
+            PaddingRight: =3.56
+            PaddingTop: =3.56
+            PressedBorderColor: =ColorFade(RGBA(105, 121, 126, 1), -50%)
+            PressedColor: =RGBA(255, 255, 255, 1)
+            PressedFill: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+            Size: =14.23
+            Text: =LookUp(colTranslations, language.Value = varLanguage And key = "button_newimprovement").Title
+            Width: =270.35
+            X: =Parent.Width / 2 - Self.Width / 2
+            Y: =Button1_21.Y + Button1_21.Height + 20
+            ZIndex: =4
+
+        Label1_13 As label:
+            BorderColor: =RGBA(0, 0, 0, 0)
+            BorderStyle: =BorderStyle.None
+            BorderThickness: =2
+            Color: =RGBA(51, 51, 51, 1)
+            DisabledBorderColor: =RGBA(0, 0, 0, 0)
+            DisabledColor: =RGBA(166, 166, 166, 1)
+            FocusedBorderThickness: =4
+            Font: =Font.'Segoe UI'
+            FontWeight: =FontWeight.Semibold
+            Height: =38
+            PaddingBottom: =10
+            PaddingRight: =3.56
+            PaddingTop: =3.56
+            Size: =12.81
+            Text: =LookUp(colTranslations, language.Value = varLanguage And key = "label_new").Title
+            VerticalAlign: =VerticalAlign.Bottom
+            Width: =270.35
+            X: =Parent.Width / 2 - Self.Width / 2
+            Y: =2
+            ZIndex: =5
+
+        Button4_1 As button:
+            BorderColor: =RGBA(0, 0, 0, 0)
+            BorderStyle: =BorderStyle.None
+            DisabledBorderColor: =RGBA(0, 0, 0, 0)
+            DisabledColor: =RGBA(166, 166, 166, 1)
+            DisabledFill: =RGBA(244, 244, 244, 1)
+            Fill: =RGBA(105, 121, 126, 1)
+            Font: =Font.'Segoe UI'
+            Height: =25
+            HoverBorderColor: =RGBA(0, 0, 0, 0)
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(105, 121, 126, 1), -10%)
+            PaddingRight: =3.56
+            PaddingTop: =3.56
+            PressedBorderColor: =ColorFade(RGBA(105, 121, 126, 1), -50%)
+            PressedColor: =RGBA(255, 255, 255, 1)
+            PressedFill: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+            RadiusBottomLeft: =360
+            RadiusBottomRight: =360
+            RadiusTopLeft: =360
+            RadiusTopRight: =360
+            Size: =7.11
+            Text: =CountRows(colNewSubmitted)
+            Visible: =false//If(Value(Self.Text) <= 0; false;true)
+            Width: =17.79
+            X: =28.46
+            Y: =15
+            ZIndex: =6
+
+    ProfileInfo As groupContainer:
+        Height: =Button8.Height
+        Width: =If(App.Width > App.Height, Parent.Width / 2, Parent.Width)
+        ZIndex: =11
+
+        "Gallery2 As gallery.'BrowseLayout_Vertical_ThreeTextOneImageVariant_ver4.0'":
+            BorderColor: =RGBA(0, 0, 0, 0)
+            Height: =Parent.Height
+            Items: =colUser//If(!IsBlank(Label9.Text); colUser)
+            Layout: =Layout.Vertical
+            TemplatePadding: =0
+            TemplateSize: =Gallery2.Height
+            Width: =Parent.Width
+            ZIndex: =1
+
+            Image4 As image:
+                BorderColor: =RGBA(0, 0, 0, 0)
+                BorderStyle: =BorderStyle.None
+                BorderThickness: =2
+                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                DisabledFill: =RGBA(0, 0, 0, 0)
+                FocusedBorderThickness: =4
+                Height: =Self.Width
+                HoverBorderColor: =RGBA(0, 0, 0, 0)
+                HoverFill: =RGBA(0, 0, 0, 0)
+                Image: =ThisItem.Image
+                OnSelect: =Select(Parent)
+                PressedBorderColor: =RGBA(0, 0, 0, 0)
+                PressedFill: =RGBA(0, 0, 0, 0)
+                RadiusBottomLeft: =360
+                RadiusBottomRight: =360
+                RadiusTopLeft: =360
+                RadiusTopRight: =360
+                Width: =Parent.Height / 2
+                X: =16
+                Y: =Parent.Height / 2 - Self.Height / 2
+                ZIndex: =1
+
+            Subtitle3 As label:
+                Color: =RGBA(255, 255, 255, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                Font: =Font.'Segoe UI'
+                Height: =Self.Size * 1.8
+                OnSelect: =Select(Parent)
+                PaddingBottom: =0
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Size: =If(Gallery2.Height / 8.5 >= 12, 12,Gallery2.Height / 8.5)
+                Text: =ThisItem.Country
+                Visible: =If(Self.X + Self.Width >= Button3_1.X, false, true)
+                Width: =Parent.TemplateWidth - Image4.Width - Parent.TemplateWidth / 2
+                X: =Title3.X
+                Y: =Title3.Y + Title3.Height
+                ZIndex: =2
+
+            Title3 As label:
+                Color: =RGBA(255, 255, 255, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                Font: =Font.'Segoe UI'
+                Height: =Self.Size * 1.8
+                OnSelect: =Select(Parent)
+                PaddingBottom: =0
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Size: =If(Gallery2.Height / 8.5 >= 12, 12,Gallery2.Height / 8.5)
+                Text: =ThisItem.City
+                Visible: =If(Self.X + Self.Width >= Button3_1.X, false, true)
+                Width: =Parent.TemplateWidth - Image4.Width - Parent.TemplateWidth / 2
+                X: =Image4.X + Image4.Width + 16
+                Y: =Parent.Height / 2
+                ZIndex: =3
+
+            Subtitle1_2 As label:
+                Color: =RGBA(255, 255, 255, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                Font: =Font.'Segoe UI'
+                Height: =Self.Size * 1.8
+                OnSelect: =Select(Parent)
+                PaddingBottom: =0
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Size: =If(Gallery2.Height / 8.5 >= 12, 12,Gallery2.Height / 8.5)
+                Text: =ThisItem.Department
+                Visible: =If(Self.X + Self.Width >= Button3_1.X, false, true)
+                Width: =Parent.TemplateWidth - Image4.Width - Parent.TemplateWidth / 2
+                X: =Subtitle3.X
+                Y: =Parent.Height / 2 - Self.Height
+                ZIndex: =4
+
+            Title1_1 As label:
+                Color: =RGBA(255, 255, 255, 1)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Semibold
+                Height: =Self.Size * 1.8
+                OnSelect: =Select(Parent)
+                PaddingBottom: =0
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Size: =If(Gallery2.Height / 8 >= 12, 12,Gallery2.Height / 8)
+                Text: =ThisItem.DisplayName
+                Visible: =If(Self.X + Self.Width >= Button3_1.X, false, true)
+                Width: =Parent.TemplateWidth - Image4.Width - Parent.TemplateWidth / 2
+                X: =Image4.X + Image4.Width + 16
+                Y: =Subtitle1_2.Y - Self.Height
+                ZIndex: =5
+
+    Button11_5 As button:
+        AutoDisableOnSelect: =false
+        BorderColor: =RGBA(0, 0, 0, 0)
+        BorderStyle: =BorderStyle.None
+        BorderThickness: =0
+        Color: =If(varLangVisible, RGBA(255, 255, 255, 1),RGBA(0, 0, 0, 1))
+        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        DisabledFill: =RGBA(244, 244, 244, 1)
+        Fill: =RGBA(0, 0, 0, 0.19)
+        FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+        Font: =Font.'Segoe UI'
+        Height: =35
+        HoverBorderColor: =RGBA(0, 0, 0, 0)
+        HoverColor: =RGBA(255, 255, 255, 1)
+        HoverFill: =ColorFade(RGBA(105, 121, 126, 1), -10%)
+        OnSelect: =Set(varLangVisible, !varLangVisible)
+        PressedBorderColor: =//ColorFade(RGBA(105, 121, 126, 1), -50%)
+        PressedColor: =RGBA(255, 255, 255, 1)
+        PressedFill: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+        Size: =11
+        Text: =Upper(varLanguage)
+        Width: =40
+        X: =Button11.X + 2
+        Y: =Button11.Y + 2
+        ZIndex: =12
+
+    Button3_3 As button:
+        BorderColor: =RGBA(172, 62, 11, 1)
+        BorderThickness: =0
+        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        DisabledFill: =RGBA(244, 244, 244, 1)
+        DisplayMode: =DisplayMode.View
+        Fill: =RGBA(0, 0, 0, 0.19)
+        Font: =Font.'Segoe UI'
+        FontWeight: =FontWeight.Semibold
+        Height: =35
+        HoverBorderColor: =RGBA(0, 0, 0, 0)
+        HoverColor: =RGBA(255, 255, 255, 1)
+        HoverFill: =ColorFade(Self.Fill, -10%)
+        OnSelect: =
+        PressedBorderColor: =ColorFade(RGBA(105, 121, 126, 1), -50%)
+        PressedColor: =RGBA(255, 255, 255, 1)
+        PressedFill: =ColorFade(Self.Fill, -30%)
+        Size: =9.25
+        Text: =""
+        Width: =110
+        X: =Button3.X + 2
+        Y: =Button3.Y + 2
+        ZIndex: =13
+
+    Button3_2 As button:
+        BorderColor: =RGBA(172, 62, 11, 1)
+        BorderThickness: =0
+        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        DisabledFill: =RGBA(244, 244, 244, 1)
+        DisplayMode: =DisplayMode.View
+        Fill: =RGBA(0, 0, 0, 0.19)
+        Font: =Font.'Segoe UI'
+        FontWeight: =FontWeight.Semibold
+        Height: =35
+        HoverBorderColor: =RGBA(0, 0, 0, 0)
+        HoverColor: =RGBA(255, 255, 255, 1)
+        HoverFill: =ColorFade(Self.Fill, -10%)
+        OnSelect: =
+        PressedBorderColor: =ColorFade(RGBA(105, 121, 126, 1), -50%)
+        PressedColor: =RGBA(255, 255, 255, 1)
+        PressedFill: =ColorFade(Self.Fill, -30%)
+        Size: =9.25
+        Text: =""
+        Width: =110
+        X: =Button3_1.X + 2
+        Y: =Button3_1.Y + 2
+        ZIndex: =14
+
+    Button3 As button:
+        BorderColor: =RGBA(255, 255, 255, 1)
+        BorderStyle: =BorderStyle.None
+        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        DisabledFill: =RGBA(244, 244, 244, 1)
+        Fill: =RGBA(221, 79, 14, 1)
+        Font: =Font.'Segoe UI'
+        FontWeight: =FontWeight.Semibold
+        Height: =35
+        HoverBorderColor: =RGBA(0, 0, 0, 0)
+        HoverColor: =RGBA(255, 255, 255, 1)
+        HoverFill: =ColorFade(Self.Fill, -10%)
+        OnSelect: =Navigate(Feedback);NewForm(FormFeedback)
+        PressedBorderColor: =ColorFade(RGBA(105, 121, 126, 1), -50%)
+        PressedColor: =RGBA(255, 255, 255, 1)
+        PressedFill: =ColorFade(Self.Fill, -30%)
+        Size: =9.25
+        Text: =LookUp(colTranslations, language.Value = varLanguage And key = "button_feedback").Title
+        Width: =110
+        X: |-
+            =//If(App.Width>App.Height, Parent .Width-Self.Width-Gallery2.Height/2, Parent .Width-Self.Width-Gallery2.Height/4)
+            Button11.X - Self.Width * 1.2
+        Y: |
+            =If(App.Width > App.Height, Gallery2.Height / 2 - Self.Height / 2, Gallery2.Height / 2 - Self.Height / 2)
+        ZIndex: =15
+
+    Button3_1 As button:
+        BorderColor: =RGBA(255, 255, 255, 1)
+        BorderStyle: =BorderStyle.None
+        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        DisabledFill: =RGBA(244, 244, 244, 1)
+        Fill: =RGBA(221, 79, 14, 1)
+        Font: =Font.'Segoe UI'
+        FontWeight: =FontWeight.Semibold
+        Height: =35
+        HoverBorderColor: =RGBA(0, 0, 0, 0)
+        HoverColor: =RGBA(255, 255, 255, 1)
+        HoverFill: =ColorFade(Self.Fill, -10%)
+        OnSelect: =Set(varFormMode, "Edit");Navigate(Mgmt_My_Drafts)
+        PressedBorderColor: =ColorFade(RGBA(105, 121, 126, 1), -50%)
+        PressedColor: =RGBA(255, 255, 255, 1)
+        PressedFill: =ColorFade(Self.Fill, -30%)
+        Size: =9.25
+        Text: =LookUp(colTranslations, language.Value = varLanguage And key = "button_drafts").Title
+        Width: =110
+        X: |-
+            =//If(App.Width > App.Height; Button3.X - Self.Width * 1,2; Button3.X)
+            Button3.X - Self.Width * 1.1
+        Y: =Button3.Y//If(App.Width > App.Height; Button3.Y; Button3.Y + Button3.Height + 10)
+        ZIndex: =16
+
+    Button4_7 As button:
+        BorderColor: =RGBA(0, 0, 0, 0)
+        BorderStyle: =BorderStyle.None
+        Color: =RGBA(0, 0, 0, 1)
+        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        DisabledFill: =RGBA(244, 244, 244, 1)
+        DisplayMode: =DisplayMode.View
+        Fill: =RGBA(255, 255, 255, 1)
+        Font: =Font.'Segoe UI'
+        FontWeight: =FontWeight.Semibold
+        Height: =25
+        HoverBorderColor: =RGBA(0, 0, 0, 0)
+        HoverColor: =RGBA(255, 255, 255, 1)
+        HoverFill: =ColorFade(RGBA(105, 121, 126, 1), -10%)
+        PressedBorderColor: =ColorFade(RGBA(105, 121, 126, 1), -50%)
+        PressedColor: =RGBA(255, 255, 255, 1)
+        PressedFill: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+        RadiusBottomLeft: =360
+        RadiusBottomRight: =360
+        RadiusTopLeft: =360
+        RadiusTopRight: =360
+        Size: =9.25
+        Text: =CountRows(colFilterMainDrafts)//CountIf(colFilterMainDrafts, Finished = false)
+        Visible: |-
+            =//varCounterVisibility And If(Self.Text = "0",false,true)
+            If(Self.Text = "0",false,true)
+        Width: =Self.Height
+        X: =Button3_1.X - Self.Width / 2
+        Y: =Button3_1.Y - Self.Height / 2
+        ZIndex: =17
+
+    LanguageMenu As groupContainer:
+        Fill: =RGBA(205, 205, 205, 0.73)
+        Height: =Button11_4.Y + Button11_4.Height + 10
+        Visible: =varLangVisible
+        Width: =60
+        X: |-
+            =If(
+                App.Width > App.Height,
+                Parent.Width - Self.Width - Gallery2.Height / 2 + 10,
+                Parent.Width - Self.Width - Gallery2.Height / 4 + 10
+            )
+        Y: =Button11.Y - 10
+        ZIndex: =18
+
+        Button11_1 As button:
+            AutoDisableOnSelect: =false
+            BorderColor: =RGBA(0, 0, 0, 0)
+            BorderThickness: =0
+            Color: =RGBA(36, 42, 44, 1)
+            DisabledBorderColor: =RGBA(0, 0, 0, 0)
+            DisabledColor: =RGBA(255, 255, 255, 1)
+            DisabledFill: =RGBA(166, 166, 166, 0)
+            DisplayMode: =If(Upper(varLanguage) = Self.Text, Disabled, DisplayMode.Edit)
+            Fill: =RGBA(244, 244, 244, 1)
+            FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+            FocusedBorderThickness: =1
+            Font: =Font.'Segoe UI'
+            Height: =35
+            HoverBorderColor: =RGBA(0, 0, 0, 0)
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(105, 121, 126, 1), -10%)
+            OnSelect: |-
+                =UpdateContext({varPreLoader: true});Set(varLanguage, "en");Set(varLanguageID, 1);Set(varLangVisible, !varLangVisible);ClearCollect(
+                    colTranslations,
+                    Filter(DeviationSystemTranslations, language.Value = varLanguage)
+                );UpdateContext({varPreLoader: false});
+            PressedBorderColor: =//ColorFade(RGBA(105, 121, 126, 1), -50%)
+            PressedColor: =RGBA(255, 255, 255, 1)
+            PressedFill: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+            Size: =11
+            Text: ="EN"
+            Width: =40
+            X: |-
+                =If(
+                    App.Width > App.Height,
+                    Parent.Width - Self.Width - 10,
+                    Parent.Width - Self.Width - 10
+                )
+            Y: =Button11.Height + 20
+            ZIndex: =2
+
+        Button11_2 As button:
+            AutoDisableOnSelect: =false
+            BorderColor: =RGBA(0, 0, 0, 0)
+            BorderStyle: =BorderStyle.None
+            BorderThickness: =0
+            Color: =RGBA(36, 42, 44, 1)
+            DisabledBorderColor: =RGBA(0, 0, 0, 0)
+            DisabledColor: =RGBA(255, 255, 255, 1)
+            DisabledFill: =RGBA(244, 244, 244, 0)
+            DisplayMode: =If(Upper(varLanguage) = Self.Text, Disabled, DisplayMode.Edit)
+            Fill: =RGBA(244, 244, 244, 1)
+            FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+            FocusedBorderThickness: =1
+            Font: =Font.'Segoe UI'
+            Height: =35
+            HoverBorderColor: =RGBA(0, 0, 0, 0)
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(105, 121, 126, 1), -10%)
+            OnSelect: |
+                =UpdateContext({varPreLoader: true});
+                Set(
+                    varLanguage,
+                    "se"
+                );
+                Set(
+                    varLanguageID,
+                    2
+                );
+                Set(
+                    varLangVisible,
+                    !varLangVisible
+                );
+                ClearCollect(
+                    colTranslations,
+                    Filter(
+                        DeviationSystemTranslations,
+                        language.Value = varLanguage
+                    )
+                );
+                UpdateContext({varPreLoader: false});
+            PressedBorderColor: =//ColorFade(RGBA(105, 121, 126, 1), -50%)
+            PressedColor: =RGBA(255, 255, 255, 1)
+            PressedFill: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+            Size: =11
+            Text: ="SE"
+            Width: =40
+            X: |-
+                =If(
+                    App.Width > App.Height,
+                    Parent.Width - Self.Width - 10,
+                    Parent.Width - Self.Width - 10
+                )
+            Y: =Button11_1.Y + Button11_1.Height + 10
+            ZIndex: =3
+
+        Button11_3 As button:
+            AutoDisableOnSelect: =false
+            BorderColor: =RGBA(0, 0, 0, 0)
+            BorderStyle: =BorderStyle.None
+            BorderThickness: =0
+            Color: =RGBA(36, 42, 44, 1)
+            DisabledBorderColor: =RGBA(0, 0, 0, 0)
+            DisabledColor: =RGBA(255, 255, 255, 1)
+            DisabledFill: =RGBA(244, 244, 244, 0)
+            DisplayMode: =If(Upper(varLanguage) = Self.Text, Disabled, DisplayMode.Edit)
+            Fill: =RGBA(244, 244, 244, 1)
+            FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+            FocusedBorderThickness: =1
+            Font: =Font.'Segoe UI'
+            Height: =35
+            HoverBorderColor: =RGBA(0, 0, 0, 0)
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(105, 121, 126, 1), -10%)
+            OnSelect: |-
+                =UpdateContext({varPreLoader: true});Set(varLanguage, "no");Set(varLanguageID, 3);Set(varLangVisible, !varLangVisible);ClearCollect(
+                    colTranslations,
+                    Filter(DeviationSystemTranslations, language.Value = varLanguage)
+                );UpdateContext({varPreLoader: false});
+            PressedBorderColor: =//ColorFade(RGBA(105, 121, 126, 1), -50%)
+            PressedColor: =RGBA(255, 255, 255, 1)
+            PressedFill: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+            Size: =11
+            Text: ="NO"
+            Width: =40
+            X: |-
+                =If(
+                    App.Width > App.Height,
+                    Parent.Width - Self.Width - 10,
+                    Parent.Width - Self.Width - 10
+                )
+            Y: =Button11_2.Y + Button11_2.Height + 10
+            ZIndex: =4
+
+        Button11_4 As button:
+            AutoDisableOnSelect: =false
+            BorderColor: =RGBA(0, 0, 0, 0)
+            BorderStyle: =BorderStyle.None
+            BorderThickness: =0
+            Color: =RGBA(36, 42, 44, 1)
+            DisabledBorderColor: =RGBA(0, 0, 0, 0)
+            DisabledColor: =RGBA(255, 255, 255, 1)
+            DisabledFill: =RGBA(244, 244, 244, 0)
+            DisplayMode: =Disabled//If(Upper(varLanguage) = Self.Text, Disabled, DisplayMode.Edit)
+            Fill: =RGBA(244, 244, 244, 1)
+            FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+            FocusedBorderThickness: =1
+            Font: =Font.'Segoe UI'
+            Height: =35
+            HoverBorderColor: =RGBA(0, 0, 0, 0)
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(105, 121, 126, 1), -10%)
+            OnSelect: |-
+                =UpdateContext({varPreLoader: true});Set(varLanguage, "dk");Set(varLanguageID, 4);Set(varLangVisible, !varLangVisible);ClearCollect(
+                    colTranslations,
+                    Filter(DeviationSystemTranslations, language.Value = varLanguage)
+                );UpdateContext({varPreLoader: false});
+            PressedBorderColor: =//ColorFade(RGBA(105, 121, 126, 1), -50%)
+            PressedColor: =RGBA(255, 255, 255, 1)
+            PressedFill: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+            Size: =11
+            Text: ="DK"
+            Width: =40
+            X: |-
+                =If(
+                    App.Width > App.Height,
+                    Parent.Width - Self.Width - 10,
+                    Parent.Width - Self.Width - 10
+                )
+            Y: =Button11_3.Y + Button11_3.Height + 10
+            ZIndex: =5
+
+    Button11 As button:
+        AutoDisableOnSelect: =false
+        BorderColor: =RGBA(0, 0, 0, 0)
+        BorderStyle: =BorderStyle.None
+        BorderThickness: =0
+        Color: =If(varLangVisible, RGBA(255, 255, 255, 1),RGBA(0, 0, 0, 1))
+        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        DisabledFill: =RGBA(244, 244, 244, 1)
+        Fill: =If(varLangVisible, ColorFade(RGBA(105, 121, 126, 1), -10%),RGBA(255, 255, 255, 1))
+        FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+        Font: =Font.'Segoe UI'
+        Height: =35
+        HoverBorderColor: =RGBA(0, 0, 0, 0)
+        HoverColor: =RGBA(255, 255, 255, 1)
+        HoverFill: =ColorFade(RGBA(105, 121, 126, 1), -10%)
+        OnSelect: =Set(varLangVisible, !varLangVisible)
+        PressedBorderColor: =//ColorFade(RGBA(105, 121, 126, 1), -50%)
+        PressedColor: =RGBA(255, 255, 255, 1)
+        PressedFill: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+        Size: =11
+        Text: =Upper(varLanguage)
+        Width: =40
+        X: |-
+            =If(
+                App.Width > App.Height,
+                Parent.Width - Self.Width - Gallery2.Height / 2,
+                Parent.Width - Self.Width - Gallery2.Height / 4
+            )
+        Y: =If(App.Width > App.Height, Gallery2.Height / 2 - Self.Height / 2, Gallery2.Height / 2 - Self.Height / 2)
+        ZIndex: =19
+
+    "'TEST department' As groupContainer":
+        Height: =189
+        Visible: =User().FullName = "Patrik Goodwin" Or User().FullName = "Tilda Taubert" Or (User().FullName = "Anton Störling" And varAdminMode = 5)
+        Width: =613
+        Y: =Button8.Y + Button8.Height
+        ZIndex: =20
+
+        Dropdown1 As dropdown:
+            BorderColor: =RGBA(166, 166, 166, 1)
+            ChevronBackground: =RGBA(255, 255, 255, 1)
+            ChevronDisabledBackground: =RGBA(244, 244, 244, 1)
+            ChevronDisabledFill: =RGBA(166, 166, 166, 1)
+            ChevronFill: =RGBA(33, 33, 33, 1)
+            ChevronHoverBackground: =RGBA(212, 212, 212, 1)
+            ChevronHoverFill: =RGBA(33, 33, 33, 1)
+            Color: =RGBA(51, 51, 51, 1)
+            Default: =false
+            DisabledBorderColor: =RGBA(0, 0, 0, 0)
+            DisabledColor: =RGBA(166, 166, 166, 1)
+            DisabledFill: =RGBA(244, 244, 244, 1)
+            FocusedBorderThickness: =1
+            Font: =Font.'Segoe UI'
+            HoverBorderColor: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+            HoverColor: =RGBA(51, 51, 51, 1)
+            HoverFill: =RGBA(212, 212, 212, 1)
+            Items: =Sort(Filter(colData,Type = "Hidden - Support Function" Or Type = "Clinic" Or Type = "Support Function" Or Type = "Reporting from - Clinic" Or Type = "Reporting from - Clinic" Or Type = "Organisation"), Title, Ascending)
+            PaddingBottom: =5
+            PaddingLeft: =12
+            PaddingRight: =5
+            PaddingTop: =5
+            PressedBorderColor: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+            PressedColor: =RGBA(255, 255, 255, 1)
+            PressedFill: =RGBA(105, 121, 126, 1)
+            SelectionFill: =RGBA(105, 121, 126, 1)
+            Size: =13
+            Width: =250
+            X: =20
+            Y: =20
+            ZIndex: =1
+
+        Button9 As button:
+            BorderColor: =RGBA(0, 0, 0, 0)
+            DisabledBorderColor: =RGBA(0, 0, 0, 0)
+            DisabledColor: =RGBA(166, 166, 166, 1)
+            DisabledFill: =RGBA(244, 244, 244, 1)
+            Fill: =RGBA(105, 121, 126, 1)
+            FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+            FocusedBorderThickness: =1
+            Font: =Font.'Segoe UI'
+            FontWeight: =FontWeight.Semibold
+            HoverBorderColor: =RGBA(0, 0, 0, 0)
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(105, 121, 126, 1), -10%)
+            OnSelect: |-
+                =Patch(
+                    colUser,
+                    First(colUser),
+                    {
+                        Department: Dropdown1.Selected.Location,
+                        ParentDATA: LookUp(
+                            colData,
+                            Location = Dropdown1.Selected.Location And (City = Dropdown1.Selected.City Or IsBlank(City))
+                        ).'Parent'
+                    }
+                )
+                //Set(varTEMPPatrik, Dropdown1.Selected.Location)
+            PressedBorderColor: =ColorFade(RGBA(105, 121, 126, 1), -50%)
+            PressedColor: =RGBA(255, 255, 255, 1)
+            PressedFill: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+            RadiusBottomLeft: =0
+            RadiusBottomRight: =0
+            RadiusTopLeft: =0
+            RadiusTopRight: =0
+            Size: =10
+            Text: ="Set"
+            Width: =86
+            X: =Dropdown1.X + Dropdown1.Width + 20
+            Y: =Dropdown1.Y
+            ZIndex: =2
+
+        Button9_1 As button:
+            BorderColor: =RGBA(0, 0, 0, 0)
+            DisabledBorderColor: =RGBA(0, 0, 0, 0)
+            DisabledColor: =RGBA(166, 166, 166, 1)
+            DisabledFill: =RGBA(244, 244, 244, 1)
+            Fill: =RGBA(105, 121, 126, 1)
+            FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+            FocusedBorderThickness: =1
+            Font: =Font.'Segoe UI'
+            FontWeight: =FontWeight.Semibold
+            HoverBorderColor: =RGBA(0, 0, 0, 0)
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(105, 121, 126, 1), -10%)
+            OnSelect: |-
+                =Patch(
+                    colUser,
+                    First(colUser),
+                    {Department: 'Office365-användare'.MyProfileV2().department}
+                );
+                Patch(
+                    colUser,
+                    First(colUser),
+                    {
+                        ParentDATA: LookUp(colData,Location = First(colUser).Department And (City = First(colUser).City Or IsBlank(City))).'Parent'
+                    }
+                );
+            PressedBorderColor: =ColorFade(RGBA(105, 121, 126, 1), -50%)
+            PressedColor: =RGBA(255, 255, 255, 1)
+            PressedFill: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+            RadiusBottomLeft: =0
+            RadiusBottomRight: =0
+            RadiusTopLeft: =0
+            RadiusTopRight: =0
+            Size: =10
+            Text: ="Clear"
+            Width: =86
+            X: =Button9.X + Button9.Width + 20
+            Y: =Dropdown1.Y
+            ZIndex: =3
+
+        Button9_2 As button:
+            BorderColor: =RGBA(0, 0, 0, 0)
+            DisabledBorderColor: =RGBA(0, 0, 0, 0)
+            DisabledColor: =RGBA(166, 166, 166, 1)
+            DisabledFill: =RGBA(244, 244, 244, 1)
+            Fill: =RGBA(105, 121, 126, 1)
+            FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+            FocusedBorderThickness: =1
+            Font: =Font.'Segoe UI'
+            FontWeight: =FontWeight.Semibold
+            HoverBorderColor: =RGBA(0, 0, 0, 0)
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(105, 121, 126, 1), -10%)
+            OnSelect: |-
+                =Set(varAdminMode, 0);
+                Reset(ComboBox1)
+            PressedBorderColor: =ColorFade(RGBA(105, 121, 126, 1), -50%)
+            PressedColor: =RGBA(255, 255, 255, 1)
+            PressedFill: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+            RadiusBottomLeft: =0
+            RadiusBottomRight: =0
+            RadiusTopLeft: =0
+            RadiusTopRight: =0
+            Size: =10
+            Text: ="Hide"
+            Visible: =User().FullName = "Anton Störling"
+            Width: =86
+            X: =Button9_1.X + Button9_1.Width + 20
+            Y: =Dropdown1.Y
+            ZIndex: =4
+
+        ComboBox1 As combobox:
+            BorderColor: =RGBA(166, 166, 166, 1)
+            ChevronBackground: =RGBA(255, 255, 255, 1)
+            ChevronDisabledBackground: =RGBA(244, 244, 244, 1)
+            ChevronDisabledFill: =RGBA(166, 166, 166, 1)
+            ChevronFill: =RGBA(33, 33, 33, 1)
+            ChevronHoverBackground: =RGBA(212, 212, 212, 1)
+            ChevronHoverFill: =RGBA(33, 33, 33, 1)
+            Color: =RGBA(51, 51, 51, 1)
+            DisabledBorderColor: =RGBA(0, 0, 0, 0)
+            DisabledColor: =RGBA(166, 166, 166, 1)
+            DisabledFill: =RGBA(244, 244, 244, 1)
+            DisplayFields: =["DisplayName"]
+            FocusedBorderThickness: =2
+            Font: =Font.'Segoe UI'
+            HoverBorderColor: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+            HoverColor: =RGBA(51, 51, 51, 1)
+            HoverFill: =RGBA(212, 212, 212, 1)
+            Items: |-
+                ='Office365-användare'.SearchUser({searchTerm:ComboBox1.SearchText})
+            PaddingLeft: =10
+            PressedBorderColor: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+            PressedColor: =RGBA(255, 255, 255, 1)
+            PressedFill: =RGBA(105, 121, 126, 1)
+            Reset: =true
+            SearchFields: =["DisplayName"]
+            SearchItems: |-
+                =Search('Office365-användare'.SearchUser({searchTerm:ComboBox1.SearchText}),ComboBox1.SearchText,"DisplayName")
+            SelectionFill: =RGBA(105, 121, 126, 1)
+            SelectMultiple: =false
+            Size: =13
+            Width: =250
+            X: =20
+            Y: =89
+            ZIndex: =5
+
+        Button9_3 As button:
+            BorderColor: =RGBA(0, 0, 0, 0)
+            DisabledBorderColor: =RGBA(0, 0, 0, 0)
+            DisabledColor: =RGBA(166, 166, 166, 1)
+            DisabledFill: =RGBA(244, 244, 244, 1)
+            Fill: =RGBA(105, 121, 126, 1)
+            FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+            FocusedBorderThickness: =1
+            Font: =Font.'Segoe UI'
+            FontWeight: =FontWeight.Semibold
+            HoverBorderColor: =RGBA(0, 0, 0, 0)
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(105, 121, 126, 1), -10%)
+            OnSelect: |-
+                =Patch(
+                    colUser,
+                    First(colUser),
+                    {
+                        Department: ComboBox1.Selected.Department,
+                        DisplayName: ComboBox1.Selected.DisplayName,
+                        City: ComboBox1.Selected.City,
+                        Country: ComboBox1.Selected.Country,
+                        Email: ComboBox1.Selected.Mail,
+                        ParentDATA: LookUp(colData, Location = ComboBox1.Selected.Department And (City = ComboBox1.Selected.City Or IsBlank(City))).'Parent'
+                    }
+                );
+                Set(
+                    varUserPrincipalName,
+                    First(colUser).Email
+                );
+                Set(
+                    varUserDirectReport,
+                    First('Office365-användare'.DirectReportsV2(varUserPrincipalName).value)
+                );
+                Set(
+                    varUserManager,
+                    'Office365-användare'.ManagerV2(varUserPrincipalName)
+                );
+                Set(
+                    varParentDepartment,
+                    ForAll(
+                        Filter(
+                            colData,
+                            'Parent' = LookUp(
+                                colData,
+                                Location = First(colUser).Department
+                            ).'Parent'
+                        ),
+                        {Location: Location, ID: ID}
+                    )
+                );
+                Clear(colReportsDepartments)
+            PressedBorderColor: =ColorFade(RGBA(105, 121, 126, 1), -50%)
+            PressedColor: =RGBA(255, 255, 255, 1)
+            PressedFill: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+            RadiusBottomLeft: =0
+            RadiusBottomRight: =0
+            RadiusTopLeft: =0
+            RadiusTopRight: =0
+            Size: =10
+            Text: ="Set"
+            Width: =86
+            X: =Dropdown1.X + Dropdown1.Width + 20
+            Y: =89
+            ZIndex: =6
+
+        Button9_4 As button:
+            BorderColor: =RGBA(0, 0, 0, 0)
+            DisabledBorderColor: =RGBA(0, 0, 0, 0)
+            DisabledColor: =RGBA(166, 166, 166, 1)
+            DisabledFill: =RGBA(244, 244, 244, 1)
+            Fill: =RGBA(105, 121, 126, 1)
+            FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+            FocusedBorderThickness: =1
+            Font: =Font.'Segoe UI'
+            FontWeight: =FontWeight.Semibold
+            HoverBorderColor: =RGBA(0, 0, 0, 0)
+            HoverColor: =RGBA(255, 255, 255, 1)
+            HoverFill: =ColorFade(RGBA(105, 121, 126, 1), -10%)
+            OnSelect: |
+                =Patch(
+                    colUser,
+                    First(colUser),
+                    {
+                        Image: User().Image,
+                        DisplayName: 'Office365-användare'.MyProfileV2().displayName,
+                        Department: 'Office365-användare'.MyProfileV2().department,
+                        City: 'Office365-användare'.MyProfileV2().city,
+                        Country: 'Office365-användare'.MyProfileV2().country,
+                        Email: 'Office365-användare'.MyProfileV2().userPrincipalName
+                    }
+                );
+                Patch(
+                    colUser,
+                    First(colUser),
+                    {
+                        ParentDATA: LookUp(colData,Location = First(colUser).Department And (City = First(colUser).City Or IsBlank(City))).'Parent'
+                    }
+                );
+                Set(
+                    varUserPrincipalName,
+                    First(colUser).Email
+                );
+                Set(
+                    varUserDirectReport,
+                    First('Office365-användare'.DirectReportsV2(varUserPrincipalName).value)
+                );
+                Set(
+                    varUserManager,
+                    'Office365-användare'.ManagerV2(varUserPrincipalName)
+                );
+                Set(
+                    varParentDepartment,
+                    ForAll(
+                        Filter(
+                            colData,
+                            'Parent' = LookUp(
+                                colData,
+                                Location = First(colUser).Department
+                            ).'Parent'
+                        ),
+                        {Location: Location, ID: ID}
+                    )
+                );
+                Clear(colReportsDepartments)
+            PressedBorderColor: =ColorFade(RGBA(105, 121, 126, 1), -50%)
+            PressedColor: =RGBA(255, 255, 255, 1)
+            PressedFill: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+            RadiusBottomLeft: =0
+            RadiusBottomRight: =0
+            RadiusTopLeft: =0
+            RadiusTopRight: =0
+            Size: =10
+            Text: ="Clear"
+            Width: =86
+            X: =Button9_3.X + Button9_3.Width + 20
+            Y: =89
+            ZIndex: =7
+
+    PreLoader_5 As groupContainer:
+        Fill: =RGBA(255, 255, 255, 0.7)
+        Height: =Parent.Height
+        Visible: =varPreLoader
+        Width: =Parent.Width
+        X: =Parent.Width / 2 - Self.Width / 2
+        Y: =Parent.Height / 2 - Self.Height / 2
+        ZIndex: =22
+
+        loadingSpinner_1 As image:
+            BorderColor: =RGBA(0, 0, 0, 0)
+            BorderStyle: =BorderStyle.None
+            BorderThickness: =2
+            DisabledBorderColor: =RGBA(0, 0, 0, 0)
+            DisabledFill: =RGBA(0, 0, 0, 0)
+            FocusedBorderThickness: =4
+            HoverBorderColor: =RGBA(0, 0, 0, 0)
+            HoverFill: =RGBA(0, 0, 0, 0)
+            Image: ='icons8-loading-circle'
+            PressedBorderColor: =RGBA(0, 0, 0, 0)
+            PressedFill: =RGBA(0, 0, 0, 0)
+            X: =Parent.Width / 2 - Self.Width / 2
+            Y: =Parent.Height / 2 - Self.Height / 2
+            ZIndex: =1
+
+    debug_1 As toggleSwitch:
+        BorderColor: =RGBA(0, 0, 0, 0)
+        BorderStyle: =BorderStyle.None
+        Color: =RGBA(51, 51, 51, 1)
+        Default: =varDebug
+        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+        FalseFill: =RGBA(102, 102, 102, 1)
+        FalseHoverFill: =RGBA(33, 33, 33, 1)
+        FalseText: ="Debug"
+        FocusedBorderThickness: =4
+        Font: =Font.'Segoe UI'
+        HandleFill: =RGBA(255, 255, 255, 1)
+        Height: =52
+        HoverBorderColor: =RGBA(0, 0, 0, 0)
+        OnCheck: =Set(varDebug, true)
+        OnUncheck: =Set(varDebug, false)
+        PressedBorderColor: =RGBA(0, 0, 0, 0)
+        Size: =13
+        TrueFill: =RGBA(221, 79, 14, 1)
+        TrueHoverFill: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+        TrueText: ="Debug"
+        Visible: =Self.Value
+        Width: =185
+        X: =36
+        Y: =145
+        ZIndex: =23
+
+    collectCounters As button:
+        BorderColor: =RGBA(0, 0, 0, 0)
+        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        DisabledFill: =RGBA(244, 244, 244, 1)
+        Fill: =RGBA(105, 121, 126, 1)
+        FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+        Font: =Font.'Segoe UI'
+        FontWeight: =FontWeight.Semibold
+        HoverBorderColor: =RGBA(0, 0, 0, 0)
+        HoverColor: =RGBA(255, 255, 255, 1)
+        HoverFill: =ColorFade(RGBA(105, 121, 126, 1), -10%)
+        OnSelect: |-
+            =Concurrent(
+                ClearCollect(
+                    colFilterMainReported,
+                    Filter(
+                        colSystem,
+                        'Created By'.DisplayName = First(colUser).DisplayName
+                    )
+                ),
+                ClearCollect(
+                    colFilterMainAssigned,
+                    Filter(
+                        colSystem,
+                        Responsible.DisplayName = First(colUser).DisplayName,
+                        Phase.Value = "Ongoing"
+                    )
+                ),/*
+                ClearCollect(
+                    colFilterMainOwner,
+                    Filter(
+                        ClinicsDeviationSystem,
+                        Owner.DisplayName = First(colUser).DisplayName Or 'Default Responsible'.DisplayName = First(colUser).DisplayName Or 'Operations Manager'.DisplayName = First(colUser).DisplayName
+                    )
+                ),*/
+                ClearCollect(
+                    colFilterMainDrafts,
+                    Filter(
+                        colSystem,
+                        'Created By'.DisplayName = First(colUser).DisplayName,
+                        Phase.Value = "DraftNew" Or Phase.Value = "DraftEdit"
+                    )
+                )
+            );
+        PressedBorderColor: =ColorFade(RGBA(105, 121, 126, 1), -50%)
+        PressedColor: =RGBA(255, 255, 255, 1)
+        PressedFill: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+        RadiusBottomLeft: =0
+        RadiusBottomRight: =0
+        RadiusTopLeft: =0
+        RadiusTopRight: =0
+        Size: =15
+        Text: ="collectCounters"
+        Visible: =false
+        X: =301
+        Y: =30
+        ZIndex: =24
+

@@ -1,0 +1,1415 @@
+"Success As screen.'tabletLayout_Success_ver3.0'":
+    LoadingSpinnerColor: =RGBA(105, 121, 126, 1)
+    OnVisible: |-
+        =If(
+            DataCardValue82.Selected.Value = Last(
+                FirstN(
+                    Split(
+                        LookUp(
+                            colAreaList,
+                            'Area/Specific Area' = "SupplierType" And Title = "Sales & Private Market"
+                        ).Translation,
+                        ";"
+                    ),
+                    varLanguageID
+                )
+            ).Result && varFormMode = "New" && varFormSubmit = true && !debug.Value,
+                Select(btnPatchSales),
+            If(
+                varFormMode = "New" && varFormSubmit = true && !debug.Value,
+                Select(btnPatchNew),
+                varFormMode = "Edit" && varFormSubmit = true && !debug.Value,
+                Select(btnPatchEdit)
+            )
+        )
+
+    iconCircle1 As circle.Circle:
+        BorderColor: =RGBA(166, 166, 166, 1)
+        BorderStyle: =BorderStyle.None
+        BorderThickness: =2
+        DisabledFill: =RGBA(105, 121, 126, 1)
+        Fill: =RGBA(105, 121, 126, 1)
+        Height: =71.15
+        HoverFill: =RGBA(105, 121, 126, 1)
+        PressedFill: =RGBA(105, 121, 126, 1)
+        Width: =71.15
+        X: =Parent.Width / 2 - Self.Width / 2
+        Y: =(Parent.Height/2 - Self.Height/2) * .7
+        ZIndex: =1
+
+    iconCheck1 As icon.Check:
+        BorderColor: =RGBA(0, 0, 0, 0)
+        Color: =RGBA(255, 255, 255, 1)
+        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+        DisabledColor: =RGBA(220, 220, 220, 1)
+        DisplayMode: =DisplayMode.View
+        Height: =iconCircle1.Height
+        Icon: =Icon.Check
+        PaddingBottom: =Self.PaddingTop
+        PaddingLeft: =Self.PaddingTop
+        PaddingRight: =17.07
+        PaddingTop: =17.07
+        PressedFill: =RGBA(0, 0, 0, 0)
+        Width: =71.15
+        X: =Parent.Width / 2 - Self.Width / 2
+        Y: =(Parent.Height/2 - Self.Height/2) * .7
+        ZIndex: =2
+
+    LblSuccessMsg1 As label:
+        Align: =Align.Center
+        AutoHeight: =true
+        Color: =RGBA(51, 51, 51, 1)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        Font: =Font.'Segoe UI'
+        Height: =iconCircle1.Height
+        PaddingRight: =3.56
+        PaddingTop: =3.56
+        Size: =14.23
+        Text: =locSuccessText
+        Width: =1024.5
+        X: =Parent.Width / 2 - Self.Width / 2
+        Y: =iconCheck1.Y + iconCheck1.Height + 100
+        ZIndex: =3
+
+    Timer1 As timer:
+        AutoStart: =true
+        BorderColor: =RGBA(105, 121, 126, 1)
+        BorderStyle: =BorderStyle.None
+        DisabledBorderColor: =RGBA(244, 244, 244, 1)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        DisabledFill: =RGBA(244, 244, 244, 1)
+        Duration: =500
+        Fill: =RGBA(105, 121, 126, 1)
+        Font: =Font.'Segoe UI'
+        HoverBorderColor: =ColorFade(RGBA(105, 121, 126, 1), -10%)
+        HoverColor: =RGBA(255, 255, 255, 1)
+        HoverFill: =ColorFade(RGBA(105, 121, 126, 1), -10%)
+        OnTimerEnd: |-
+            =If(
+                locStartTimer,
+                Set(
+                    varCollectDataCheck,
+                    false
+                );
+                If(
+                    IsBlank(varBack),
+                    Navigate(Start),
+                    Navigate(varBack)
+                );
+                ResetForm(Form1);
+                Set(
+                    varFormSubmit,
+                    false
+                );
+                UpdateContext({locSuccessText: Blank()});
+                UpdateContext({locStartTimer: false})
+            )
+        PaddingRight: =3.56
+        PaddingTop: =3.56
+        PressedBorderColor: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+        PressedColor: =RGBA(255, 255, 255, 1)
+        PressedFill: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+        Repeat: =true
+        Size: =9.25
+        Text: |-
+            =Text(Time(0, 0, Self.Value/1000), "hh:mm:ss.fff")
+        Visible: =false
+        Width: =113.83
+        X: =28.46
+        Y: =40
+        ZIndex: =4
+
+    btnPatchNew As button:
+        BorderColor: =RGBA(0, 0, 0, 0)
+        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        DisabledFill: =RGBA(244, 244, 244, 1)
+        Fill: =RGBA(105, 121, 126, 1)
+        FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+        Font: =Font.'Segoe UI'
+        FontWeight: =FontWeight.Semibold
+        HoverBorderColor: =RGBA(0, 0, 0, 0)
+        HoverColor: =RGBA(255, 255, 255, 1)
+        HoverFill: =ColorFade(RGBA(105, 121, 126, 1), -10%)
+        OnSelect: |
+            =UpdateContext({locSuccessText: "Patching..."});
+            Collect(
+                colSystem,
+                Patch(
+                    ClinicsDeviationSystem,
+                    Defaults(ClinicsDeviationSystem),
+                    Form1.Updates,
+                    {
+                        Title: DataCardValue20.Text,
+                        Owner: DataCardValue12.Selected,
+                        Responsible: DataCardValue22.Selected,
+                        'Prev. Responsible': DataCardValue13.Selected,
+                        'Default Responsible': DataCardValue6.Selected,
+                        Area: {
+                            '@odata.type': "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference",
+                            //Id:1,
+                            Value: First(
+                                Filter(
+                                    colAreaList,
+                                    'Area/Specific Area' = "Area",
+                                    ID = First(
+                                        Filter(
+                                            colAreaList,
+                                            Last(
+                                                FirstN(
+                                                    Split(
+                                                        Translation,
+                                                        ";"
+                                                    ),
+                                                    varLanguageID
+                                                )
+                                            ).Result = DataCardValue3.Selected.Value
+                                        )
+                                    ).ID
+                                )
+                            ).Title
+                        },
+                        'Specific Area': {
+                            '@odata.type': "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference",
+                            //Id:-1,
+                            Value: First(
+                                Filter(
+                                    colAreaList,
+                                    'Area/Specific Area' = "Specific Area",
+                                    ID = First(
+                                        Filter(
+                                            colAreaList,
+                                            Last(
+                                                FirstN(
+                                                    Split(
+                                                        Translation,
+                                                        ";"
+                                                    ),
+                                                    varLanguageID
+                                                )
+                                            ).Result = DataCardValue2.Selected.Value
+                                        )
+                                    ).ID
+                                )
+                            ).Title
+                        },
+                        Phase: {
+                            '@odata.type': "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference",
+                            //Id:1,
+                            Value: LookUp(
+                                Choices(ClinicsDeviationSystem.Phase),
+                                Value = varPhaseDraft
+                            ).Value
+                        },
+                        //DataCardValue30.Selected,
+            Location: {
+                            '@odata.type': "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference",
+                            Id: If(
+                                IsBlank(DataCardValue21.Selected.Id),
+                                -1,
+                                DataCardValue21.Selected.Id
+                            ),
+                            Value: If(
+                                IsBlank(DataCardValue21.Selected.Value),
+                                Blank(),
+                                DataCardValue21.Selected.Value
+                            )
+                        },
+                        IncidentDate: DataCardValue8.SelectedDate,
+                        Description: DataCardValue18.HtmlText,
+                        External: DataCardValue25.Value,
+                        MyDepartment: {
+                            '@odata.type': "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference",
+                            Id: DataCardValue15.Selected.Id,
+                            Value: DataCardValue15.Selected.Value
+                        },
+                        SupportFunction: {
+                            '@odata.type': "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference",
+                            Id: If(
+                                IsBlank(DataCardValue27.Selected.Id),
+                                -1,
+                                DataCardValue27.Selected.Id
+                            ),
+                            Value: If(
+                                IsBlank(DataCardValue27.Selected.Value),
+                                Blank(),
+                                DataCardValue27.Selected.Value
+                            )
+                        },
+                        Supplier: {
+                            '@odata.type': "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference",
+                            Id: If(
+                                IsBlank(DataCardValue1.Selected.Id),
+                                -1,
+                                DataCardValue1.Selected.Id
+                            ),
+                            Value: If(
+                                IsBlank(DataCardValue1.Selected.Value),
+                                Blank(),
+                                DataCardValue1.Selected.Value
+                            )
+                        },
+                        'Recommended Actions': TextInput2.Text,
+                        'Actions Taken': DataCardValue26.HtmlText,
+                        Serious: DataCardValue9.Value,
+                        Finished: DataCardValue7.Value,
+                        ExternalChoices: {
+                            '@odata.type': "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference",
+                            //Id:1,
+                            Value: First(
+                                Filter(
+                                    colAreaList,
+                                    'Area/Specific Area' = "External",
+                                    ID = First(
+                                        Filter(
+                                            colAreaList,
+                                            Last(
+                                                FirstN(
+                                                    Split(
+                                                        Translation,
+                                                        ";"
+                                                    ),
+                                                    varLanguageID
+                                                )
+                                            ).Result = Radio1.Selected.Value
+                                        )
+                                    ).ID
+                                )
+                            ).Title
+                        },
+                        EventLog: DataCardValue44.Text,
+                        Postponed: Value(DataCardValue42.Text),
+                        DateExpirationAssignee: DataCardValue10.SelectedDate,
+                        //Manufacturing: ,
+                        ItemCategory: {
+                            '@odata.type': "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference",
+                            //Id:1,
+                            Value: First(
+                                Filter(
+                                    colAreaList,
+                                    'Area/Specific Area' = "ItemCategory",
+                                    ID = First(
+                                        Filter(
+                                            colAreaList,
+                                            Last(
+                                                FirstN(
+                                                    Split(
+                                                        Translation,
+                                                        ";"
+                                                    ),
+                                                    varLanguageID
+                                                )
+                                            ).Result = DataCardValue4.Selected.Value
+                                        )
+                                    ).ID
+                                )
+                            ).Title
+                        },
+                        //RecurrenceProbability: Slider2.Value,
+                        Reassign: DataCardValue43.Selected,
+                        //Keywords: ,
+                        NoActionTaken: DataCardValue50.Value,
+                        NoActionReason: DataCardValue51.Selected,
+                        ReferenceNumber: DataCardValue54.Text,
+                        ProductToManufacturing: {
+                            '@odata.type': "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference",
+                            //Id:1,
+                            Value: First(
+                                Filter(
+                                    colAreaList,
+                                    'Area/Specific Area' = "ProductToManufacturing",
+                                    ID = First(
+                                        Filter(
+                                            colAreaList,
+                                            Last(
+                                                FirstN(
+                                                    Split(
+                                                        Translation,
+                                                        ";"
+                                                    ),
+                                                    varLanguageID
+                                                )
+                                            ).Result = DataCardValue52.Selected.Value
+                                        )
+                                    ).ID
+                                )
+                            ).Title
+                        },
+                        ProductFromManufacturing: {
+                            '@odata.type': "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference",
+                            //Id:1,
+                            Value: First(
+                                Filter(
+                                    colAreaList,
+                                    'Area/Specific Area' = "ProductFromManufacturing",
+                                    ID = First(
+                                        Filter(
+                                            colAreaList,
+                                            Last(
+                                                FirstN(
+                                                    Split(
+                                                        Translation,
+                                                        ";"
+                                                    ),
+                                                    varLanguageID
+                                                )
+                                            ).Result = DataCardValue49.Selected.Value
+                                        )
+                                    ).ID
+                                )
+                            ).Title
+                        },
+                        RootCause: DataCardValue56.Text,
+                        PersonalDataReoccurrence: DataCardValue62.Value,
+                        ConsiderableRisk: DataCardValue61.Value,
+                        SupplierOrderNumber: DataCardValue69.Text,
+                        SupplierSerialNumber: DataCardValue79.Text,
+                        SupplierReturnPossible: DataCardValue75.Value,
+                        'SupplierUDI-DI/UDI-PI': DataCardValue80.Text,
+                        SupplierWillBeReturned: DataCardValue81.Value,
+                        SupplierReturnReason: {
+                            '@odata.type': "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference",
+                            //Id:1,
+                            Value: First(
+                                Filter(
+                                    colAreaList,
+                                    'Area/Specific Area' = "ReturnReason",
+                                    ID = First(
+                                        Filter(
+                                            colAreaList,
+                                            Last(
+                                                FirstN(
+                                                    Split(
+                                                        Translation,
+                                                        ";"
+                                                    ),
+                                                    varLanguageID
+                                                )
+                                            ).Result = DataCardValue76.Selected.Value
+                                        )
+                                    ).ID
+                                )
+                            ).Title
+                        },
+                        SupplierReturnReasonDescription: DataCardValue77.Text,
+                        SupplierPatientWeight: DataCardValue71.Text,
+                        SupplierLevelOfActivity: {
+                            '@odata.type': "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference",
+                            //Id:1,
+                            Value: First(
+                                Filter(
+                                    colAreaList,
+                                    'Area/Specific Area' = "ActivityLevel",
+                                    ID = First(
+                                        Filter(
+                                            colAreaList,
+                                            Last(
+                                                FirstN(
+                                                    Split(
+                                                        Translation,
+                                                        ";"
+                                                    ),
+                                                    varLanguageID
+                                                )
+                                            ).Result = DataCardValue67.Selected.Value
+                                        )
+                                    ).ID
+                                )
+                            ).Title
+                        },
+                        SupplierFittingDate: DataCardValue65.SelectedDate,
+                        SupplierDateOfIncident: DataCardValue63.SelectedDate,
+                        SupplierPracticedSports: DataCardValue72.Text,
+                        SupplierRightLeft: {
+                            '@odata.type': "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference",
+                            //Id:1,
+                            Value: First(
+                                Filter(
+                                    colAreaList,
+                                    'Area/Specific Area' = "ReturnSide",
+                                    ID = First(
+                                        Filter(
+                                            colAreaList,
+                                            Last(
+                                                FirstN(
+                                                    Split(
+                                                        Translation,
+                                                        ";"
+                                                    ),
+                                                    varLanguageID
+                                                )
+                                            ).Result = DataCardValue78.Selected.Value
+                                        )
+                                    ).ID
+                                )
+                            ).Title
+                        },
+                        SupplierItemProductNumber: DataCardValue66.Text,
+                        SupplierReclaimReturnNumber: DataCardValue74.Text,
+                        SupplierPatientRelated: DataCardValue70.Value,
+                        SupplierProductName: DataCardValue73.Text,
+                        SupplierChoices: {
+                            '@odata.type': "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference",
+                            //Id:1,
+                            Value: If(
+                                Radio1.Selected.Value = Last(
+                                    FirstN(
+                                        Split(
+                                            First(
+                                                Filter(
+                                                    colAreaList,
+                                                    Title = "Supplier"
+                                                )
+                                            ).Translation,
+                                            ";"
+                                        ),
+                                        varLanguageID
+                                    )
+                                ).Result,
+                                First(
+                                    Filter(
+                                        colAreaList,
+                                        'Area/Specific Area' = "SupplierType",
+                                        ID = First(
+                                            Filter(
+                                                colAreaList,
+                                                Last(
+                                                    FirstN(
+                                                        Split(
+                                                            Translation,
+                                                            ";"
+                                                        ),
+                                                        varLanguageID
+                                                    )
+                                                ).Result = DataCardValue82.Selected.Value
+                                            )
+                                        ).ID
+                                    )
+                                ).Title,
+                                ""
+                            )
+                        },
+                        'Operations Manager': DataCardValue14.Selected,
+                        ProductName: ComboBox2.Selected.Title,
+                        Secrecy: DataCardValue19.Value,
+                        InjuryEmployee: DataCardValue23.Value,
+                        InjuryPatient: DataCardValue17.Value,
+                        AssigneeStarted: DataCardValue28.Value
+                    }
+                )
+            );
+            UpdateContext({locSuccessText: "Saving successfull!"});
+            UpdateContext({locStartTimer: true});
+            /*Set(
+                varCollectDataCheck,
+                false
+            );
+            If(
+                IsBlank(varBack),
+                Navigate(Start),
+                Navigate(varBack)
+            );
+            ResetForm(Form1);
+            Set(
+                varFormSubmit,
+                false
+            );
+            UpdateContext({locSuccessText: Blank()});*/
+        PressedBorderColor: =ColorFade(RGBA(105, 121, 126, 1), -50%)
+        PressedColor: =RGBA(255, 255, 255, 1)
+        PressedFill: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+        RadiusBottomLeft: =0
+        RadiusBottomRight: =0
+        RadiusTopLeft: =0
+        RadiusTopRight: =0
+        Size: =15
+        Text: ="New"
+        Visible: =debug.Value
+        X: =475
+        Y: =545
+        ZIndex: =5
+
+    btnPatchEdit As button:
+        BorderColor: =RGBA(0, 0, 0, 0)
+        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        DisabledFill: =RGBA(244, 244, 244, 1)
+        Fill: =RGBA(105, 121, 126, 1)
+        FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+        Font: =Font.'Segoe UI'
+        FontWeight: =FontWeight.Semibold
+        HoverBorderColor: =RGBA(0, 0, 0, 0)
+        HoverColor: =RGBA(255, 255, 255, 1)
+        HoverFill: =ColorFade(RGBA(105, 121, 126, 1), -10%)
+        OnSelect: |-
+            =UpdateContext({locSuccessText: "Patching..."});
+            UpdateContext(
+                {
+                    locLastSubmitted: Patch(
+                        ClinicsDeviationSystem,
+                        //{ID: varDataTableEdit.ID},
+                        LookUp(ClinicsDeviationSystem, ID = varDataTableEdit.ID),
+                        Form1.Updates,
+                        {
+                            Title: DataCardValue20.Text,
+                            Owner: DataCardValue12.Selected,
+                            Responsible: DataCardValue22.Selected,
+                            'Prev. Responsible': varPrevAssignee,
+                            'Default Responsible': DataCardValue6.Selected,
+                            Area: {
+                                '@odata.type': "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference",
+                                //Id:1,
+                                Value: First(
+                                    Filter(
+                                        colAreaList,
+                                        'Area/Specific Area' = "Area",
+                                        ID = First(
+                                            Filter(
+                                                colAreaList,
+                                                Last(
+                                                    FirstN(
+                                                        Split(
+                                                            Translation,
+                                                            ";"
+                                                        ),
+                                                        varLanguageID
+                                                    )
+                                                ).Result = DataCardValue3.Selected.Value
+                                            )
+                                        ).ID
+                                    )
+                                ).Title
+                            },
+                            'Specific Area': {
+                                '@odata.type': "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference",
+                                //Id:-1,
+                                Value: First(
+                                    Filter(
+                                        colAreaList,
+                                        'Area/Specific Area' = "Specific Area",
+                                        ID = First(
+                                            Filter(
+                                                colAreaList,
+                                                Last(
+                                                    FirstN(
+                                                        Split(
+                                                            Translation,
+                                                            ";"
+                                                        ),
+                                                        varLanguageID
+                                                    )
+                                                ).Result = DataCardValue2.Selected.Value
+                                            )
+                                        ).ID
+                                    )
+                                ).Title
+                            },
+                            Phase: {
+                            '@odata.type': "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference",
+                            //Id:1,
+                            Value: LookUp(Choices(ClinicsDeviationSystem.Phase), Value = varPhaseDraft).Value
+                        },//DataCardValue30.Selected,
+                            Location: {
+                                '@odata.type': "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference",
+                                Id: If(
+                                    IsBlank(DataCardValue21.Selected.Id),
+                                    -1,
+                                    DataCardValue21.Selected.Id
+                                ),
+                                Value: If(
+                                    IsBlank(DataCardValue21.Selected.Value),
+                                    Blank(),
+                                    DataCardValue21.Selected.Value
+                                )
+                            },
+                            IncidentDate: DataCardValue8.SelectedDate,
+                            Description: DataCardValue18.HtmlText,
+                            External: DataCardValue25.Value,
+                            MyDepartment: {
+                                '@odata.type': "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference",
+                                Id: DataCardValue15.Selected.Id,
+                                Value: DataCardValue15.Selected.Value
+                            },
+                            SupportFunction: {
+                                '@odata.type': "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference",
+                                Id: If(
+                                    IsBlank(DataCardValue27.Selected.Id),
+                                    -1,
+                                    DataCardValue27.Selected.Id
+                                ),
+                                Value: If(
+                                    IsBlank(DataCardValue27.Selected.Value),
+                                    Blank(),
+                                    DataCardValue27.Selected.Value
+                                )
+                            },
+                            Supplier: {
+                                '@odata.type': "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference",
+                                Id: If(
+                                    IsBlank(DataCardValue1.Selected.Id),
+                                    -1,
+                                    DataCardValue1.Selected.Id
+                                ),
+                                Value: If(
+                                    IsBlank(DataCardValue1.Selected.Value),
+                                    Blank(),
+                                    DataCardValue1.Selected.Value
+                                )
+                            },
+                            'Recommended Actions': TextInput2.Text,
+                            'Actions Taken': DataCardValue26.HtmlText,
+                            Serious: DataCardValue9.Value,
+                            Finished: DataCardValue7.Value,
+                            ExternalChoices: {
+                                '@odata.type': "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference",
+                                //Id:1,
+                                Value: First(
+                                    Filter(
+                                        colAreaList,
+                                        'Area/Specific Area' = "External",
+                                        ID = First(
+                                            Filter(
+                                                colAreaList,
+                                                Last(
+                                                    FirstN(
+                                                        Split(
+                                                            Translation,
+                                                            ";"
+                                                        ),
+                                                        varLanguageID
+                                                    )
+                                                ).Result = Radio1.Selected.Value
+                                            )
+                                        ).ID
+                                    )
+                                ).Title
+                            },
+                            EventLog: DataCardValue44.Text,
+                            Postponed: Value(DataCardValue42.Text),
+                            DateExpirationAssignee: DataCardValue10.SelectedDate,
+                            //Manufacturing: ,
+                            ItemCategory: {
+                                '@odata.type': "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference",
+                                //Id:1,
+                                Value: First(
+                                    Filter(
+                                        colAreaList,
+                                        'Area/Specific Area' = "ItemCategory",
+                                        ID = First(
+                                            Filter(
+                                                colAreaList,
+                                                Last(
+                                                    FirstN(
+                                                        Split(
+                                                            Translation,
+                                                            ";"
+                                                        ),
+                                                        varLanguageID
+                                                    )
+                                                ).Result = DataCardValue4.Selected.Value
+                                            )
+                                        ).ID
+                                    )
+                                ).Title
+                            },
+                            //RecurrenceProbability: Slider2.Value,
+                            Reassign: DataCardValue43.Selected,
+                            //Keywords: ,
+                            NoActionTaken: DataCardValue50.Value,
+                            NoActionReason: DataCardValue51.Selected,
+                            ReferenceNumber: DataCardValue54.Text,
+                            ProductToManufacturing: {
+                                '@odata.type': "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference",
+                                //Id:1,
+                                Value: First(
+                                    Filter(
+                                        colAreaList,
+                                        'Area/Specific Area' = "ProductToManufacturing",
+                                        ID = First(
+                                            Filter(
+                                                colAreaList,
+                                                Last(
+                                                    FirstN(
+                                                        Split(
+                                                            Translation,
+                                                            ";"
+                                                        ),
+                                                        varLanguageID
+                                                    )
+                                                ).Result = DataCardValue52.Selected.Value
+                                            )
+                                        ).ID
+                                    )
+                                ).Title
+                            },
+                            ProductFromManufacturing: {
+                                '@odata.type': "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference",
+                                //Id:1,
+                                Value: First(
+                                    Filter(
+                                        colAreaList,
+                                        'Area/Specific Area' = "ProductFromManufacturing",
+                                        ID = First(
+                                            Filter(
+                                                colAreaList,
+                                                Last(
+                                                    FirstN(
+                                                        Split(
+                                                            Translation,
+                                                            ";"
+                                                        ),
+                                                        varLanguageID
+                                                    )
+                                                ).Result = DataCardValue49.Selected.Value
+                                            )
+                                        ).ID
+                                    )
+                                ).Title
+                            },
+                            RootCause: DataCardValue56.Text,
+                            PersonalDataReoccurrence: DataCardValue62.Value,
+                            ConsiderableRisk: DataCardValue61.Value,
+                            SupplierOrderNumber: DataCardValue69.Text,
+                            SupplierSerialNumber: DataCardValue79.Text,
+                            SupplierReturnPossible: DataCardValue75.Value,
+                            'SupplierUDI-DI/UDI-PI': DataCardValue80.Text,
+                            SupplierWillBeReturned: DataCardValue81.Value,
+                            SupplierReturnReason: {
+                                '@odata.type': "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference",
+                                //Id:1,
+                                Value: First(
+                                    Filter(
+                                        colAreaList,
+                                        'Area/Specific Area' = "ReturnReason",
+                                        ID = First(
+                                            Filter(
+                                                colAreaList,
+                                                Last(
+                                                    FirstN(
+                                                        Split(
+                                                            Translation,
+                                                            ";"
+                                                        ),
+                                                        varLanguageID
+                                                    )
+                                                ).Result = DataCardValue76.Selected.Value
+                                            )
+                                        ).ID
+                                    )
+                                ).Title
+                            },
+                            SupplierReturnReasonDescription: DataCardValue77.Text,
+                            SupplierPatientWeight: DataCardValue71.Text,
+                            SupplierLevelOfActivity: {
+                                '@odata.type': "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference",
+                                //Id:1,
+                                Value: First(
+                                    Filter(
+                                        colAreaList,
+                                        'Area/Specific Area' = "ActivityLevel",
+                                        ID = First(
+                                            Filter(
+                                                colAreaList,
+                                                Last(
+                                                    FirstN(
+                                                        Split(
+                                                            Translation,
+                                                            ";"
+                                                        ),
+                                                        varLanguageID
+                                                    )
+                                                ).Result = DataCardValue67.Selected.Value
+                                            )
+                                        ).ID
+                                    )
+                                ).Title
+                            },
+                            SupplierFittingDate: DataCardValue65.SelectedDate,
+                            SupplierDateOfIncident: DataCardValue63.SelectedDate,
+                            SupplierPracticedSports: DataCardValue72.Text,
+                            SupplierRightLeft: {
+                                '@odata.type': "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference",
+                                //Id:1,
+                                Value: First(
+                                    Filter(
+                                        colAreaList,
+                                        'Area/Specific Area' = "ReturnSide",
+                                        ID = First(
+                                            Filter(
+                                                colAreaList,
+                                                Last(
+                                                    FirstN(
+                                                        Split(
+                                                            Translation,
+                                                            ";"
+                                                        ),
+                                                        varLanguageID
+                                                    )
+                                                ).Result = DataCardValue78.Selected.Value
+                                            )
+                                        ).ID
+                                    )
+                                ).Title
+                            },
+                            SupplierItemProductNumber: DataCardValue66.Text,
+                            SupplierReclaimReturnNumber: DataCardValue74.Text,
+                            SupplierPatientRelated: DataCardValue70.Value,
+                            SupplierProductName: DataCardValue73.Text,
+                            SupplierChoices: {
+                                '@odata.type': "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference",
+                                //Id:1,
+                                Value: If(
+                                    Radio1.Selected.Value = Last(
+                                        FirstN(
+                                            Split(
+                                                First(
+                                                    Filter(
+                                                        colAreaList,
+                                                        Title = "Supplier"
+                                                    )
+                                                ).Translation,
+                                                ";"
+                                            ),
+                                            varLanguageID
+                                        )
+                                    ).Result,
+                                    First(
+                                        Filter(
+                                            colAreaList,
+                                            'Area/Specific Area' = "SupplierType",
+                                            ID = First(
+                                                Filter(
+                                                    colAreaList,
+                                                    Last(
+                                                        FirstN(
+                                                            Split(
+                                                                Translation,
+                                                                ";"
+                                                            ),
+                                                            varLanguageID
+                                                        )
+                                                    ).Result = DataCardValue82.Selected.Value
+                                                )
+                                            ).ID
+                                        )
+                                    ).Title,
+                                    ""
+                                )
+                            },
+                            'Operations Manager': DataCardValue14.Selected,
+                            ProductName: ComboBox2.Selected.Title,
+                            Secrecy: DataCardValue19.Value,
+                            InjuryEmployee: DataCardValue23.Value,
+                            InjuryPatient: DataCardValue17.Value,
+                            AssigneeStarted: DataCardValue28.Value,
+                            SupplierEmail: TextEmailRecipient.Text,
+                            SupplierComment: If(
+                                TextCommentToVendor.HtmlText = "Add comments to supplier here. ",
+                                Blank(),
+                                TextCommentToVendor.HtmlText
+                            ),
+                            'Process Feedback': Concatenate(
+                                Concat(
+                                    colProcessFeedback,
+                                    Result,
+                                    Char(10)
+                                ),
+                                /*If(
+                                    !IsEmpty(colProcessFeedback);
+                                    Char(10)
+                                )*/
+                                Blank()
+                            ),
+                            RiskConsequence:cmpRiskAnalysis_CheckBox_1.valueOut,
+                            RiskRating: cmpRiskAnalysis_CheckBox_1.calcValueOut,
+                            FollowUpCheck: If((cmpRiskAnalysis_CheckBox_1.calcValueOut > 9 Or chkFollowUp.Value) And !chkNoFollowUp.Value, "1", "0"),
+                            FollowUpDate: dateFollowUp.SelectedDate,
+                            FollowUpComment: txtNoFollowUp.Text,
+                            FollowUpDescription: If(varDataTableEdit.FollowUpCheck = "1", DataCardValue56_1.Text),
+                            FollowUpSuccess: 
+                            LookUp(
+                                        colAreaList,
+                                        'Area/Specific Area' = "Boolean" And
+                                        ID = First(
+                                            Filter(
+                                                colAreaList,
+                                                Last(
+                                                    FirstN(
+                                                        Split(
+                                                            Translation,
+                                                            ";"
+                                                        ),
+                                                        varLanguageID
+                                                    )
+                                                ).Result = Radio2.Selected.Value
+                                            )
+                                        ).ID
+                                    ).Title
+                        }
+                    )
+                }
+            );
+            UpdateContext({locSuccessText: "Patching finished date..."});
+            If(
+                DataCardValue7.Value = true,
+                Patch(
+                    ClinicsDeviationSystem,
+                    {ID: varDataTableEdit.ID},
+                    {FinishedDate: Today()}
+                )
+            );
+            UpdateContext({locSuccessText: "Clearing parameters..."});
+            Set(
+                varScreenParam,
+                Blank()
+            );
+            Set(
+                varFormID,
+                Blank()
+            );
+            UpdateContext({locSuccessText: "Updating SharePoint data..."});
+            Update(
+                colSystem,
+                LookUp(
+                    colSystem,
+                    ID = locLastSubmitted.ID
+                ),
+                LookUp(
+                    ClinicsDeviationSystem,
+                    ID = locLastSubmitted.ID
+                )
+            );
+            UpdateContext({locSuccessText: "Updating table data..."});
+            Update(
+                colTableData,
+                LookUp(
+                    colTableData,
+                    ID = locLastSubmitted.ID
+                ),
+                LookUp(
+                    ClinicsDeviationSystem,
+                    ID = locLastSubmitted.ID
+                )
+            );
+            UpdateContext({locSuccessText: "Saving successfull!"});
+            UpdateContext({locStartTimer: true});
+            /*Set(varCollectDataCheck, false);
+            If(
+                IsBlank(varBack),
+                Navigate(Start),
+                Navigate(varBack)
+            );
+            ResetForm(Form1);
+            Set(
+                varFormSubmit,
+                false
+            );
+            UpdateContext({locSuccessText: Blank()});*/
+        PressedBorderColor: =ColorFade(RGBA(105, 121, 126, 1), -50%)
+        PressedColor: =RGBA(255, 255, 255, 1)
+        PressedFill: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+        RadiusBottomLeft: =0
+        RadiusBottomRight: =0
+        RadiusTopLeft: =0
+        RadiusTopRight: =0
+        Size: =15
+        Text: ="Edit"
+        Visible: =debug.Value
+        X: =718
+        Y: =545
+        ZIndex: =6
+
+    btnPatchSales As button:
+        BorderColor: =RGBA(0, 0, 0, 0)
+        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        DisabledFill: =RGBA(244, 244, 244, 1)
+        Fill: =RGBA(105, 121, 126, 1)
+        FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+        Font: =Font.'Segoe UI'
+        FontWeight: =FontWeight.Semibold
+        HoverBorderColor: =RGBA(0, 0, 0, 0)
+        HoverColor: =RGBA(255, 255, 255, 1)
+        HoverFill: =ColorFade(RGBA(105, 121, 126, 1), -10%)
+        OnSelect: |
+            =UpdateContext({locSuccessText: "Patching..."});
+            Collect(
+                colSystem,
+                Patch(
+                    ClinicsDeviationSystem,
+                    Defaults(ClinicsDeviationSystem),
+                    Form1.Updates,
+                    {
+                        Title: DataCardValue20.Text,
+                        Owner: DataCardValue12.Selected,
+                        Responsible: DataCardValue22.Selected,
+                        'Prev. Responsible': DataCardValue13.Selected,
+                        'Default Responsible': DataCardValue6.Selected,
+                        Area: {
+                            '@odata.type': "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference",
+                            //Id:1,
+                            Value: First(
+                                Filter(
+                                    colAreaList,
+                                    'Area/Specific Area' = "Area",
+                                    ID = First(
+                                        Filter(
+                                            colAreaList,
+                                            Last(
+                                                FirstN(
+                                                    Split(
+                                                        Translation,
+                                                        ";"
+                                                    ),
+                                                    varLanguageID
+                                                )
+                                            ).Result = DataCardValue3.Selected.Value
+                                        )
+                                    ).ID
+                                )
+                            ).Title
+                        },
+                        'Specific Area': {
+                            '@odata.type': "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference",
+                            //Id:-1,
+                            Value: "Broken/Non-functional Product"
+                        },
+                        Phase: {
+                            '@odata.type': "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference",
+                            //Id:1,
+                            Value: LookUp(
+                                Choices(ClinicsDeviationSystem.Phase),
+                                Value = varPhaseDraft
+                            ).Value
+                        },
+                        //DataCardValue30.Selected,
+            Location: {
+                            '@odata.type': "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference",
+                            Id: If(
+                                IsBlank(DataCardValue21.Selected.Id),
+                                -1,
+                                DataCardValue21.Selected.Id
+                            ),
+                            Value: If(
+                                IsBlank(DataCardValue21.Selected.Value),
+                                Blank(),
+                                DataCardValue21.Selected.Value
+                            )
+                        },
+                        IncidentDate: DataCardValue8.SelectedDate,
+                        Description: DataCardValue18.HtmlText,
+                        External: DataCardValue25.Value,
+                        MyDepartment: {
+                            '@odata.type': "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference",
+                            Id: DataCardValue15.Selected.Id,
+                            Value: DataCardValue15.Selected.Value
+                        },
+                        SupportFunction: {
+                            '@odata.type': "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference",
+                            Id: If(
+                                IsBlank(DataCardValue27.Selected.Id),
+                                -1,
+                                DataCardValue27.Selected.Id
+                            ),
+                            Value: If(
+                                IsBlank(DataCardValue27.Selected.Value),
+                                Blank(),
+                                DataCardValue27.Selected.Value
+                            )
+                        },
+                        Supplier: {
+                            '@odata.type': "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference",
+                            Id: If(
+                                IsBlank(DataCardValue1.Selected.Id),
+                                -1,
+                                DataCardValue1.Selected.Id
+                            ),
+                            Value: If(
+                                IsBlank(DataCardValue1.Selected.Value),
+                                Blank(),
+                                DataCardValue1.Selected.Value
+                            )
+                        },
+                        'Recommended Actions': TextInput2.Text,
+                        'Actions Taken': DataCardValue26.HtmlText,
+                        Serious: DataCardValue9.Value,
+                        Finished: true,
+                        ExternalChoices: {
+                            '@odata.type': "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference",
+                            //Id:1,
+                            Value: First(
+                                Filter(
+                                    colAreaList,
+                                    'Area/Specific Area' = "External",
+                                    ID = First(
+                                        Filter(
+                                            colAreaList,
+                                            Last(
+                                                FirstN(
+                                                    Split(
+                                                        Translation,
+                                                        ";"
+                                                    ),
+                                                    varLanguageID
+                                                )
+                                            ).Result = Radio1.Selected.Value
+                                        )
+                                    ).ID
+                                )
+                            ).Title
+                        },
+                        EventLog: DataCardValue44.Text,
+                        Postponed: Value(DataCardValue42.Text),
+                        DateExpirationAssignee: Today(),
+                        //Manufacturing: ,
+                        ItemCategory: {
+                            '@odata.type': "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference",
+                            //Id:1,
+                            Value: First(
+                                Filter(
+                                    colAreaList,
+                                    'Area/Specific Area' = "ItemCategory",
+                                    ID = First(
+                                        Filter(
+                                            colAreaList,
+                                            Last(
+                                                FirstN(
+                                                    Split(
+                                                        Translation,
+                                                        ";"
+                                                    ),
+                                                    varLanguageID
+                                                )
+                                            ).Result = DataCardValue4.Selected.Value
+                                        )
+                                    ).ID
+                                )
+                            ).Title
+                        },
+                        //RecurrenceProbability: Slider2.Value,
+                        Reassign: DataCardValue43.Selected,
+                        //Keywords: ,
+                        NoActionTaken: DataCardValue50.Value,
+                        NoActionReason: DataCardValue51.Selected,
+                        ReferenceNumber: DataCardValue54.Text,
+                        ProductToManufacturing: {
+                            '@odata.type': "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference",
+                            //Id:1,
+                            Value: First(
+                                Filter(
+                                    colAreaList,
+                                    'Area/Specific Area' = "ProductToManufacturing",
+                                    ID = First(
+                                        Filter(
+                                            colAreaList,
+                                            Last(
+                                                FirstN(
+                                                    Split(
+                                                        Translation,
+                                                        ";"
+                                                    ),
+                                                    varLanguageID
+                                                )
+                                            ).Result = DataCardValue52.Selected.Value
+                                        )
+                                    ).ID
+                                )
+                            ).Title
+                        },
+                        ProductFromManufacturing: {
+                            '@odata.type': "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference",
+                            //Id:1,
+                            Value: First(
+                                Filter(
+                                    colAreaList,
+                                    'Area/Specific Area' = "ProductFromManufacturing",
+                                    ID = First(
+                                        Filter(
+                                            colAreaList,
+                                            Last(
+                                                FirstN(
+                                                    Split(
+                                                        Translation,
+                                                        ";"
+                                                    ),
+                                                    varLanguageID
+                                                )
+                                            ).Result = DataCardValue49.Selected.Value
+                                        )
+                                    ).ID
+                                )
+                            ).Title
+                        },
+                        RootCause: "Automatisk stängning för att föra statistik över trasiga produkter från butik.",
+                        PersonalDataReoccurrence: DataCardValue62.Value,
+                        ConsiderableRisk: DataCardValue61.Value,
+                        SupplierOrderNumber: DataCardValue69.Text,
+                        SupplierSerialNumber: DataCardValue79.Text,
+                        SupplierReturnPossible: DataCardValue75.Value,
+                        'SupplierUDI-DI/UDI-PI': DataCardValue80.Text,
+                        SupplierWillBeReturned: DataCardValue81.Value,
+                        SupplierReturnReason: {
+                            '@odata.type': "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference",
+                            //Id:1,
+                            Value: First(
+                                Filter(
+                                    colAreaList,
+                                    'Area/Specific Area' = "ReturnReason",
+                                    ID = First(
+                                        Filter(
+                                            colAreaList,
+                                            Last(
+                                                FirstN(
+                                                    Split(
+                                                        Translation,
+                                                        ";"
+                                                    ),
+                                                    varLanguageID
+                                                )
+                                            ).Result = DataCardValue76.Selected.Value
+                                        )
+                                    ).ID
+                                )
+                            ).Title
+                        },
+                        SupplierReturnReasonDescription: DataCardValue77.Text,
+                        SupplierPatientWeight: DataCardValue71.Text,
+                        SupplierLevelOfActivity: {
+                            '@odata.type': "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference",
+                            //Id:1,
+                            Value: First(
+                                Filter(
+                                    colAreaList,
+                                    'Area/Specific Area' = "ActivityLevel",
+                                    ID = First(
+                                        Filter(
+                                            colAreaList,
+                                            Last(
+                                                FirstN(
+                                                    Split(
+                                                        Translation,
+                                                        ";"
+                                                    ),
+                                                    varLanguageID
+                                                )
+                                            ).Result = DataCardValue67.Selected.Value
+                                        )
+                                    ).ID
+                                )
+                            ).Title
+                        },
+                        SupplierFittingDate: DataCardValue65.SelectedDate,
+                        SupplierDateOfIncident: DataCardValue63.SelectedDate,
+                        SupplierPracticedSports: DataCardValue72.Text,
+                        SupplierRightLeft: {
+                            '@odata.type': "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference",
+                            //Id:1,
+                            Value: First(
+                                Filter(
+                                    colAreaList,
+                                    'Area/Specific Area' = "ReturnSide",
+                                    ID = First(
+                                        Filter(
+                                            colAreaList,
+                                            Last(
+                                                FirstN(
+                                                    Split(
+                                                        Translation,
+                                                        ";"
+                                                    ),
+                                                    varLanguageID
+                                                )
+                                            ).Result = DataCardValue78.Selected.Value
+                                        )
+                                    ).ID
+                                )
+                            ).Title
+                        },
+                        SupplierItemProductNumber: DataCardValue66.Text,
+                        SupplierReclaimReturnNumber: DataCardValue74.Text,
+                        SupplierPatientRelated: DataCardValue70.Value,
+                        SupplierProductName: DataCardValue73.Text,
+                        SupplierChoices: {
+                            '@odata.type': "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference",
+                            //Id:1,
+                            Value: If(
+                                Radio1.Selected.Value = Last(
+                                    FirstN(
+                                        Split(
+                                            First(
+                                                Filter(
+                                                    colAreaList,
+                                                    Title = "Supplier"
+                                                )
+                                            ).Translation,
+                                            ";"
+                                        ),
+                                        varLanguageID
+                                    )
+                                ).Result,
+                                First(
+                                    Filter(
+                                        colAreaList,
+                                        'Area/Specific Area' = "SupplierType",
+                                        ID = First(
+                                            Filter(
+                                                colAreaList,
+                                                Last(
+                                                    FirstN(
+                                                        Split(
+                                                            Translation,
+                                                            ";"
+                                                        ),
+                                                        varLanguageID
+                                                    )
+                                                ).Result = DataCardValue82.Selected.Value
+                                            )
+                                        ).ID
+                                    )
+                                ).Title,
+                                ""
+                            )
+                        },
+                        'Operations Manager': DataCardValue14.Selected,
+                        ProductName: ComboBox2.Selected.Title,
+                        Secrecy: DataCardValue19.Value,
+                        InjuryEmployee: DataCardValue23.Value,
+                        InjuryPatient: DataCardValue17.Value,
+                        AssigneeStarted: DataCardValue28.Value,
+                        RiskConsequence: "1_1",
+                        RiskRating: 1,
+                        FinishedDate: Today()
+                    }
+                )
+            );
+            UpdateContext({locSuccessText: "Saving successfull!"});
+            UpdateContext({locStartTimer: true});
+            /*Set(
+                varCollectDataCheck,
+                false
+            );
+            If(
+                IsBlank(varBack),
+                Navigate(Start),
+                Navigate(varBack)
+            );
+            ResetForm(Form1);
+            Set(
+                varFormSubmit,
+                false
+            );
+            UpdateContext({locSuccessText: Blank()});*/
+        PressedBorderColor: =ColorFade(RGBA(105, 121, 126, 1), -50%)
+        PressedColor: =RGBA(255, 255, 255, 1)
+        PressedFill: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+        RadiusBottomLeft: =0
+        RadiusBottomRight: =0
+        RadiusTopLeft: =0
+        RadiusTopRight: =0
+        Size: =15
+        Text: ="Sales"
+        Visible: =debug.Value
+        X: =602
+        Y: =642
+        ZIndex: =7
+

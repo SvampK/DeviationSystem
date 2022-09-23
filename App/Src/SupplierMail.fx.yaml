@@ -1,0 +1,582 @@
+"SupplierMail As screen.'tabletLayout_Email_ver3.0'":
+    LoadingSpinnerColor: =RGBA(105, 121, 126, 1)
+    OnVisible: =
+
+    LblEmailSubject2 As label:
+        Color: =RGBA(51, 51, 51, 1)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        Font: =Font.'Segoe UI'
+        FontWeight: =FontWeight.Semibold
+        PaddingLeft: =30
+        PaddingRight: =3.56
+        PaddingTop: =3.56
+        Size: =9.25
+        Text: ="Subject"
+        Width: =Parent.Width / 2
+        Wrap: =false
+        X: =Parent.Width / 2
+        Y: =Label2_2.Y + Label2_2.Height
+        ZIndex: =9
+
+    TextEmailSubject2 As text:
+        AccessibleLabel: ="Det krävs ett ämne när du ska skicka ett e-postmeddelande."
+        BorderColor: =RGBA(166, 166, 166, 1)
+        BorderThickness: =2
+        Color: =RGBA(51, 51, 51, 1)
+        Default: =DataCardValue20.Text & "_" & DataCardValue74.Text
+        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        DisabledFill: =RGBA(244, 244, 244, 1)
+        DisplayMode: =DisplayMode.View
+        FocusedBorderThickness: =4
+        Font: =Font.'Segoe UI'
+        HintText: =""""""
+        HoverBorderColor: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+        HoverColor: =RGBA(51, 51, 51, 1)
+        HoverFill: =RGBA(255, 255, 255, 1)
+        PaddingLeft: =45
+        PaddingRight: =3.56
+        PaddingTop: =3.56
+        PressedBorderColor: =RGBA(105, 121, 126, 1)
+        PressedColor: =RGBA(51, 51, 51, 1)
+        PressedFill: =RGBA(255, 255, 255, 1)
+        RadiusBottomLeft: =0
+        RadiusBottomRight: =0
+        RadiusTopLeft: =0
+        RadiusTopRight: =0
+        Size: =9.25
+        Width: =Parent.Width / 2 - 20
+        X: =Parent.Width / 2
+        Y: =LblEmailSubject2.Y + LblEmailSubject2.Height
+        ZIndex: =10
+
+    HtmlText1 As htmlViewer:
+        Font: =Font.'Segoe UI'
+        Height: =Parent.Height - Self.Y - Button6.Height * 2
+        HtmlText: |-
+            ="<!--[if !mso]><!-->
+            <div style='font-family: Segoe UI, Arial, Verdana; padding: 5px 15px; background: #F4F4F4'>
+                <!--<![endif]-->
+                <h3>For vendor</h3>
+                    <table role='presentation' style='padding: 0 0 0 10px; width: 60%'>
+                        <p>If possible; please complete your response by answering the following questions:<br></p>
+                        <tr>
+                        <th style='text-align: left'>Root Cause</th>
+                        </tr>
+                        <tr>
+                        <td style='padding: 0 0 0 10px; text-align: left'>What was the root cause?</td>
+                        </tr>
+                        <tr>
+                        <th style='text-align: left'>Actions Taken</th>
+                        </tr>
+                        <tr>
+                        <td style='padding: 0 0 0 10px; text-align: left'>What actions have been taken to prevent this in the future?</td>
+                        </tr>
+                    </table>
+                    <br>
+            
+                <h3>Complaint / Reclaim / Return</h3>
+                
+                    <table role='presentation' style='padding: 0 0 0 10px'>
+                        <tr>
+                        <th>Reclaim / Return Number</th>
+                        </tr>
+                        <tr>
+                        <td>" & DataCardValue74.Text & "</td>
+                        </tr>
+                    </table>
+            
+                <br>
+            
+                <h3>1. Contact Info, Customer / Claimant</h3>
+                    <table role='presentation' style='padding: 0 0 0 10px'>
+                        <tr>
+                        <th style='text-align: left'>Department</th>
+                        </tr>
+                        <tr>
+                        <td>" & LookUp(colData, ID = varDataTableEdit.MyDepartment.Id).Title & ", " & LookUp(colData, varDataTableEdit.MyDepartment.Id = ID).Company & "</td>
+                        </tr>
+                        <tr>
+                        <th style='text-align: left'>Observation Date</th>
+                        </tr>
+                        <tr>
+                        <td>" & DataCardValue8.SelectedDate & "</td>
+                        </tr>
+                        <tr>
+                            <th style='text-align: left'>Contact Person</th>
+                            </tr>
+                        <tr>
+                            <td>" & 'Office365-användare'.MyProfile().DisplayName & "</td>
+                            </tr>
+                        <tr>
+                            <th style='text-align: left'>Phone Number</th>
+                            </tr>
+                        <tr>
+                            <td>" & 'Office365-användare'.MyProfile().mobilePhone & "</td>
+                            </tr>
+                        <tr>
+                            <th style='text-align: left'>E-mail</th>
+                            </tr>
+                        <tr>
+                            <td>" & 'Office365-användare'.MyProfile().Mail & "</td>
+                        </tr>
+                    </table>
+            
+                <br>
+            
+                <h3>2. Producer / Supplier</h3>
+                    <table role='presentation' style='padding: 0 0 0 10px'>
+                        <tr>
+                        <th style='text-align: left'>Producer / Supplier Name</th>
+                        <th style='text-align: left'>E-mail</th>
+                        </tr>
+                        <tr>
+                        <td>" & DataCardValue1.Selected.Value & "</td>
+                        <td'>" & LookUp(AvvikelseForbattringssystemDATA, Location = DataCardValue1.Selected.Value, 'Supplier Mail') & "</td>
+                        </tr>
+                    </table>
+            
+                <br>
+            
+                <h3>3. Reclaim / Return</h3>
+                    <table role='presentation' style='padding: 0 0 0 10px'>
+                        <tr>
+                        <th style='text-align: left'>3.1. Item / Product Number</th>
+                        </tr>
+                        <tr>
+                        <td>" & DataCardValue66.Text & "</td>
+                        </tr>
+                        <tr>
+                        <th style='text-align: left'>3.2. Product Name</th>
+                        </tr>
+                        <tr>
+                        <td>" & DataCardValue73.Text & "</td>
+                        </tr>
+                        <tr>
+                        <th style='text-align: left'>3.3. Serial Number</th>
+                        </tr>
+                    <tr>
+                        <td>" & DataCardValue79.Text & "</td>
+                        </tr>
+                    
+                        <tr>
+                            <th style='text-align: left'>3.4. LOT Number (if applicable)</th>
+                        </tr>
+                        <tr>
+                            <td>" & DataCardValue68.Text & "</td>
+                        </tr>
+                        <tr>
+                            <th style='text-align: left'>3.5. Order Number</th>
+                        </tr>
+                        <tr>
+                            <td>" & DataCardValue69.Text & "</td>
+                        </tr>
+                        <tr>
+                            <th style='text-align: left'>3.6. UDI-DI / UDI-PI (whichever is applicable)</th>
+                        </tr>
+                        <tr>
+                            <td>" & DataCardValue80.Text & "</td>
+                        </tr>
+                        
+            
+                        <tr>
+                            <th style='text-align: left'>3.7. Is the item ready to send back?</th>
+                        </tr>
+                        <tr>
+                            <td>" & If(DataCardValue75.Value,"Yes","No") & "</td>
+                        </tr>
+                        <tr>
+                            <th style='text-align: left'>3.8. Will the item be sent back for inquiry?</th>
+                        </tr>
+                        <tr>
+                            <td>" & If(DataCardValue81.Value,"Yes","No") & "</td>
+                        </tr>
+                        <tr>
+                        </tr>
+                        <tr>
+                            
+                            
+                        </tr>
+                        <tr>
+                            <th style='text-align: left'>3.9. Reason for returning item</th>
+                        </tr>
+                        <tr>
+                            <td>" & DataCardValue76.Selected.Value & "</td>
+                        </tr>
+                        <tr>
+                            <td>" & "Description: " & DataCardValue77.Text & "</td>
+                        </tr>
+                        <tr>
+                        </tr>
+                        <tr>
+                            
+                        </tr>
+                        <tr>
+                            <th style='text-align: left'>3.10. Patient Weight</th>
+                        </tr>
+                        <tr>
+                            <td>" & DataCardValue71.Text & "</td>
+                        </tr>
+                        <tr>
+                            <th style='text-align: left'>3.11. Level of Activity</th>
+                        </tr>
+                        <tr>
+                            <td>" & DataCardValue67.Selected.Value & "</td>
+                        </tr>
+                        <tr>
+                            <th style='text-align: left'>3.12. Fitting Date</th>
+                        </tr>
+                        <tr>
+                            <td>" & DataCardValue65.SelectedDate & "</td>
+                        </tr>
+                        <tr>
+                            <th style='text-align: left'>3.13. Date of Incident</th>
+                        </tr>
+                        <tr>
+                            <td>" & DataCardValue63.SelectedDate & "</td>
+                        </tr>
+                        <tr>
+                            <th style='text-align: left'>3.14. Practiced Sports (describe activities such as running, dancing, working out or other similar)</th>
+                        </tr>
+                        <tr>
+                            <td>" & DataCardValue72.Text & "</td>
+                        </tr>
+                        <tr>
+                            <th style='text-align: left'>3.15. Right or Left Side</th>
+                        </tr>
+                        <tr>
+                            <td>" & DataCardValue78.Selected.Value & "</td>
+                        </tr>
+                        <tr>
+                            <th style='text-align: left'>3.16. Describe the claim / reason for returning</th>
+                        </tr>
+                        <tr>
+                            <td>" & DataCardValue18.HtmlText & "</td>
+                        </tr>
+                        <tr>
+                            <th style='text-align: left'>3.17. Did this product cause / contribute to an accident / severe incident?</th>
+                        </tr>
+                        <tr>
+                            <td>" & If(DataCardValue9.Value = false, "No","Yes, this will be reported separately in a form intended for the proper authorities with a copy to the supplier.") & "</td>
+                        </tr>
+                    </table>
+            
+                <br>
+            
+                <h3>4. Suggestions for Improvement</h3>
+                    <table role='presentation' style='padding: 0 0 0 10px'>
+                        <tr>
+                        <th style='text-align: left'>Describe Suggestion</th>
+                        </tr>
+                        <tr>
+                        <td>" & TextInput2.Text & "</td>
+                        </tr>
+                    </table>
+            <!--[if !mso]><!-->
+                </div>
+                <!--<![endif]-->"
+        PaddingLeft: =30
+        PaddingRight: =30
+        Size: =7.83
+        Width: =Parent.Width
+        X: =Parent.Width / 2 - Self.Width / 2
+        Y: =TextCommentToVendor.Y + TextCommentToVendor.Height + 10
+        ZIndex: =14
+
+    Button6 As button:
+        BorderColor: =RGBA(0, 0, 0, 0)
+        BorderStyle: =BorderStyle.None
+        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        DisabledFill: =RGBA(244, 244, 244, 1)
+        DisplayMode: =If(IsBlank(TextEmailRecipient.Text), Disabled, Edit)
+        Fill: =RGBA(0, 130, 196, 1)
+        Font: =Font.'Segoe UI'
+        FontWeight: =FontWeight.Semibold
+        Height: =50
+        HoverBorderColor: =RGBA(0, 0, 0, 0)
+        HoverColor: =RGBA(255, 255, 255, 1)
+        HoverFill: =ColorFade(RGBA(105, 121, 126, 1), -10%)
+        OnSelect: |-
+            =//Collect required fields for error notifications.
+            ClearCollect(
+                colSubmitRequired,
+                If(
+                    Area_DataCard1.Required,
+                    """" & Area_DataCard1.DisplayName & """ " & LookUp(
+                        colTranslations,
+                        language.Value = varLanguage And key = "error_missing"
+                    ).Title
+                ),
+                If(
+                    Department_DataCard2.Required,
+                    """" & Department_DataCard2.DisplayName & """ " & LookUp(
+                        colTranslations,
+                        language.Value = varLanguage And key = "error_missing"
+                    ).Title
+                ),
+                If(
+                    SupportFunction_DataCard1.Required,
+                    """" & SupportFunction_DataCard1.DisplayName & """ " & LookUp(
+                        colTranslations,
+                        language.Value = varLanguage And key = "error_missing"
+                    ).Title
+                ),
+                If(
+                    SupplierChoices_DataCard1.Required,
+                    """" & SupplierChoices_DataCard1.DisplayName & """ " & LookUp(
+                        colTranslations,
+                        language.Value = varLanguage And key = "error_missing"
+                    ).Title
+                ),
+                If(
+                    IsEmpty(DataCardValue15.Selected),
+                    """" & MyDepartment_DataCard1.DisplayName & """ " & LookUp(
+                        colTranslations,
+                        language.Value = varLanguage And key = "error_missing"
+                    ).Title
+                ),
+                If(
+                    DateExpirationAssignee_DataCard1.Required,
+                    """" & DateExpirationAssignee_DataCard1.DisplayName & """ " & LookUp(
+                        colTranslations,
+                        language.Value = varLanguage And key = "error_missing"
+                    ).Title
+                ),
+                If(
+                    NoActionReason_DataCard1.Required,
+                    """" & NoActionReason_DataCard1.DisplayName & """ " & LookUp(
+                        colTranslations,
+                        language.Value = varLanguage And key = "error_missing"
+                    ).Title
+                ),
+                If(
+                    RootCause_DataCard1.Required,
+                    """" & RootCause_DataCard1.DisplayName & """ " & LookUp(
+                        colTranslations,
+                        language.Value = varLanguage And key = "error_missing"
+                    ).Title
+                ),
+                If(
+                    ProductFromManufacturing_DataCard1.Required,
+                    """" & ProductFromManufacturing_DataCard1.DisplayName & """ " & LookUp(
+                        colTranslations,
+                        language.Value = varLanguage And key = "error_missing"
+                    ).Title
+                ),
+                If(
+                    Supplier_DataCard1.Required,
+                    """" & Supplier_DataCard1.DisplayName & """ " & LookUp(
+                        colTranslations,
+                        language.Value = varLanguage And key = "error_missing"
+                    ).Title
+                ),
+                If(
+                    ItemCategory_DataCard1.Required,
+                    """" & ItemCategory_DataCard1.DisplayName & """ " & LookUp(
+                        colTranslations,
+                        language.Value = varLanguage And key = "error_missing"
+                    ).Title
+                ),
+                If(
+                    MyDepartment_DataCard1.Required,
+                    """" & MyDepartment_DataCard1.DisplayName & """ " & LookUp(
+                        colTranslations,
+                        language.Value = varLanguage And key = "error_missing"
+                    ).Title
+                ),
+                If(
+                    'Specific Area_DataCard1'.Required,
+                    """" & 'Specific Area_DataCard1'.DisplayName & """ " & LookUp(
+                        colTranslations,
+                        language.Value = varLanguage And key = "error_missing"
+                    ).Title
+                ),
+                If(
+                    SupplierOrderNumber_DataCard1.Required,
+                    """" & SupplierOrderNumber_DataCard1.DisplayName & """ " & LookUp(
+                        colTranslations,
+                        language.Value = varLanguage And key = "error_missing"
+                    ).Title
+                ),
+                If(
+                    SupplierItemProductNumber_DataCard1.Required,
+                    """" & SupplierItemProductNumber_DataCard1.DisplayName & """ " & LookUp(
+                        colTranslations,
+                        language.Value = varLanguage And key = "error_missing"
+                    ).Title
+                ),
+                If(
+                    SupplierReturnReason_DataCard1.Required,
+                    """" & SupplierReturnReason_DataCard1.DisplayName & """ " & LookUp(
+                        colTranslations,
+                        language.Value = varLanguage And key = "error_missing"
+                    ).Title
+                )
+            );
+            Clear(colSubmitErrors);
+            ForAll(
+                colSubmitRequired,
+                If(
+                    !IsBlank(Value),
+                    Collect(
+                        colSubmitErrors,
+                        Value
+                    )
+                )
+            );
+            If(
+                CountRows(colSubmitErrors) = 1,
+                Notify(
+                    First(colSubmitErrors).Value & ".",
+                    Error
+                ),
+                CountRows(colSubmitErrors) > 1,
+                Notify(
+                    Concat(
+                        colSubmitErrors,
+                        Value,
+                        ", "
+                    ) & ".",
+                    Error
+                ),
+                //Send Supplier Mail
+                Office365Outlook.SendEmailV2(
+                    TextEmailRecipient,
+                    TextEmailSubject2.Text,
+                    "
+                    <!--[if !mso]><!-->
+                    <img src='ÖssurLogo.jpg' alt='Össur logo' height='50px' style='margin-left: auto; margin-right: auto; display: block;'>" &//https://ossur.sharepoint.com/sites/Clinics/scandinavia/ops/quality/SiteAssets/ossur-logo-tagline-blue.png' alt='Össur logo' height='50px' style='margin-left: auto; margin-right: auto; display: block;'>
+             "<!--<![endif]-->" & "<br>" & If(
+                        TextCommentToVendor.HtmlText = "Add comments to supplier here. ",
+                        Blank(),
+                        TextCommentToVendor.HtmlText
+                    ) & "<br>" & HtmlText1.HtmlText,
+                    {
+                        IsHtml: true,
+                        Importance: "Normal",
+                        Attachments: Table(
+                            {
+                                contentType: "image/jpeg",
+                                ContentId: "ossurlogo",
+                                Name: "ÖssurLogo.jpg",
+                                ContentBytes: 'ossur-logo-tagline-blue_1'
+                            }
+                        )
+                    }
+                );
+                Set(
+                    varFormSubmit,
+                    true
+                );
+                Navigate(Success)
+            )
+        PaddingRight: =3.56
+        PaddingTop: =3.56
+        PressedBorderColor: =ColorFade(RGBA(105, 121, 126, 1), -50%)
+        PressedColor: =RGBA(255, 255, 255, 1)
+        PressedFill: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+        Size: =10.67
+        Text: =LookUp(colTranslations, language.Value = varLanguage And key = "form_button_save").Title & " & " & "Send E-mail"
+        Width: =180
+        X: =Parent.Width / 2 - Self.Width / 2
+        Y: =Parent.Height - Self.Height * 1.5
+        ZIndex: =15
+
+    Label2_2 As label:
+        Align: =Align.Center
+        BorderColor: =RGBA(0, 0, 0, 0)
+        BorderStyle: =BorderStyle.None
+        BorderThickness: =2
+        Color: =RGBA(51, 51, 51, 1)
+        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        FocusedBorderThickness: =4
+        Font: =Font.'Segoe UI'
+        FontWeight: =FontWeight.Semibold
+        Height: =82
+        PaddingRight: =3.56
+        PaddingTop: =3.56
+        Size: =15.65
+        Text: =LookUp(colTranslations, language.Value = varLanguage And key = "form_button_supplier_mail").Title
+        Width: =267.51
+        X: =Parent.Width / 2 - Self.Width / 2
+        Y: =Icon1_5.Y + Icon1_5.Height / 2 - Self.Height / 2
+        ZIndex: =16
+
+    TextEmailRecipient As text:
+        AccessibleLabel: ="Det krävs ett ämne när du ska skicka ett e-postmeddelande."
+        BorderColor: =RGBA(237, 237, 237, 1)
+        BorderThickness: =2
+        Color: =RGBA(51, 51, 51, 1)
+        Default: =varDataTableEdit.SupplierEmail
+        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        DisabledFill: =RGBA(244, 244, 244, 1)
+        Fill: =If(And(IsBlank(Self.Text), varPhaseDraft = "Ongoing"),RGBA(253, 222, 207, 1),RGBA(255, 255, 255, 1))
+        FocusedBorderThickness: =4
+        Font: =Font.'Segoe UI'
+        HintText: ="Enter recipient e-mail"
+        HoverBorderColor: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+        HoverColor: =RGBA(51, 51, 51, 1)
+        HoverFill: =RGBA(255, 255, 255, 1)
+        PaddingLeft: =20
+        PaddingRight: =3.56
+        PaddingTop: =3.56
+        PressedBorderColor: =RGBA(105, 121, 126, 1)
+        PressedColor: =RGBA(51, 51, 51, 1)
+        PressedFill: =RGBA(255, 255, 255, 1)
+        RadiusBottomLeft: =0
+        RadiusBottomRight: =0
+        RadiusTopLeft: =0
+        RadiusTopRight: =0
+        Size: =9.25
+        Width: =Parent.Width / 2 - Self.X
+        X: =20
+        Y: =LblEmailRecipient.Y + LblEmailRecipient.Height
+        ZIndex: =18
+
+    LblEmailRecipient As label:
+        Color: =RGBA(51, 51, 51, 1)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        Font: =Font.'Segoe UI'
+        FontWeight: =FontWeight.Semibold
+        PaddingLeft: =30
+        PaddingRight: =3.56
+        PaddingTop: =3.56
+        Size: =9.25
+        Text: ="Recipient"
+        Width: =Parent.Width / 2
+        Wrap: =false
+        Y: =Label2_2.Y + Label2_2.Height
+        ZIndex: =19
+
+    Icon1_5 As icon.Cancel:
+        BorderColor: =RGBA(166, 166, 166, 1)
+        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+        DisabledColor: =RGBA(220, 220, 220, 1)
+        DisabledFill: =RGBA(0, 0, 0, 0)
+        FocusedBorderThickness: =4
+        Height: =Parent.Height * 0.06
+        HoverBorderColor: =RGBA(0, 0, 0, 0)
+        HoverColor: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+        HoverFill: =RGBA(0, 0, 0, 0)
+        Icon: =Icon.Cancel
+        OnSelect: =Back()
+        PressedBorderColor: =RGBA(0, 0, 0, 0)
+        PressedColor: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+        PressedFill: =RGBA(0, 0, 0, 0)
+        Width: =46.1
+        X: =23.05
+        Y: =Self.Height / 2
+        ZIndex: =20
+
+    TextCommentToVendor As richTextEditor:
+        BorderColor: =RGBA(230, 230, 230, 1)
+        Default: =If(IsBlank(varDataTableEdit.SupplierComment), "Add comments to supplier here. ",varDataTableEdit.SupplierComment)
+        Size: =9.25
+        Width: =Parent.Width - 40
+        X: =20
+        Y: =TextEmailRecipient.Y + TextEmailRecipient.Height
+        ZIndex: =21
+

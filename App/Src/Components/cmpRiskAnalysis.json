@@ -1,0 +1,179 @@
+{
+  "ComponentAllowCustomization": true,
+  "ComponentChangedSinceFileImport": true,
+  "ComponentManifest": {
+    "AllowAccessToGlobals": false,
+    "AllowCustomization": true,
+    "Description": "",
+    "Name": "cmpRiskAnalysis",
+    "TemplateGuid": "c8501110d10b4686bbb7886ef8be620c"
+  },
+  "ComponentType": "CanvasComponent",
+  "CustomGroupControlTemplateName": "",
+  "CustomProperties": [
+    {
+      "Category": 0,
+      "DisplayName": "calcValueIn",
+      "Hidden": false,
+      "Name": "calcValueIn",
+      "PropertyDataTypeKey": "Number",
+      "Tooltip": "A custom property",
+      "Type": "{\"Version\":\"1.326\",\"Type\":{\"Name\":\"Root\",\"Kind\":\"Number\",\"EnumString\":\"\",\"Type\":[]}}"
+    },
+    {
+      "Category": 0,
+      "DisplayName": "calcValueOut",
+      "Hidden": true,
+      "Name": "calcValueOut",
+      "PropertyDataTypeKey": "Number",
+      "Tooltip": "Output of calculated value",
+      "Type": "{\"Version\":\"1.326\",\"Type\":{\"Name\":\"Root\",\"Kind\":\"Number\",\"EnumString\":\"\",\"Type\":[]}}"
+    },
+    {
+      "Category": 0,
+      "DisplayName": "rowsOut",
+      "Hidden": true,
+      "Name": "rowsOut",
+      "PropertyDataTypeKey": "Number",
+      "PropertyScopeKey": {
+        "PropertyScopeRuleNamespaceKey": "48",
+        "PropertyScopeRulesKey": [
+          {
+            "DisplayName": "rowsOut_row1",
+            "Name": "rowsOut_row1",
+            "PropertyDataTypeKey": "Number",
+            "ScopeVariableInfo": {
+              "DependencyType": "New",
+              "Description": "row1",
+              "IsRequired": false,
+              "ResolveExpands": false,
+              "ResolveSelects": false,
+              "ScopeVariableName": "row1"
+            },
+            "Tooltip": "row1",
+            "Type": "{\"Version\":\"1.326\",\"Type\":{\"Name\":\"Root\",\"Kind\":\"Number\",\"EnumString\":\"\",\"Type\":[]}}"
+          },
+          {
+            "DisplayName": "rowsOut_row2",
+            "Name": "rowsOut_row2",
+            "PropertyDataTypeKey": "Number",
+            "ScopeVariableInfo": {
+              "DependencyType": "New",
+              "Description": "row2",
+              "IsRequired": false,
+              "ResolveExpands": false,
+              "ResolveSelects": false,
+              "ScopeVariableName": "row2"
+            },
+            "Tooltip": "row2",
+            "Type": "{\"Version\":\"1.326\",\"Type\":{\"Name\":\"Root\",\"Kind\":\"Number\",\"EnumString\":\"\",\"Type\":[]}}"
+          },
+          {
+            "DisplayName": "rowsOut_row3",
+            "Name": "rowsOut_row3",
+            "PropertyDataTypeKey": "Number",
+            "ScopeVariableInfo": {
+              "DependencyType": "New",
+              "Description": "row3",
+              "IsRequired": false,
+              "ResolveExpands": false,
+              "ResolveSelects": false,
+              "ScopeVariableName": "row3"
+            },
+            "Tooltip": "row3",
+            "Type": "{\"Version\":\"1.326\",\"Type\":{\"Name\":\"Root\",\"Kind\":\"Number\",\"EnumString\":\"\",\"Type\":[]}}"
+          },
+          {
+            "DisplayName": "rowsOut_row4",
+            "Name": "rowsOut_row4",
+            "PropertyDataTypeKey": "Number",
+            "ScopeVariableInfo": {
+              "DependencyType": "New",
+              "Description": "row4",
+              "IsRequired": false,
+              "ResolveExpands": false,
+              "ResolveSelects": false,
+              "ScopeVariableName": "row4"
+            },
+            "Tooltip": "row4",
+            "Type": "{\"Version\":\"1.326\",\"Type\":{\"Name\":\"Root\",\"Kind\":\"Number\",\"EnumString\":\"\",\"Type\":[]}}"
+          },
+          {
+            "DisplayName": "rowsOut_row5",
+            "Name": "rowsOut_row5",
+            "PropertyDataTypeKey": "Number",
+            "ScopeVariableInfo": {
+              "DependencyType": "New",
+              "Description": "row5",
+              "IsRequired": false,
+              "ResolveExpands": false,
+              "ResolveSelects": false,
+              "ScopeVariableName": "row5"
+            },
+            "Tooltip": "row5",
+            "Type": "{\"Version\":\"1.326\",\"Type\":{\"Name\":\"Root\",\"Kind\":\"Number\",\"EnumString\":\"\",\"Type\":[]}}"
+          }
+        ]
+      },
+      "Tooltip": "A custom property",
+      "Type": "{\"Version\":\"1.326\",\"Type\":{\"Name\":\"Root\",\"Kind\":\"Number\",\"EnumString\":\"\",\"Type\":[]}}"
+    },
+    {
+      "Category": 0,
+      "DisplayName": "rowIn1",
+      "Hidden": false,
+      "Name": "rowIn1",
+      "PropertyDataTypeKey": "Number",
+      "Tooltip": "A custom property",
+      "Type": "{\"Version\":\"1.326\",\"Type\":{\"Name\":\"Root\",\"Kind\":\"Number\",\"EnumString\":\"\",\"Type\":[]}}"
+    },
+    {
+      "Category": 0,
+      "DisplayName": "rowIn2",
+      "Hidden": false,
+      "Name": "rowIn2",
+      "PropertyDataTypeKey": "Number",
+      "Tooltip": "A custom property",
+      "Type": "{\"Version\":\"1.326\",\"Type\":{\"Name\":\"Root\",\"Kind\":\"Number\",\"EnumString\":\"\",\"Type\":[]}}"
+    },
+    {
+      "Category": 0,
+      "DisplayName": "rowIn3",
+      "Hidden": false,
+      "Name": "rowIn3",
+      "PropertyDataTypeKey": "Number",
+      "Tooltip": "A custom property",
+      "Type": "{\"Version\":\"1.326\",\"Type\":{\"Name\":\"Root\",\"Kind\":\"Number\",\"EnumString\":\"\",\"Type\":[]}}"
+    },
+    {
+      "Category": 0,
+      "DisplayName": "rowIn4",
+      "Hidden": false,
+      "Name": "rowIn4",
+      "PropertyDataTypeKey": "Number",
+      "Tooltip": "A custom property",
+      "Type": "{\"Version\":\"1.326\",\"Type\":{\"Name\":\"Root\",\"Kind\":\"Number\",\"EnumString\":\"\",\"Type\":[]}}"
+    },
+    {
+      "Category": 0,
+      "DisplayName": "rowIn5",
+      "Hidden": false,
+      "Name": "rowIn5",
+      "PropertyDataTypeKey": "Number",
+      "Tooltip": "A custom property",
+      "Type": "{\"Version\":\"1.326\",\"Type\":{\"Name\":\"Root\",\"Kind\":\"Number\",\"EnumString\":\"\",\"Type\":[]}}"
+    }
+  ],
+  "FirstParty": true,
+  "Id": "http://microsoft.com/appmagic/Component",
+  "IsComponentLocked": false,
+  "IsComponentTemplate": true,
+  "IsCustomGroupControlTemplate": false,
+  "IsPcfControl": false,
+  "IsPremiumPcfControl": false,
+  "IsWidgetTemplate": false,
+  "LastModifiedTimestamp": "637995344326538312",
+  "Name": "c8501110d10b4686bbb7886ef8be620c",
+  "OverridableProperties": {},
+  "Version": "637768078997698989"
+}

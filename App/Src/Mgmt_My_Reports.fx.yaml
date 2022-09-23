@@ -1,0 +1,3488 @@
+Mgmt_My_Reports As screen:
+    LoadingSpinnerColor: =RGBA(105, 121, 126, 1)
+    OnVisible: |-
+        =UpdateContext({varPreLoader: true});
+        ClearCollect(
+            colTableData,
+            Filter(
+                colSystem,
+                Phase.Value = "Ongoing" And Switch(
+                    varClosedView,
+                    0,
+                    Finished = false,
+                    1,
+                    Finished = true
+                )
+            )
+        );
+        UpdateContext({locSortDirection: false});
+        UpdateContext({locSortColumn: "Created"});
+        UpdateContext(
+            {
+                locFilterIsSelected: {
+                    column: "",
+                    selected: false
+                }
+            }
+        );
+        UpdateContext({locFilterAssignee: ""});
+        UpdateContext({locFilterManager: ""});
+        UpdateContext({locFilterPrevAssignee: ""});
+        UpdateContext({varPreLoader: false});
+
+    Icon6_2 As icon.ChevronDown:
+        BorderColor: =RGBA(166, 166, 166, 1)
+        Color: =RGBA(255, 255, 255, 1)
+        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+        DisabledColor: =RGBA(220, 220, 220, 1)
+        DisabledFill: =RGBA(0, 0, 0, 0)
+        FocusedBorderThickness: =4
+        Height: =40
+        HoverBorderColor: =RGBA(0, 0, 0, 0)
+        HoverColor: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+        HoverFill: =RGBA(0, 0, 0, 0)
+        Icon: =Icon.ChevronDown
+        OnSelect: |-
+            =Switch(locRotate180,0,UpdateContext({locRotate180: 180}),Blank(),UpdateContext({locRotate180: 180}),180,UpdateContext({locRotate180: 0}))
+        PaddingBottom: =10
+        PaddingLeft: =10
+        PaddingRight: =10
+        PaddingTop: =10
+        PressedBorderColor: =RGBA(0, 0, 0, 0)
+        PressedColor: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+        PressedFill: =RGBA(0, 0, 0, 0)
+        Rotation: =locRotate180
+        Width: =40
+        X: =210
+        Y: =170
+        ZIndex: =1
+
+    Container4_1 As groupContainer.horizontalAutoLayoutContainer:
+        Height: =Parent.Height - Self.Y - 20
+        LayoutMode: =LayoutMode.Auto
+        LayoutOverflowX: =LayoutOverflow.Scroll
+        Width: =Parent.Width * 0.95
+        X: =Parent.Width / 2 - Self.Width / 2
+        Y: =Label2_16.Y + Label2_16.Height + 70
+        ZIndex: =2
+
+        Container5_1 As groupContainer:
+            AlignInContainer: =AlignInContainer.SetByContainer
+            FillPortions: =0
+            Height: =Parent.Height
+            LayoutMinHeight: =100
+            LayoutMinWidth: =3200
+            Width: =If(varClosedView = 1, hdrTitle_1.Width * 18 + 5, hdrTitle_1.Width * 16 + 5)//3200
+            ZIndex: =1
+
+            MgmtTable_1 As gallery.galleryVertical:
+                BorderColor: =RGBA(166, 166, 166, 1)
+                DelayItemLoading: =true
+                Fill: =White
+                FocusedBorderThickness: =0
+                Height: =Parent.Height - Self.Y - 20
+                Items: |-
+                    =SortByColumns(
+                        AddColumns(
+                            //Filter for assignee checkboxer
+                            Filter(
+                                //Switch for column header filters
+                                If(
+                                    locFilterIsSelected.selected And (!IsBlank(dropdownFilters_1.SelectedItems) And !IsEmpty(dropdownFilters_1.SelectedItems)),
+                                    Filter(
+                                        colTableData,
+                                        Switch(
+                                            locFilterIsSelected.column,
+                                            "Type",
+                                            Switch(
+                                                First(
+                                                    Split(
+                                                        Title,
+                                                        "_"
+                                                    )
+                                                ).Result,
+                                                "IM",
+                                                First(
+                                                    Filter(
+                                                        colTranslations,
+                                                        key = "button_newimprovement" && language.Value = varLanguage
+                                                    )
+                                                ).Title,
+                                                "DV",
+                                                First(
+                                                    Filter(
+                                                        colTranslations,
+                                                        key = "button_newdeviation" && language.Value = varLanguage
+                                                    )
+                                                ).Title
+                                            ),
+                                            "Title",
+                                            Title,
+                                            "Created",
+                                            Created,
+                                            "AssigneeName",
+                                            Responsible.DisplayName,
+                                            "AreaValue",
+                                            Last(
+                                                FirstN(
+                                                    Split(
+                                                        First(
+                                                            Filter(
+                                                                colAreaList,
+                                                                ('Area/Specific Area' = "Area" Or 'Area/Specific Area' = "OldArea") And Title = Area.Value
+                                                            )
+                                                        ).Translation,
+                                                        ";"
+                                                    ),
+                                                    varLanguageID
+                                                )
+                                            ).Result,
+                                            "SpecificAreaValue",
+                                            Last(
+                                                FirstN(
+                                                    Split(
+                                                        First(
+                                                            Filter(
+                                                                colAreaList,
+                                                                'Area/Specific Area' = "Specific Area" And Title = 'Specific Area'.Value
+                                                            )
+                                                        ).Translation,
+                                                        ";"
+                                                    ),
+                                                    varLanguageID
+                                                )
+                                            ).Result,
+                                            "OtherClinicValue",
+                                            Location.Value,
+                                            "OperationsManagerName",
+                                            'Operations Manager'.DisplayName,
+                                            "OwnerName",
+                                            Owner.DisplayName,
+                                            "MyDepartmentValue",
+                                            MyDepartment.Value,
+                                            "Description",
+                                            PlainText(Description),
+                                            "Observation Date",
+                                            IncidentDate,
+                                            "Severe",
+                                            Last(
+                                                FirstN(
+                                                    Split(
+                                                        First(
+                                                            Filter(
+                                                                colAreaList,
+                                                                'Area/Specific Area' = "Boolean" And Lower(Title) = Text(Serious)
+                                                            )
+                                                        ).Translation,
+                                                        ";"
+                                                    ),
+                                                    varLanguageID
+                                                )
+                                            ).Result,
+                                            "ModifiedBy",
+                                            'Modified By'.DisplayName,
+                                            "FinishedDate",
+                                            FinishedDate,
+                                            "ActionsTaken",
+                                            PlainText('Actions Taken'),
+                                            "Supplier",
+                                            Supplier.Value,
+                                            "SupportFunctionValue",
+                                            SupportFunction.Value,
+                                            "AuthorName",
+                                            'Created By'.DisplayName,
+                                            "AssigneeStarted",
+                                            Last(
+                                                FirstN(
+                                                    Split(
+                                                        First(
+                                                            Filter(
+                                                                colAreaList,
+                                                                'Area/Specific Area' = "Boolean" And Lower(Title) = Text(AssigneeStarted)
+                                                            )
+                                                        ).Translation,
+                                                        ";"
+                                                    ),
+                                                    varLanguageID
+                                                )
+                                            ).Result
+                                        ) in dropdownFilters_1.SelectedItems.Result
+                                    ),
+                                    colTableData
+                                ),
+                                'Created By'.DisplayName = First(colUser).DisplayName
+                            ),
+                            "AuthorName",
+                            'Created By'.DisplayName,
+                            "OwnerName",
+                            Owner.DisplayName,
+                            "AssigneeName",
+                            Responsible.DisplayName,
+                            "AreaValue",
+                            Last(
+                                FirstN(
+                                    Split(
+                                        First(
+                                            Filter(
+                                                colAreaList,
+                                                ('Area/Specific Area' = "Area" Or 'Area/Specific Area' = "OldArea") And Title = Area.Value
+                                            )
+                                        ).Translation,
+                                        ";"
+                                    ),
+                                    varLanguageID
+                                )
+                            ).Result,
+                            "SpecificAreaValue",
+                            Last(
+                                FirstN(
+                                    Split(
+                                        First(
+                                            Filter(
+                                                colAreaList,
+                                                'Area/Specific Area' = "Specific Area" And Title = 'Specific Area'.Value
+                                            )
+                                        ).Translation,
+                                        ";"
+                                    ),
+                                    varLanguageID
+                                )
+                            ).Result,
+                            "ExternalChoicesValue",
+                            ExternalChoices.Value,
+                            "OtherClinicValue",
+                            Location.Value,
+                            "SupportFunctionValue",
+                            SupportFunction.Value,
+                            "SupplierValue",
+                            Supplier.Value,
+                            "ModifiedBy",
+                            'Modified By'.DisplayName,
+                            "MyDepartmentValue",
+                            MyDepartment.Value,
+                            "OperationsManagerName",
+                            'Operations Manager'.DisplayName
+                        ),
+                        If(
+                            locSortColumn = "Type",
+                            "Title",
+                            locSortColumn
+                        ),
+                        If(
+                            locSortDirection,
+                            Ascending,
+                            Descending
+                        )
+                    )
+                Layout: =Layout.Vertical
+                OnSelect: |-
+                    =Set(
+                        varDataTableEdit,
+                        First(
+                            Filter(
+                                colSystem,
+                                ID = MgmtTable_1.Selected.ID
+                            )
+                        )
+                    );
+                    Set(
+                        varSupplierSent,
+                        false
+                    );
+                    Set(
+                        varFromDraft,
+                        false
+                    );
+                    Set(varFollowUp, false);
+                    EditForm(Form1);
+                    Navigate(Form,None,{varPreLoader: true});
+                TemplatePadding: =0
+                TemplateSize: =40
+                Width: =Parent.Width
+                Y: =40
+                ZIndex: =10
+
+                cntGalleryItem_1 As groupContainer.horizontalAutoLayoutContainer:
+                    Height: =40
+                    LayoutMode: =LayoutMode.Auto
+                    Width: =Parent.Width
+                    ZIndex: =20
+
+                    tblType_1 As label:
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        BorderStyle: =BorderStyle.None
+                        BorderThickness: =2
+                        Color: =RGBA(51, 51, 51, 1)
+                        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                        DisabledColor: =RGBA(166, 166, 166, 1)
+                        Fill: |-
+                            =If(First(
+                                    Split(
+                                        tblTitle_1.Text,
+                                        "_"
+                                    )
+                                ).Result = "IM", ColorValue("#BBE6FA"), ColorValue("#FFF0CF"))
+                        FocusedBorderThickness: =4
+                        Font: =Font.'Segoe UI'
+                        Size: =9.25
+                        Text: |-
+                            =Switch(
+                                First(
+                                    Split(
+                                        tblTitle_1.Text,
+                                        "_"
+                                    )
+                                ).Result,
+                                "IM",
+                                First(
+                                    Filter(
+                                        colTranslations,
+                                        key = "button_newimprovement" && language.Value = varLanguage
+                                    )
+                                ).Title,
+                                "DV",
+                                First(
+                                    Filter(
+                                        colTranslations,
+                                        key = "button_newdeviation" && language.Value = varLanguage
+                                    )
+                                ).Title
+                            )
+                        Width: =100
+                        ZIndex: =1
+
+                    tblTitle_1 As button:
+                        BorderColor: =RGBA(202, 202, 202, 1)
+                        BorderThickness: =1
+                        Color: =RGBA(0, 0, 0, 1)
+                        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                        DisabledColor: =RGBA(166, 166, 166, 1)
+                        DisabledFill: =RGBA(244, 244, 244, 1)
+                        Fill: =RGBA(244, 244, 244, 1)
+                        FocusedBorderColor: =ColorFade(Self.Fill, -75%)
+                        FocusedBorderThickness: =1
+                        Font: =Font.'Segoe UI'
+                        FontWeight: =FontWeight.Semibold
+                        HoverBorderColor: =RGBA(0, 0, 0, 0)
+                        HoverColor: =RGBA(255, 255, 255, 1)
+                        HoverFill: =ColorFade(RGBA(105, 121, 126, 1), -10%)
+                        OnSelect: =Select(MgmtTable_1)
+                        PressedBorderColor: =ColorFade(RGBA(105, 121, 126, 1), -50%)
+                        PressedColor: =RGBA(255, 255, 255, 1)
+                        PressedFill: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+                        RadiusBottomLeft: =0
+                        RadiusBottomRight: =0
+                        RadiusTopLeft: =0
+                        RadiusTopRight: =0
+                        Size: =8
+                        Text: =ThisItem.Title
+                        Width: =190
+                        ZIndex: =2
+
+                    tblFinishedDate_1 As label:
+                        BorderColor: =RGBA(219, 219, 219, 1)
+                        BorderThickness: =1
+                        Color: =RGBA(51, 51, 51, 1)
+                        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                        DisabledColor: =RGBA(166, 166, 166, 1)
+                        FocusedBorderThickness: =1
+                        Font: =Font.'Segoe UI'
+                        Size: =9.25
+                        Text: =ThisItem.FinishedDate
+                        Visible: =varClosedView
+                        Width: =190
+                        X: =tblModifiedBy_1.X + tblModifiedBy_1.Width
+                        ZIndex: =3
+
+                    tblModifiedBy_1 As label:
+                        BorderColor: =RGBA(219, 219, 219, 1)
+                        BorderThickness: =1
+                        Color: =RGBA(51, 51, 51, 1)
+                        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                        DisabledColor: =RGBA(166, 166, 166, 1)
+                        FocusedBorderThickness: =1
+                        Font: =Font.'Segoe UI'
+                        Size: =9.25
+                        Text: =ThisItem.ModifiedBy
+                        Visible: =varClosedView
+                        Width: =190
+                        X: =tblSerious_1.X + tblSerious_1.Width
+                        ZIndex: =4
+
+                    tblActionsTaken_1 As label:
+                        BorderColor: =RGBA(219, 219, 219, 1)
+                        BorderThickness: =1
+                        Color: =RGBA(51, 51, 51, 1)
+                        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                        DisabledColor: =RGBA(166, 166, 166, 1)
+                        FocusedBorderThickness: =1
+                        Font: =Font.'Segoe UI'
+                        Size: =9.25
+                        Text: =PlainText(ThisItem.'Actions Taken')
+                        Visible: =varClosedView
+                        Width: =190
+                        X: =tblFinishedDate_1.X + tblFinishedDate_1.Width
+                        ZIndex: =5
+
+                    tblCreated_1 As label:
+                        BorderColor: =RGBA(219, 219, 219, 1)
+                        BorderThickness: =1
+                        Color: =RGBA(51, 51, 51, 1)
+                        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                        DisabledColor: =RGBA(166, 166, 166, 1)
+                        FocusedBorderThickness: =1
+                        Font: =Font.'Segoe UI'
+                        Size: =9.25
+                        Text: =ThisItem.Created
+                        Width: =190
+                        X: =190
+                        ZIndex: =6
+
+                    tblAuthor_1 As label:
+                        BorderColor: =RGBA(219, 219, 219, 1)
+                        BorderThickness: =1
+                        Color: =RGBA(51, 51, 51, 1)
+                        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                        DisabledColor: =RGBA(166, 166, 166, 1)
+                        FocusedBorderThickness: =1
+                        Font: =Font.'Segoe UI'
+                        Size: =9.25
+                        Text: =ThisItem.AuthorName
+                        Visible: =false
+                        Width: =190
+                        X: =tblActionsTaken_1.X + tblActionsTaken_1.Width
+                        ZIndex: =7
+
+                    tblAssigneeStarted_1 As label:
+                        BorderColor: =RGBA(219, 219, 219, 1)
+                        BorderThickness: =1
+                        Color: =RGBA(51, 51, 51, 1)
+                        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                        DisabledColor: =RGBA(166, 166, 166, 1)
+                        FocusedBorderThickness: =1
+                        Font: =Font.'Segoe UI'
+                        Size: =9.25
+                        Text: |-
+                            =Last(
+                                FirstN(
+                                    Split(
+                                        LookUp(
+                                            colAreaList,
+                                            'Area/Specific Area' = "Boolean" And Lower(Title) = Text(ThisItem.AssigneeStarted)
+                                        ).Translation,
+                                        ";"
+                                    ),
+                                    varLanguageID
+                                )
+                            ).Result
+                        Visible: =!varClosedView
+                        Width: =180
+                        X: =
+                        ZIndex: =8
+
+                    tblDescription_1 As label:
+                        AlignInContainer: =AlignInContainer.Stretch
+                        BorderColor: =RGBA(219, 219, 219, 1)
+                        BorderThickness: =1
+                        Color: =RGBA(51, 51, 51, 1)
+                        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                        DisabledColor: =RGBA(166, 166, 166, 1)
+                        FocusedBorderThickness: =1
+                        Font: =Font.'Segoe UI'
+                        Overflow: =Overflow.Scroll
+                        Size: =9.25
+                        Text: =PlainText(ThisItem.Description)
+                        Width: =190
+                        X: =tblMyDepartment_1.X + tblMyDepartment_1.Width
+                        ZIndex: =9
+
+                    tblArea_1 As label:
+                        BorderColor: =RGBA(219, 219, 219, 1)
+                        BorderThickness: =1
+                        Color: =RGBA(51, 51, 51, 1)
+                        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                        DisabledColor: =RGBA(166, 166, 166, 1)
+                        FocusedBorderThickness: =1
+                        Font: =Font.'Segoe UI'
+                        Size: =9.25
+                        Text: |-
+                            =Last(
+                                FirstN(
+                                    Split(
+                                        First(
+                                            Filter(
+                                                colAreaList,
+                                                ('Area/Specific Area' = "Area" Or 'Area/Specific Area' = "OldArea") And Title = ThisItem.Area.Value
+                                            )
+                                        ).Translation,
+                                        ";"
+                                    ),
+                                    varLanguageID
+                                )
+                            ).Result
+                        Width: =190
+                        X: =490
+                        ZIndex: =10
+
+                    tblAssignee_1 As label:
+                        BorderColor: =RGBA(219, 219, 219, 1)
+                        BorderThickness: =1
+                        Color: =RGBA(51, 51, 51, 1)
+                        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                        DisabledColor: =RGBA(166, 166, 166, 1)
+                        FocusedBorderThickness: =1
+                        Font: =Font.'Segoe UI'
+                        Size: =9.25
+                        Text: =ThisItem.Responsible.DisplayName
+                        Width: =190
+                        X: =340
+                        ZIndex: =11
+
+                    tblSpecArea_1 As label:
+                        BorderColor: =RGBA(219, 219, 219, 1)
+                        BorderThickness: =1
+                        Color: =RGBA(51, 51, 51, 1)
+                        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                        DisabledColor: =RGBA(166, 166, 166, 1)
+                        FocusedBorderThickness: =1
+                        Font: =Font.'Segoe UI'
+                        Size: =9.25
+                        Text: |-
+                            =Last(
+                                FirstN(
+                                    Split(
+                                        First(
+                                            Filter(
+                                                colAreaList,
+                                                'Area/Specific Area' = "Specific Area" And Title = ThisItem.'Specific Area'.Value
+                                            )
+                                        ).Translation,
+                                        ";"
+                                    ),
+                                    varLanguageID
+                                )
+                            ).Result
+                        Width: =190
+                        X: =640
+                        ZIndex: =12
+
+                    tblSerious_1 As label:
+                        BorderColor: =RGBA(219, 219, 219, 1)
+                        BorderThickness: =1
+                        Color: =RGBA(51, 51, 51, 1)
+                        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                        DisabledColor: =RGBA(166, 166, 166, 1)
+                        FocusedBorderThickness: =1
+                        Font: =Font.'Segoe UI'
+                        Size: =9.25
+                        Text: |-
+                            =Last(
+                                FirstN(
+                                    Split(
+                                        LookUp(
+                                            colAreaList,
+                                            'Area/Specific Area' = "Boolean" And Lower(Title) = Text(ThisItem.Serious)
+                                        ).Translation,
+                                        ";"
+                                    ),
+                                    varLanguageID
+                                )
+                            ).Result
+                        Width: =190
+                        X: =tblObsDate_1.X + tblObsDate_1.Width
+                        ZIndex: =13
+
+                    tblObsDate_1 As label:
+                        BorderColor: =RGBA(219, 219, 219, 1)
+                        BorderThickness: =1
+                        Color: =RGBA(51, 51, 51, 1)
+                        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                        DisabledColor: =RGBA(166, 166, 166, 1)
+                        FocusedBorderThickness: =1
+                        Font: =Font.'Segoe UI'
+                        Size: =9.25
+                        Text: =ThisItem.IncidentDate
+                        Width: =190
+                        X: =tblDescription_1.X + tblDescription_1.Width
+                        ZIndex: =14
+
+                    tblMyDepartment_1 As label:
+                        BorderColor: =RGBA(219, 219, 219, 1)
+                        BorderThickness: =1
+                        Color: =RGBA(51, 51, 51, 1)
+                        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                        DisabledColor: =RGBA(166, 166, 166, 1)
+                        FocusedBorderThickness: =1
+                        Font: =Font.'Segoe UI'
+                        Size: =9.25
+                        Text: =ThisItem.MyDepartment.Value
+                        Width: =190
+                        X: =tblOwner_1.X + tblOwner_1.Width
+                        ZIndex: =15
+
+                    tblOwner_1 As label:
+                        BorderColor: =RGBA(219, 219, 219, 1)
+                        BorderThickness: =1
+                        Color: =RGBA(51, 51, 51, 1)
+                        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                        DisabledColor: =RGBA(166, 166, 166, 1)
+                        FocusedBorderThickness: =1
+                        Font: =Font.'Segoe UI'
+                        Size: =9.25
+                        Text: =ThisItem.Owner.DisplayName
+                        Width: =190
+                        X: =1090
+                        ZIndex: =16
+
+                    tblOpMan_1 As label:
+                        BorderColor: =RGBA(219, 219, 219, 1)
+                        BorderThickness: =1
+                        Color: =RGBA(51, 51, 51, 1)
+                        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                        DisabledColor: =RGBA(166, 166, 166, 1)
+                        FocusedBorderThickness: =1
+                        Font: =Font.'Segoe UI'
+                        Size: =9.25
+                        Text: =ThisItem.'Operations Manager'.DisplayName
+                        Width: =190
+                        X: =940
+                        ZIndex: =17
+
+                    tblOtherClinic_1 As label:
+                        BorderColor: =RGBA(219, 219, 219, 1)
+                        BorderThickness: =1
+                        Color: =RGBA(51, 51, 51, 1)
+                        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                        DisabledColor: =RGBA(166, 166, 166, 1)
+                        FocusedBorderThickness: =1
+                        Font: =Font.'Segoe UI'
+                        Size: =9.25
+                        Text: =ThisItem.Location.Value
+                        Width: =190
+                        X: =790
+                        ZIndex: =18
+
+                    tblSupplier_1 As label:
+                        BorderColor: =RGBA(219, 219, 219, 1)
+                        BorderThickness: =1
+                        Color: =RGBA(51, 51, 51, 1)
+                        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                        DisabledColor: =RGBA(166, 166, 166, 1)
+                        FocusedBorderThickness: =1
+                        Font: =Font.'Segoe UI'
+                        Size: =9.25
+                        Text: =ThisItem.SupplierValue
+                        Width: =190
+                        X: =tblActionsTaken_1.X + tblActionsTaken_1.Width
+                        ZIndex: =19
+
+                    tblSupportFunction_1 As label:
+                        BorderColor: =RGBA(219, 219, 219, 1)
+                        BorderThickness: =1
+                        Color: =RGBA(51, 51, 51, 1)
+                        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                        DisabledColor: =RGBA(166, 166, 166, 1)
+                        FocusedBorderThickness: =1
+                        Font: =Font.'Segoe UI'
+                        Size: =9.25
+                        Text: =ThisItem.SupportFunctionValue
+                        Width: =190
+                        X: =tblActionsTaken_1.X + tblActionsTaken_1.Width
+                        ZIndex: =20
+
+            cntHeaders_1 As groupContainer.horizontalAutoLayoutContainer:
+                Height: =40
+                LayoutMode: =LayoutMode.Auto
+                Width: =Parent.Width
+                ZIndex: =11
+
+                hdrType_1 As TableHeader:
+                    ButtonIsSelected: =Self.ButtonSortValue = locSortColumn
+                    ButtonOnSelect: |-
+                        =UpdateContext({locSortColumn: Self.ButtonSortValue});UpdateContext({locSortDirection: !locSortDirection})
+                    ButtonSortValue: ="Type"
+                    ButtonText: =First(Filter(colTranslations, key = "label_type" && language.Value = varLanguage)).Title
+                    FilterIsSelected: =If(Self.ButtonSortValue = locFilterIsSelected.column, locFilterIsSelected.selected, false)
+                    FilterOnSelect: |-
+                        =UpdateContext(
+                            {
+                                locFilterIsSelected: {
+                                    column: Self.ButtonSortValue,
+                                    selected: !locFilterIsSelected.selected
+                                }
+                            }
+                        );
+                        ClearCollect(
+                            colTableFilter,
+                            AddColumns(
+                                colTableData,
+                                "helper",
+                                Switch(
+                                    locFilterIsSelected.column,
+                                    "Type",
+                                    Switch(
+                                        First(
+                                            Split(
+                                                Title,
+                                                "_"
+                                            )
+                                        ).Result,
+                                        "IM",
+                                        First(
+                                            Filter(
+                                                DeviationSystemTranslations,
+                                                key = "button_newimprovement" && language.Value = varLanguage
+                                            )
+                                        ).Title,
+                                        "DV",
+                                        First(
+                                            Filter(
+                                                DeviationSystemTranslations,
+                                                key = "button_newdeviation" && language.Value = varLanguage
+                                            )
+                                        ).Title
+                                    ),
+                                    "Title",
+                                    Title,
+                                    "Created",
+                                    Created,
+                                    "AssigneeName",
+                                    Responsible.DisplayName,
+                                    "AreaValue",
+                                    Last(
+                                        FirstN(
+                                            Split(
+                                                First(
+                                                    Filter(
+                                                        colAreaList,
+                                                        ('Area/Specific Area' = "Area" Or 'Area/Specific Area' = "OldArea") And Title = Area.Value
+                                                    )
+                                                ).Translation,
+                                                ";"
+                                            ),
+                                            varLanguageID
+                                        )
+                                    ).Result,
+                                    "SpecificAreaValue",
+                                    Last(
+                                        FirstN(
+                                            Split(
+                                                First(
+                                                    Filter(
+                                                        colAreaList,
+                                                        'Area/Specific Area' = "Specific Area" And Title = 'Specific Area'.Value
+                                                    )
+                                                ).Translation,
+                                                ";"
+                                            ),
+                                            varLanguageID
+                                        )
+                                    ).Result,
+                                    "OtherClinicValue",
+                                    Location.Value,
+                                    "OperationsManagerName",
+                                    'Operations Manager'.DisplayName,
+                                    "OwnerName",
+                                    Owner.DisplayName,
+                                    "MyDepartmentValue",
+                                    MyDepartment.Value,
+                                    "Description",
+                                    PlainText(Description),
+                                    "IncidentDate",
+                                    IncidentDate,
+                                    "Severe",
+                                    Last(
+                                        FirstN(
+                                            Split(
+                                                First(
+                                                    Filter(
+                                                        colAreaList,
+                                                        'Area/Specific Area' = "Boolean" And Lower(Title) = Text(Serious)
+                                                    )
+                                                ).Translation,
+                                                ";"
+                                            ),
+                                            varLanguageID
+                                        )
+                                    ).Result,
+                                    "ModifiedBy",
+                                    'Modified By'.DisplayName,
+                                    "FinishedDate",
+                                    FinishedDate,
+                                    "ActionsTaken",
+                                    PlainText('Actions Taken'),
+                                    "Supplier",
+                                    Supplier.Value,
+                                    "SupportFunctionValue",
+                                    SupportFunction.Value,
+                                    "AuthorName",
+                                    'Created By'.DisplayName
+                                )
+                            )
+                        )
+                    LayoutMinHeight: =640
+                    LayoutMinWidth: =640
+                    SortRotate: =If(Self.ButtonSortValue = locSortColumn && locSortDirection, 180, Self.ButtonSortValue = locSortColumn && locSortDirection = false, 0)
+                    Width: =100
+
+                hdrTitle_1 As TableHeader:
+                    ButtonIsSelected: =Self.ButtonSortValue = locSortColumn
+                    ButtonOnSelect: |-
+                        =UpdateContext({locSortColumn: Self.ButtonSortValue});UpdateContext({locSortDirection: !locSortDirection})
+                    ButtonSortValue: ="Title"
+                    ButtonText: =LookUp(colTranslations, language.Value = varLanguage And key = "table_column_title").Title
+                    FilterIsSelected: =If(Self.ButtonSortValue = locFilterIsSelected.column, locFilterIsSelected.selected, false)
+                    FilterOnSelect: |-
+                        =UpdateContext(
+                            {
+                                locFilterIsSelected: {
+                                    column: Self.ButtonSortValue,
+                                    selected: !locFilterIsSelected.selected
+                                }
+                            }
+                        );
+                        ClearCollect(
+                            colTableFilter,
+                            AddColumns(
+                                colTableData,
+                                "helper",
+                                Switch(
+                                    locFilterIsSelected.column,
+                                    "Type",
+                                    Switch(
+                                        First(
+                                            Split(
+                                                Title,
+                                                "_"
+                                            )
+                                        ).Result,
+                                        "IM",
+                                        First(
+                                            Filter(
+                                                DeviationSystemTranslations,
+                                                key = "button_newimprovement" && language.Value = varLanguage
+                                            )
+                                        ).Title,
+                                        "DV",
+                                        First(
+                                            Filter(
+                                                DeviationSystemTranslations,
+                                                key = "button_newdeviation" && language.Value = varLanguage
+                                            )
+                                        ).Title
+                                    ),
+                                    "Title",
+                                    Title,
+                                    "Created",
+                                    Created,
+                                    "AssigneeName",
+                                    Responsible.DisplayName,
+                                    "AreaValue",
+                                    Last(
+                                        FirstN(
+                                            Split(
+                                                First(
+                                                    Filter(
+                                                        colAreaList,
+                                                        ('Area/Specific Area' = "Area" Or 'Area/Specific Area' = "OldArea") And Title = Area.Value
+                                                    )
+                                                ).Translation,
+                                                ";"
+                                            ),
+                                            varLanguageID
+                                        )
+                                    ).Result,
+                                    "SpecificAreaValue",
+                                    Last(
+                                        FirstN(
+                                            Split(
+                                                First(
+                                                    Filter(
+                                                        colAreaList,
+                                                        'Area/Specific Area' = "Specific Area" And Title = 'Specific Area'.Value
+                                                    )
+                                                ).Translation,
+                                                ";"
+                                            ),
+                                            varLanguageID
+                                        )
+                                    ).Result,
+                                    "OtherClinicValue",
+                                    Location.Value,
+                                    "OperationsManagerName",
+                                    'Operations Manager'.DisplayName,
+                                    "OwnerName",
+                                    Owner.DisplayName,
+                                    "MyDepartmentValue",
+                                    MyDepartment.Value,
+                                    "Description",
+                                    PlainText(Description),
+                                    "IncidentDate",
+                                    IncidentDate,
+                                    "Severe",
+                                    Last(
+                                        FirstN(
+                                            Split(
+                                                First(
+                                                    Filter(
+                                                        colAreaList,
+                                                        'Area/Specific Area' = "Boolean" And Lower(Title) = Text(Serious)
+                                                    )
+                                                ).Translation,
+                                                ";"
+                                            ),
+                                            varLanguageID
+                                        )
+                                    ).Result,
+                                    "ModifiedBy",
+                                    'Modified By'.DisplayName,
+                                    "FinishedDate",
+                                    FinishedDate,
+                                    "ActionsTaken",
+                                    PlainText('Actions Taken'),
+                                    "Supplier",
+                                    Supplier.Value,
+                                    "SupportFunctionValue",
+                                    SupportFunction.Value,
+                                    "AuthorName",
+                                    'Created By'.DisplayName
+                                )
+                            )
+                        )
+                    LayoutMinHeight: =640
+                    LayoutMinWidth: =640
+                    SortRotate: =If(Self.ButtonSortValue = locSortColumn && locSortDirection, 180, Self.ButtonSortValue = locSortColumn && locSortDirection = false, 0)
+                    Width: =190
+                    ZIndex: =2
+
+                hdrFinishedDate_1 As TableHeader:
+                    ButtonIsSelected: =Self.ButtonSortValue = locSortColumn
+                    ButtonOnSelect: |-
+                        =UpdateContext({locSortColumn: Self.ButtonSortValue});UpdateContext({locSortDirection: !locSortDirection})
+                    ButtonSortValue: ="FinishedDate"
+                    ButtonText: ="Finished Date"
+                    FilterIsSelected: =If(Self.ButtonSortValue = locFilterIsSelected.column, locFilterIsSelected.selected, false)
+                    FilterOnSelect: |-
+                        =UpdateContext(
+                            {
+                                locFilterIsSelected: {
+                                    column: Self.ButtonSortValue,
+                                    selected: !locFilterIsSelected.selected
+                                }
+                            }
+                        );
+                        ClearCollect(
+                            colTableFilter,
+                            AddColumns(
+                                colTableData,
+                                "helper",
+                                Switch(
+                                    locFilterIsSelected.column,
+                                    "Type",
+                                    Switch(
+                                        First(
+                                            Split(
+                                                Title,
+                                                "_"
+                                            )
+                                        ).Result,
+                                        "IM",
+                                        First(
+                                            Filter(
+                                                DeviationSystemTranslations,
+                                                key = "button_newimprovement" && language.Value = varLanguage
+                                            )
+                                        ).Title,
+                                        "DV",
+                                        First(
+                                            Filter(
+                                                DeviationSystemTranslations,
+                                                key = "button_newdeviation" && language.Value = varLanguage
+                                            )
+                                        ).Title
+                                    ),
+                                    "Title",
+                                    Title,
+                                    "Created",
+                                    Created,
+                                    "AssigneeName",
+                                    Responsible.DisplayName,
+                                    "AreaValue",
+                                    Last(
+                                        FirstN(
+                                            Split(
+                                                First(
+                                                    Filter(
+                                                        colAreaList,
+                                                        ('Area/Specific Area' = "Area" Or 'Area/Specific Area' = "OldArea") And Title = Area.Value
+                                                    )
+                                                ).Translation,
+                                                ";"
+                                            ),
+                                            varLanguageID
+                                        )
+                                    ).Result,
+                                    "SpecificAreaValue",
+                                    Last(
+                                        FirstN(
+                                            Split(
+                                                First(
+                                                    Filter(
+                                                        colAreaList,
+                                                        'Area/Specific Area' = "Specific Area" And Title = 'Specific Area'.Value
+                                                    )
+                                                ).Translation,
+                                                ";"
+                                            ),
+                                            varLanguageID
+                                        )
+                                    ).Result,
+                                    "OtherClinicValue",
+                                    Location.Value,
+                                    "OperationsManagerName",
+                                    'Operations Manager'.DisplayName,
+                                    "OwnerName",
+                                    Owner.DisplayName,
+                                    "MyDepartmentValue",
+                                    MyDepartment.Value,
+                                    "Description",
+                                    PlainText(Description),
+                                    "IncidentDate",
+                                    IncidentDate,
+                                    "Severe",
+                                    Last(
+                                        FirstN(
+                                            Split(
+                                                First(
+                                                    Filter(
+                                                        colAreaList,
+                                                        'Area/Specific Area' = "Boolean" And Lower(Title) = Text(Serious)
+                                                    )
+                                                ).Translation,
+                                                ";"
+                                            ),
+                                            varLanguageID
+                                        )
+                                    ).Result,
+                                    "ModifiedBy",
+                                    'Modified By'.DisplayName,
+                                    "FinishedDate",
+                                    FinishedDate,
+                                    "ActionsTaken",
+                                    PlainText('Actions Taken'),
+                                    "Supplier",
+                                    Supplier.Value,
+                                    "SupportFunctionValue",
+                                    SupportFunction.Value,
+                                    "AuthorName",
+                                    'Created By'.DisplayName
+                                )
+                            )
+                        )
+                    LayoutMinHeight: =640
+                    LayoutMinWidth: =640
+                    SortRotate: =If(Self.ButtonSortValue = locSortColumn && locSortDirection, 180, Self.ButtonSortValue = locSortColumn && locSortDirection = false, 0)
+                    Visible: =varClosedView
+                    Width: =190
+                    X: =
+                    ZIndex: =3
+
+                hdrModifiedBy_1 As TableHeader:
+                    ButtonIsSelected: =Self.ButtonSortValue = locSortColumn
+                    ButtonOnSelect: |-
+                        =UpdateContext({locSortColumn: Self.ButtonSortValue});UpdateContext({locSortDirection: !locSortDirection})
+                    ButtonSortValue: ="ModifiedBy"
+                    ButtonText: ="Modified By"
+                    FilterIsSelected: =If(Self.ButtonSortValue = locFilterIsSelected.column, locFilterIsSelected.selected, false)
+                    FilterOnSelect: |-
+                        =UpdateContext(
+                            {
+                                locFilterIsSelected: {
+                                    column: Self.ButtonSortValue,
+                                    selected: !locFilterIsSelected.selected
+                                }
+                            }
+                        );
+                        ClearCollect(
+                            colTableFilter,
+                            AddColumns(
+                                colTableData,
+                                "helper",
+                                Switch(
+                                    locFilterIsSelected.column,
+                                    "Type",
+                                    Switch(
+                                        First(
+                                            Split(
+                                                Title,
+                                                "_"
+                                            )
+                                        ).Result,
+                                        "IM",
+                                        First(
+                                            Filter(
+                                                DeviationSystemTranslations,
+                                                key = "button_newimprovement" && language.Value = varLanguage
+                                            )
+                                        ).Title,
+                                        "DV",
+                                        First(
+                                            Filter(
+                                                DeviationSystemTranslations,
+                                                key = "button_newdeviation" && language.Value = varLanguage
+                                            )
+                                        ).Title
+                                    ),
+                                    "Title",
+                                    Title,
+                                    "Created",
+                                    Created,
+                                    "AssigneeName",
+                                    Responsible.DisplayName,
+                                    "AreaValue",
+                                    Last(
+                                        FirstN(
+                                            Split(
+                                                First(
+                                                    Filter(
+                                                        colAreaList,
+                                                        ('Area/Specific Area' = "Area" Or 'Area/Specific Area' = "OldArea") And Title = Area.Value
+                                                    )
+                                                ).Translation,
+                                                ";"
+                                            ),
+                                            varLanguageID
+                                        )
+                                    ).Result,
+                                    "SpecificAreaValue",
+                                    Last(
+                                        FirstN(
+                                            Split(
+                                                First(
+                                                    Filter(
+                                                        colAreaList,
+                                                        'Area/Specific Area' = "Specific Area" And Title = 'Specific Area'.Value
+                                                    )
+                                                ).Translation,
+                                                ";"
+                                            ),
+                                            varLanguageID
+                                        )
+                                    ).Result,
+                                    "OtherClinicValue",
+                                    Location.Value,
+                                    "OperationsManagerName",
+                                    'Operations Manager'.DisplayName,
+                                    "OwnerName",
+                                    Owner.DisplayName,
+                                    "MyDepartmentValue",
+                                    MyDepartment.Value,
+                                    "Description",
+                                    PlainText(Description),
+                                    "IncidentDate",
+                                    IncidentDate,
+                                    "Severe",
+                                    Last(
+                                        FirstN(
+                                            Split(
+                                                First(
+                                                    Filter(
+                                                        colAreaList,
+                                                        'Area/Specific Area' = "Boolean" And Lower(Title) = Text(Serious)
+                                                    )
+                                                ).Translation,
+                                                ";"
+                                            ),
+                                            varLanguageID
+                                        )
+                                    ).Result,
+                                    "ModifiedBy",
+                                    'Modified By'.DisplayName,
+                                    "FinishedDate",
+                                    FinishedDate,
+                                    "ActionsTaken",
+                                    PlainText('Actions Taken'),
+                                    "Supplier",
+                                    Supplier.Value,
+                                    "SupportFunctionValue",
+                                    SupportFunction.Value,
+                                    "AuthorName",
+                                    'Created By'.DisplayName
+                                )
+                            )
+                        )
+                    LayoutMinHeight: =640
+                    LayoutMinWidth: =640
+                    SortRotate: =If(Self.ButtonSortValue = locSortColumn && locSortDirection, 180, Self.ButtonSortValue = locSortColumn && locSortDirection = false, 0)
+                    Visible: =varClosedView
+                    Width: =190
+                    X: =
+                    ZIndex: =4
+
+                hdrActionsTaken_1 As TableHeader:
+                    ButtonIsSelected: =Self.ButtonSortValue = locSortColumn
+                    ButtonOnSelect: |-
+                        =UpdateContext({locSortColumn: Self.ButtonSortValue});UpdateContext({locSortDirection: !locSortDirection})
+                    ButtonSortValue: ="ActionsTaken"
+                    ButtonText: ="Actions Taken"
+                    FilterIsSelected: =If(Self.ButtonSortValue = locFilterIsSelected.column, locFilterIsSelected.selected, false)
+                    FilterOnSelect: |-
+                        =UpdateContext(
+                            {
+                                locFilterIsSelected: {
+                                    column: Self.ButtonSortValue,
+                                    selected: !locFilterIsSelected.selected
+                                }
+                            }
+                        );
+                        ClearCollect(
+                            colTableFilter,
+                            AddColumns(
+                                colTableData,
+                                "helper",
+                                Switch(
+                                    locFilterIsSelected.column,
+                                    "Type",
+                                    Switch(
+                                        First(
+                                            Split(
+                                                Title,
+                                                "_"
+                                            )
+                                        ).Result,
+                                        "IM",
+                                        First(
+                                            Filter(
+                                                DeviationSystemTranslations,
+                                                key = "button_newimprovement" && language.Value = varLanguage
+                                            )
+                                        ).Title,
+                                        "DV",
+                                        First(
+                                            Filter(
+                                                DeviationSystemTranslations,
+                                                key = "button_newdeviation" && language.Value = varLanguage
+                                            )
+                                        ).Title
+                                    ),
+                                    "Title",
+                                    Title,
+                                    "Created",
+                                    Created,
+                                    "AssigneeName",
+                                    Responsible.DisplayName,
+                                    "AreaValue",
+                                    Last(
+                                        FirstN(
+                                            Split(
+                                                First(
+                                                    Filter(
+                                                        colAreaList,
+                                                        ('Area/Specific Area' = "Area" Or 'Area/Specific Area' = "OldArea") And Title = Area.Value
+                                                    )
+                                                ).Translation,
+                                                ";"
+                                            ),
+                                            varLanguageID
+                                        )
+                                    ).Result,
+                                    "SpecificAreaValue",
+                                    Last(
+                                        FirstN(
+                                            Split(
+                                                First(
+                                                    Filter(
+                                                        colAreaList,
+                                                        'Area/Specific Area' = "Specific Area" And Title = 'Specific Area'.Value
+                                                    )
+                                                ).Translation,
+                                                ";"
+                                            ),
+                                            varLanguageID
+                                        )
+                                    ).Result,
+                                    "OtherClinicValue",
+                                    Location.Value,
+                                    "OperationsManagerName",
+                                    'Operations Manager'.DisplayName,
+                                    "OwnerName",
+                                    Owner.DisplayName,
+                                    "MyDepartmentValue",
+                                    MyDepartment.Value,
+                                    "Description",
+                                    PlainText(Description),
+                                    "IncidentDate",
+                                    IncidentDate,
+                                    "Severe",
+                                    Last(
+                                        FirstN(
+                                            Split(
+                                                First(
+                                                    Filter(
+                                                        colAreaList,
+                                                        'Area/Specific Area' = "Boolean" And Lower(Title) = Text(Serious)
+                                                    )
+                                                ).Translation,
+                                                ";"
+                                            ),
+                                            varLanguageID
+                                        )
+                                    ).Result,
+                                    "ModifiedBy",
+                                    'Modified By'.DisplayName,
+                                    "FinishedDate",
+                                    FinishedDate,
+                                    "ActionsTaken",
+                                    PlainText('Actions Taken'),
+                                    "Supplier",
+                                    Supplier.Value,
+                                    "SupportFunctionValue",
+                                    SupportFunction.Value,
+                                    "AuthorName",
+                                    'Created By'.DisplayName
+                                )
+                            )
+                        )
+                    LayoutMinHeight: =640
+                    LayoutMinWidth: =640
+                    SortRotate: =If(Self.ButtonSortValue = locSortColumn && locSortDirection, 180, Self.ButtonSortValue = locSortColumn && locSortDirection = false, 0)
+                    Visible: =varClosedView
+                    Width: =190
+                    X: =
+                    ZIndex: =5
+
+                hdrCreated_1 As TableHeader:
+                    ButtonIsSelected: =Self.ButtonSortValue = locSortColumn
+                    ButtonOnSelect: |-
+                        =UpdateContext({locSortColumn: Self.ButtonSortValue});UpdateContext({locSortDirection: !locSortDirection})
+                    ButtonSortValue: ="Created"
+                    ButtonText: =LookUp(colTranslations, language.Value = varLanguage And key = "table_column_created").Title
+                    FilterIsSelected: =If(Self.ButtonSortValue = locFilterIsSelected.column, locFilterIsSelected.selected, false)
+                    FilterOnSelect: |-
+                        =UpdateContext(
+                            {
+                                locFilterIsSelected: {
+                                    column: Self.ButtonSortValue,
+                                    selected: !locFilterIsSelected.selected
+                                }
+                            }
+                        );
+                        ClearCollect(
+                            colTableFilter,
+                            AddColumns(
+                                colTableData,
+                                "helper",
+                                Switch(
+                                    locFilterIsSelected.column,
+                                    "Type",
+                                    Switch(
+                                        First(
+                                            Split(
+                                                Title,
+                                                "_"
+                                            )
+                                        ).Result,
+                                        "IM",
+                                        First(
+                                            Filter(
+                                                DeviationSystemTranslations,
+                                                key = "button_newimprovement" && language.Value = varLanguage
+                                            )
+                                        ).Title,
+                                        "DV",
+                                        First(
+                                            Filter(
+                                                DeviationSystemTranslations,
+                                                key = "button_newdeviation" && language.Value = varLanguage
+                                            )
+                                        ).Title
+                                    ),
+                                    "Title",
+                                    Title,
+                                    "Created",
+                                    Created,
+                                    "AssigneeName",
+                                    Responsible.DisplayName,
+                                    "AreaValue",
+                                    Last(
+                                        FirstN(
+                                            Split(
+                                                First(
+                                                    Filter(
+                                                        colAreaList,
+                                                        ('Area/Specific Area' = "Area" Or 'Area/Specific Area' = "OldArea") And Title = Area.Value
+                                                    )
+                                                ).Translation,
+                                                ";"
+                                            ),
+                                            varLanguageID
+                                        )
+                                    ).Result,
+                                    "SpecificAreaValue",
+                                    Last(
+                                        FirstN(
+                                            Split(
+                                                First(
+                                                    Filter(
+                                                        colAreaList,
+                                                        'Area/Specific Area' = "Specific Area" And Title = 'Specific Area'.Value
+                                                    )
+                                                ).Translation,
+                                                ";"
+                                            ),
+                                            varLanguageID
+                                        )
+                                    ).Result,
+                                    "OtherClinicValue",
+                                    Location.Value,
+                                    "OperationsManagerName",
+                                    'Operations Manager'.DisplayName,
+                                    "OwnerName",
+                                    Owner.DisplayName,
+                                    "MyDepartmentValue",
+                                    MyDepartment.Value,
+                                    "Description",
+                                    PlainText(Description),
+                                    "IncidentDate",
+                                    IncidentDate,
+                                    "Severe",
+                                    Last(
+                                        FirstN(
+                                            Split(
+                                                First(
+                                                    Filter(
+                                                        colAreaList,
+                                                        'Area/Specific Area' = "Boolean" And Lower(Title) = Text(Serious)
+                                                    )
+                                                ).Translation,
+                                                ";"
+                                            ),
+                                            varLanguageID
+                                        )
+                                    ).Result,
+                                    "ModifiedBy",
+                                    'Modified By'.DisplayName,
+                                    "FinishedDate",
+                                    FinishedDate,
+                                    "ActionsTaken",
+                                    PlainText('Actions Taken'),
+                                    "Supplier",
+                                    Supplier.Value,
+                                    "SupportFunctionValue",
+                                    SupportFunction.Value,
+                                    "AuthorName",
+                                    'Created By'.DisplayName
+                                )
+                            )
+                        )
+                    LayoutMinHeight: =640
+                    LayoutMinWidth: =640
+                    SortRotate: =If(Self.ButtonSortValue = locSortColumn && locSortDirection, 180, Self.ButtonSortValue = locSortColumn && locSortDirection = false, 0)
+                    Width: =190
+                    X: =190
+                    ZIndex: =6
+
+                hdrAuthor_1 As TableHeader:
+                    ButtonIsSelected: =Self.ButtonSortValue = locSortColumn
+                    ButtonOnSelect: |-
+                        =UpdateContext({locSortColumn: Self.ButtonSortValue});UpdateContext({locSortDirection: !locSortDirection})
+                    ButtonSortValue: ="AuthorName"
+                    ButtonText: =LookUp(colTranslations, language.Value = varLanguage And key = "table_column_author").Title
+                    FilterIsSelected: =If(Self.ButtonSortValue = locFilterIsSelected.column, locFilterIsSelected.selected, false)
+                    FilterOnSelect: |-
+                        =UpdateContext(
+                            {
+                                locFilterIsSelected: {
+                                    column: Self.ButtonSortValue,
+                                    selected: !locFilterIsSelected.selected
+                                }
+                            }
+                        );
+                        ClearCollect(
+                            colTableFilter,
+                            AddColumns(
+                                colTableData,
+                                "helper",
+                                Switch(
+                                    locFilterIsSelected.column,
+                                    "Type",
+                                    Switch(
+                                        First(
+                                            Split(
+                                                Title,
+                                                "_"
+                                            )
+                                        ).Result,
+                                        "IM",
+                                        First(
+                                            Filter(
+                                                DeviationSystemTranslations,
+                                                key = "button_newimprovement" && language.Value = varLanguage
+                                            )
+                                        ).Title,
+                                        "DV",
+                                        First(
+                                            Filter(
+                                                DeviationSystemTranslations,
+                                                key = "button_newdeviation" && language.Value = varLanguage
+                                            )
+                                        ).Title
+                                    ),
+                                    "Title",
+                                    Title,
+                                    "Created",
+                                    Created,
+                                    "AssigneeName",
+                                    Responsible.DisplayName,
+                                    "AreaValue",
+                                    Last(
+                                        FirstN(
+                                            Split(
+                                                First(
+                                                    Filter(
+                                                        colAreaList,
+                                                        ('Area/Specific Area' = "Area" Or 'Area/Specific Area' = "OldArea") And Title = Area.Value
+                                                    )
+                                                ).Translation,
+                                                ";"
+                                            ),
+                                            varLanguageID
+                                        )
+                                    ).Result,
+                                    "SpecificAreaValue",
+                                    Last(
+                                        FirstN(
+                                            Split(
+                                                First(
+                                                    Filter(
+                                                        colAreaList,
+                                                        'Area/Specific Area' = "Specific Area" And Title = 'Specific Area'.Value
+                                                    )
+                                                ).Translation,
+                                                ";"
+                                            ),
+                                            varLanguageID
+                                        )
+                                    ).Result,
+                                    "OtherClinicValue",
+                                    Location.Value,
+                                    "OperationsManagerName",
+                                    'Operations Manager'.DisplayName,
+                                    "OwnerName",
+                                    Owner.DisplayName,
+                                    "MyDepartmentValue",
+                                    MyDepartment.Value,
+                                    "Description",
+                                    PlainText(Description),
+                                    "IncidentDate",
+                                    IncidentDate,
+                                    "Severe",
+                                    Last(
+                                        FirstN(
+                                            Split(
+                                                First(
+                                                    Filter(
+                                                        colAreaList,
+                                                        'Area/Specific Area' = "Boolean" And Lower(Title) = Text(Serious)
+                                                    )
+                                                ).Translation,
+                                                ";"
+                                            ),
+                                            varLanguageID
+                                        )
+                                    ).Result,
+                                    "ModifiedBy",
+                                    'Modified By'.DisplayName,
+                                    "FinishedDate",
+                                    FinishedDate,
+                                    "ActionsTaken",
+                                    PlainText('Actions Taken'),
+                                    "Supplier",
+                                    Supplier.Value,
+                                    "SupportFunctionValue",
+                                    SupportFunction.Value,
+                                    "AuthorName",
+                                    'Created By'.DisplayName
+                                )
+                            )
+                        )
+                    LayoutMinHeight: =640
+                    LayoutMinWidth: =640
+                    SortRotate: =If(Self.ButtonSortValue = locSortColumn && locSortDirection, 180, Self.ButtonSortValue = locSortColumn && locSortDirection = false, 0)
+                    Visible: =false
+                    Width: =190
+                    X: =
+                    ZIndex: =7
+
+                hdrStarted_1 As TableHeader:
+                    ButtonIsSelected: =Self.ButtonSortValue = locSortColumn
+                    ButtonOnSelect: |-
+                        =UpdateContext({locSortColumn: Self.ButtonSortValue});UpdateContext({locSortDirection: !locSortDirection})
+                    ButtonSortValue: ="AssigneeStarted"
+                    ButtonText: =LookUp(colTranslations, language.Value = varLanguage And key = "form_label_started").Title
+                    FilterIsSelected: =If(Self.ButtonSortValue = locFilterIsSelected.column, locFilterIsSelected.selected, false)
+                    FilterOnSelect: |-
+                        =UpdateContext(
+                            {
+                                locFilterIsSelected: {
+                                    column: Self.ButtonSortValue,
+                                    selected: !locFilterIsSelected.selected
+                                }
+                            }
+                        );
+                        ClearCollect(
+                            colTableFilter,
+                            AddColumns(
+                                colTableData,
+                                "helper",
+                                Switch(
+                                    locFilterIsSelected.column,
+                                    "Type",
+                                    Switch(
+                                        First(
+                                            Split(
+                                                Title,
+                                                "_"
+                                            )
+                                        ).Result,
+                                        "IM",
+                                        First(
+                                            Filter(
+                                                DeviationSystemTranslations,
+                                                key = "button_newimprovement" && language.Value = varLanguage
+                                            )
+                                        ).Title,
+                                        "DV",
+                                        First(
+                                            Filter(
+                                                DeviationSystemTranslations,
+                                                key = "button_newdeviation" && language.Value = varLanguage
+                                            )
+                                        ).Title
+                                    ),
+                                    "Title",
+                                    Title,
+                                    "Created",
+                                    Created,
+                                    "AssigneeName",
+                                    Responsible.DisplayName,
+                                    "AreaValue",
+                                    Last(
+                                        FirstN(
+                                            Split(
+                                                First(
+                                                    Filter(
+                                                        colAreaList,
+                                                        ('Area/Specific Area' = "Area" Or 'Area/Specific Area' = "OldArea") And Title = Area.Value
+                                                    )
+                                                ).Translation,
+                                                ";"
+                                            ),
+                                            varLanguageID
+                                        )
+                                    ).Result,
+                                    "SpecificAreaValue",
+                                    Last(
+                                        FirstN(
+                                            Split(
+                                                First(
+                                                    Filter(
+                                                        colAreaList,
+                                                        'Area/Specific Area' = "Specific Area" And Title = 'Specific Area'.Value
+                                                    )
+                                                ).Translation,
+                                                ";"
+                                            ),
+                                            varLanguageID
+                                        )
+                                    ).Result,
+                                    "OtherClinicValue",
+                                    Location.Value,
+                                    "OperationsManagerName",
+                                    'Operations Manager'.DisplayName,
+                                    "OwnerName",
+                                    Owner.DisplayName,
+                                    "MyDepartmentValue",
+                                    MyDepartment.Value,
+                                    "Description",
+                                    PlainText(Description),
+                                    "IncidentDate",
+                                    IncidentDate,
+                                    "Severe",
+                                    Last(
+                                        FirstN(
+                                            Split(
+                                                First(
+                                                    Filter(
+                                                        colAreaList,
+                                                        'Area/Specific Area' = "Boolean" And Lower(Title) = Text(Serious)
+                                                    )
+                                                ).Translation,
+                                                ";"
+                                            ),
+                                            varLanguageID
+                                        )
+                                    ).Result,
+                                    "ModifiedBy",
+                                    'Modified By'.DisplayName,
+                                    "FinishedDate",
+                                    FinishedDate,
+                                    "ActionsTaken",
+                                    PlainText('Actions Taken'),
+                                    "Supplier",
+                                    Supplier.Value,
+                                    "SupportFunctionValue",
+                                    SupportFunction.Value,
+                                    "AuthorName",
+                                    'Created By'.DisplayName
+                                )
+                            )
+                        )
+                    LayoutMinHeight: =640
+                    LayoutMinWidth: =640
+                    SortRotate: =If(Self.ButtonSortValue = locSortColumn && locSortDirection, 180, Self.ButtonSortValue = locSortColumn && locSortDirection = false, 0)
+                    Visible: =!varClosedView
+                    Width: =180
+                    ZIndex: =8
+
+                hdrDescription_1 As TableHeader:
+                    ButtonIsSelected: =Self.ButtonSortValue = locSortColumn
+                    ButtonOnSelect: |-
+                        =UpdateContext({locSortColumn: Self.ButtonSortValue});UpdateContext({locSortDirection: !locSortDirection})
+                    ButtonSortValue: ="Description"
+                    ButtonText: =LookUp(colTranslations, language.Value = varLanguage And key = "form_label_description").Title
+                    FilterIsSelected: =If(Self.ButtonSortValue = locFilterIsSelected.column, locFilterIsSelected.selected, false)
+                    FilterOnSelect: |-
+                        =UpdateContext(
+                            {
+                                locFilterIsSelected: {
+                                    column: Self.ButtonSortValue,
+                                    selected: !locFilterIsSelected.selected
+                                }
+                            }
+                        );
+                        ClearCollect(
+                            colTableFilter,
+                            AddColumns(
+                                colTableData,
+                                "helper",
+                                Switch(
+                                    locFilterIsSelected.column,
+                                    "Type",
+                                    Switch(
+                                        First(
+                                            Split(
+                                                Title,
+                                                "_"
+                                            )
+                                        ).Result,
+                                        "IM",
+                                        First(
+                                            Filter(
+                                                DeviationSystemTranslations,
+                                                key = "button_newimprovement" && language.Value = varLanguage
+                                            )
+                                        ).Title,
+                                        "DV",
+                                        First(
+                                            Filter(
+                                                DeviationSystemTranslations,
+                                                key = "button_newdeviation" && language.Value = varLanguage
+                                            )
+                                        ).Title
+                                    ),
+                                    "Title",
+                                    Title,
+                                    "Created",
+                                    Created,
+                                    "AssigneeName",
+                                    Responsible.DisplayName,
+                                    "AreaValue",
+                                    Last(
+                                        FirstN(
+                                            Split(
+                                                First(
+                                                    Filter(
+                                                        colAreaList,
+                                                        ('Area/Specific Area' = "Area" Or 'Area/Specific Area' = "OldArea") And Title = Area.Value
+                                                    )
+                                                ).Translation,
+                                                ";"
+                                            ),
+                                            varLanguageID
+                                        )
+                                    ).Result,
+                                    "SpecificAreaValue",
+                                    Last(
+                                        FirstN(
+                                            Split(
+                                                First(
+                                                    Filter(
+                                                        colAreaList,
+                                                        'Area/Specific Area' = "Specific Area" And Title = 'Specific Area'.Value
+                                                    )
+                                                ).Translation,
+                                                ";"
+                                            ),
+                                            varLanguageID
+                                        )
+                                    ).Result,
+                                    "OtherClinicValue",
+                                    Location.Value,
+                                    "OperationsManagerName",
+                                    'Operations Manager'.DisplayName,
+                                    "OwnerName",
+                                    Owner.DisplayName,
+                                    "MyDepartmentValue",
+                                    MyDepartment.Value,
+                                    "Description",
+                                    PlainText(Description),
+                                    "IncidentDate",
+                                    IncidentDate,
+                                    "Severe",
+                                    Last(
+                                        FirstN(
+                                            Split(
+                                                First(
+                                                    Filter(
+                                                        colAreaList,
+                                                        'Area/Specific Area' = "Boolean" And Lower(Title) = Text(Serious)
+                                                    )
+                                                ).Translation,
+                                                ";"
+                                            ),
+                                            varLanguageID
+                                        )
+                                    ).Result,
+                                    "ModifiedBy",
+                                    'Modified By'.DisplayName,
+                                    "FinishedDate",
+                                    FinishedDate,
+                                    "ActionsTaken",
+                                    PlainText('Actions Taken'),
+                                    "Supplier",
+                                    Supplier.Value,
+                                    "SupportFunctionValue",
+                                    SupportFunction.Value,
+                                    "AuthorName",
+                                    'Created By'.DisplayName
+                                )
+                            )
+                        )
+                    LayoutMinHeight: =640
+                    LayoutMinWidth: =640
+                    SortRotate: =If(Self.ButtonSortValue = locSortColumn && locSortDirection, 180, Self.ButtonSortValue = locSortColumn && locSortDirection = false, 0)
+                    Width: =190
+                    X: =
+                    ZIndex: =9
+
+                hdrArea_1 As TableHeader:
+                    ButtonIsSelected: =Self.ButtonSortValue = locSortColumn
+                    ButtonOnSelect: |-
+                        =UpdateContext({locSortColumn: Self.ButtonSortValue});UpdateContext({locSortDirection: !locSortDirection})
+                    ButtonSortValue: ="AreaValue"
+                    ButtonText: =LookUp(colTranslations, language.Value = varLanguage And key = "form_label_area").Title
+                    FilterIsSelected: =If(Self.ButtonSortValue = locFilterIsSelected.column, locFilterIsSelected.selected, false)
+                    FilterOnSelect: |-
+                        =UpdateContext(
+                            {
+                                locFilterIsSelected: {
+                                    column: Self.ButtonSortValue,
+                                    selected: !locFilterIsSelected.selected
+                                }
+                            }
+                        );
+                        ClearCollect(
+                            colTableFilter,
+                            AddColumns(
+                                colTableData,
+                                "helper",
+                                Switch(
+                                    locFilterIsSelected.column,
+                                    "Type",
+                                    Switch(
+                                        First(
+                                            Split(
+                                                Title,
+                                                "_"
+                                            )
+                                        ).Result,
+                                        "IM",
+                                        First(
+                                            Filter(
+                                                DeviationSystemTranslations,
+                                                key = "button_newimprovement" && language.Value = varLanguage
+                                            )
+                                        ).Title,
+                                        "DV",
+                                        First(
+                                            Filter(
+                                                DeviationSystemTranslations,
+                                                key = "button_newdeviation" && language.Value = varLanguage
+                                            )
+                                        ).Title
+                                    ),
+                                    "Title",
+                                    Title,
+                                    "Created",
+                                    Created,
+                                    "AssigneeName",
+                                    Responsible.DisplayName,
+                                    "AreaValue",
+                                    Last(
+                                        FirstN(
+                                            Split(
+                                                First(
+                                                    Filter(
+                                                        colAreaList,
+                                                        ('Area/Specific Area' = "Area" Or 'Area/Specific Area' = "OldArea") And Title = Area.Value
+                                                    )
+                                                ).Translation,
+                                                ";"
+                                            ),
+                                            varLanguageID
+                                        )
+                                    ).Result,
+                                    "SpecificAreaValue",
+                                    Last(
+                                        FirstN(
+                                            Split(
+                                                First(
+                                                    Filter(
+                                                        colAreaList,
+                                                        'Area/Specific Area' = "Specific Area" And Title = 'Specific Area'.Value
+                                                    )
+                                                ).Translation,
+                                                ";"
+                                            ),
+                                            varLanguageID
+                                        )
+                                    ).Result,
+                                    "OtherClinicValue",
+                                    Location.Value,
+                                    "OperationsManagerName",
+                                    'Operations Manager'.DisplayName,
+                                    "OwnerName",
+                                    Owner.DisplayName,
+                                    "MyDepartmentValue",
+                                    MyDepartment.Value,
+                                    "Description",
+                                    PlainText(Description),
+                                    "IncidentDate",
+                                    IncidentDate,
+                                    "Severe",
+                                    Last(
+                                        FirstN(
+                                            Split(
+                                                First(
+                                                    Filter(
+                                                        colAreaList,
+                                                        'Area/Specific Area' = "Boolean" And Lower(Title) = Text(Serious)
+                                                    )
+                                                ).Translation,
+                                                ";"
+                                            ),
+                                            varLanguageID
+                                        )
+                                    ).Result,
+                                    "ModifiedBy",
+                                    'Modified By'.DisplayName,
+                                    "FinishedDate",
+                                    FinishedDate,
+                                    "ActionsTaken",
+                                    PlainText('Actions Taken'),
+                                    "Supplier",
+                                    Supplier.Value,
+                                    "SupportFunctionValue",
+                                    SupportFunction.Value,
+                                    "AuthorName",
+                                    'Created By'.DisplayName
+                                )
+                            )
+                        )
+                    LayoutMinHeight: =640
+                    LayoutMinWidth: =640
+                    SortRotate: =If(Self.ButtonSortValue = locSortColumn && locSortDirection, 180, Self.ButtonSortValue = locSortColumn && locSortDirection = false, 0)
+                    Width: =190
+                    X: =490
+                    ZIndex: =10
+
+                hdrAssignee_1 As TableHeader:
+                    ButtonIsSelected: =Self.ButtonSortValue = locSortColumn
+                    ButtonOnSelect: |-
+                        =UpdateContext({locSortColumn: Self.ButtonSortValue});UpdateContext({locSortDirection: !locSortDirection})
+                    ButtonSortValue: ="AssigneeName"
+                    ButtonText: =LookUp(colTranslations, language.Value = varLanguage And key = "form_label_assignee").Title
+                    FilterIsSelected: =If(Self.ButtonSortValue = locFilterIsSelected.column, locFilterIsSelected.selected, false)
+                    FilterOnSelect: |-
+                        =UpdateContext(
+                            {
+                                locFilterIsSelected: {
+                                    column: Self.ButtonSortValue,
+                                    selected: !locFilterIsSelected.selected
+                                }
+                            }
+                        );
+                        ClearCollect(
+                            colTableFilter,
+                            AddColumns(
+                                colTableData,
+                                "helper",
+                                Switch(
+                                    locFilterIsSelected.column,
+                                    "Type",
+                                    Switch(
+                                        First(
+                                            Split(
+                                                Title,
+                                                "_"
+                                            )
+                                        ).Result,
+                                        "IM",
+                                        First(
+                                            Filter(
+                                                DeviationSystemTranslations,
+                                                key = "button_newimprovement" && language.Value = varLanguage
+                                            )
+                                        ).Title,
+                                        "DV",
+                                        First(
+                                            Filter(
+                                                DeviationSystemTranslations,
+                                                key = "button_newdeviation" && language.Value = varLanguage
+                                            )
+                                        ).Title
+                                    ),
+                                    "Title",
+                                    Title,
+                                    "Created",
+                                    Created,
+                                    "AssigneeName",
+                                    Responsible.DisplayName,
+                                    "AreaValue",
+                                    Last(
+                                        FirstN(
+                                            Split(
+                                                First(
+                                                    Filter(
+                                                        colAreaList,
+                                                        ('Area/Specific Area' = "Area" Or 'Area/Specific Area' = "OldArea") And Title = Area.Value
+                                                    )
+                                                ).Translation,
+                                                ";"
+                                            ),
+                                            varLanguageID
+                                        )
+                                    ).Result,
+                                    "SpecificAreaValue",
+                                    Last(
+                                        FirstN(
+                                            Split(
+                                                First(
+                                                    Filter(
+                                                        colAreaList,
+                                                        'Area/Specific Area' = "Specific Area" And Title = 'Specific Area'.Value
+                                                    )
+                                                ).Translation,
+                                                ";"
+                                            ),
+                                            varLanguageID
+                                        )
+                                    ).Result,
+                                    "OtherClinicValue",
+                                    Location.Value,
+                                    "OperationsManagerName",
+                                    'Operations Manager'.DisplayName,
+                                    "OwnerName",
+                                    Owner.DisplayName,
+                                    "MyDepartmentValue",
+                                    MyDepartment.Value,
+                                    "Description",
+                                    PlainText(Description),
+                                    "IncidentDate",
+                                    IncidentDate,
+                                    "Severe",
+                                    Last(
+                                        FirstN(
+                                            Split(
+                                                First(
+                                                    Filter(
+                                                        colAreaList,
+                                                        'Area/Specific Area' = "Boolean" And Lower(Title) = Text(Serious)
+                                                    )
+                                                ).Translation,
+                                                ";"
+                                            ),
+                                            varLanguageID
+                                        )
+                                    ).Result,
+                                    "ModifiedBy",
+                                    'Modified By'.DisplayName,
+                                    "FinishedDate",
+                                    FinishedDate,
+                                    "ActionsTaken",
+                                    PlainText('Actions Taken'),
+                                    "Supplier",
+                                    Supplier.Value,
+                                    "SupportFunctionValue",
+                                    SupportFunction.Value,
+                                    "AuthorName",
+                                    'Created By'.DisplayName
+                                )
+                            )
+                        )
+                    LayoutMinHeight: =640
+                    LayoutMinWidth: =640
+                    SortRotate: =If(Self.ButtonSortValue = locSortColumn && locSortDirection, 180, Self.ButtonSortValue = locSortColumn && locSortDirection = false, 0)
+                    Width: =190
+                    X: =340
+                    ZIndex: =11
+
+                hdrSpecArea_1 As TableHeader:
+                    ButtonIsSelected: =Self.ButtonSortValue = locSortColumn
+                    ButtonOnSelect: |-
+                        =UpdateContext({locSortColumn: Self.ButtonSortValue});UpdateContext({locSortDirection: !locSortDirection})
+                    ButtonSortValue: ="SpecificAreaValue"
+                    ButtonText: =LookUp(colTranslations, language.Value = varLanguage And key = "form_label_specificarea").Title
+                    FilterIsSelected: =If(Self.ButtonSortValue = locFilterIsSelected.column, locFilterIsSelected.selected, false)
+                    FilterOnSelect: |-
+                        =UpdateContext(
+                            {
+                                locFilterIsSelected: {
+                                    column: Self.ButtonSortValue,
+                                    selected: !locFilterIsSelected.selected
+                                }
+                            }
+                        );
+                        ClearCollect(
+                            colTableFilter,
+                            AddColumns(
+                                colTableData,
+                                "helper",
+                                Switch(
+                                    locFilterIsSelected.column,
+                                    "Type",
+                                    Switch(
+                                        First(
+                                            Split(
+                                                Title,
+                                                "_"
+                                            )
+                                        ).Result,
+                                        "IM",
+                                        First(
+                                            Filter(
+                                                DeviationSystemTranslations,
+                                                key = "button_newimprovement" && language.Value = varLanguage
+                                            )
+                                        ).Title,
+                                        "DV",
+                                        First(
+                                            Filter(
+                                                DeviationSystemTranslations,
+                                                key = "button_newdeviation" && language.Value = varLanguage
+                                            )
+                                        ).Title
+                                    ),
+                                    "Title",
+                                    Title,
+                                    "Created",
+                                    Created,
+                                    "AssigneeName",
+                                    Responsible.DisplayName,
+                                    "AreaValue",
+                                    Last(
+                                        FirstN(
+                                            Split(
+                                                First(
+                                                    Filter(
+                                                        colAreaList,
+                                                        ('Area/Specific Area' = "Area" Or 'Area/Specific Area' = "OldArea") And Title = Area.Value
+                                                    )
+                                                ).Translation,
+                                                ";"
+                                            ),
+                                            varLanguageID
+                                        )
+                                    ).Result,
+                                    "SpecificAreaValue",
+                                    Last(
+                                        FirstN(
+                                            Split(
+                                                First(
+                                                    Filter(
+                                                        colAreaList,
+                                                        'Area/Specific Area' = "Specific Area" And Title = 'Specific Area'.Value
+                                                    )
+                                                ).Translation,
+                                                ";"
+                                            ),
+                                            varLanguageID
+                                        )
+                                    ).Result,
+                                    "OtherClinicValue",
+                                    Location.Value,
+                                    "OperationsManagerName",
+                                    'Operations Manager'.DisplayName,
+                                    "OwnerName",
+                                    Owner.DisplayName,
+                                    "MyDepartmentValue",
+                                    MyDepartment.Value,
+                                    "Description",
+                                    PlainText(Description),
+                                    "IncidentDate",
+                                    IncidentDate,
+                                    "Severe",
+                                    Last(
+                                        FirstN(
+                                            Split(
+                                                First(
+                                                    Filter(
+                                                        colAreaList,
+                                                        'Area/Specific Area' = "Boolean" And Lower(Title) = Text(Serious)
+                                                    )
+                                                ).Translation,
+                                                ";"
+                                            ),
+                                            varLanguageID
+                                        )
+                                    ).Result,
+                                    "ModifiedBy",
+                                    'Modified By'.DisplayName,
+                                    "FinishedDate",
+                                    FinishedDate,
+                                    "ActionsTaken",
+                                    PlainText('Actions Taken'),
+                                    "Supplier",
+                                    Supplier.Value,
+                                    "SupportFunctionValue",
+                                    SupportFunction.Value,
+                                    "AuthorName",
+                                    'Created By'.DisplayName
+                                )
+                            )
+                        )
+                    LayoutMinHeight: =640
+                    LayoutMinWidth: =640
+                    SortRotate: =If(Self.ButtonSortValue = locSortColumn && locSortDirection, 180, Self.ButtonSortValue = locSortColumn && locSortDirection = false, 0)
+                    Width: =190
+                    X: =640
+                    ZIndex: =12
+
+                hdrSerious_1 As TableHeader:
+                    ButtonIsSelected: =Self.ButtonSortValue = locSortColumn
+                    ButtonOnSelect: |-
+                        =UpdateContext({locSortColumn: Self.ButtonSortValue});UpdateContext({locSortDirection: !locSortDirection})
+                    ButtonSortValue: ="Severe"
+                    ButtonText: =LookUp(colTranslations, language.Value = varLanguage And key = "form_label_serious").Title
+                    FilterIsSelected: =If(Self.ButtonSortValue = locFilterIsSelected.column, locFilterIsSelected.selected, false)
+                    FilterOnSelect: |-
+                        =UpdateContext(
+                            {
+                                locFilterIsSelected: {
+                                    column: Self.ButtonSortValue,
+                                    selected: !locFilterIsSelected.selected
+                                }
+                            }
+                        );
+                        ClearCollect(
+                            colTableFilter,
+                            AddColumns(
+                                colTableData,
+                                "helper",
+                                Switch(
+                                    locFilterIsSelected.column,
+                                    "Type",
+                                    Switch(
+                                        First(
+                                            Split(
+                                                Title,
+                                                "_"
+                                            )
+                                        ).Result,
+                                        "IM",
+                                        First(
+                                            Filter(
+                                                DeviationSystemTranslations,
+                                                key = "button_newimprovement" && language.Value = varLanguage
+                                            )
+                                        ).Title,
+                                        "DV",
+                                        First(
+                                            Filter(
+                                                DeviationSystemTranslations,
+                                                key = "button_newdeviation" && language.Value = varLanguage
+                                            )
+                                        ).Title
+                                    ),
+                                    "Title",
+                                    Title,
+                                    "Created",
+                                    Created,
+                                    "AssigneeName",
+                                    Responsible.DisplayName,
+                                    "AreaValue",
+                                    Last(
+                                        FirstN(
+                                            Split(
+                                                First(
+                                                    Filter(
+                                                        colAreaList,
+                                                        ('Area/Specific Area' = "Area" Or 'Area/Specific Area' = "OldArea") And Title = Area.Value
+                                                    )
+                                                ).Translation,
+                                                ";"
+                                            ),
+                                            varLanguageID
+                                        )
+                                    ).Result,
+                                    "SpecificAreaValue",
+                                    Last(
+                                        FirstN(
+                                            Split(
+                                                First(
+                                                    Filter(
+                                                        colAreaList,
+                                                        'Area/Specific Area' = "Specific Area" And Title = 'Specific Area'.Value
+                                                    )
+                                                ).Translation,
+                                                ";"
+                                            ),
+                                            varLanguageID
+                                        )
+                                    ).Result,
+                                    "OtherClinicValue",
+                                    Location.Value,
+                                    "OperationsManagerName",
+                                    'Operations Manager'.DisplayName,
+                                    "OwnerName",
+                                    Owner.DisplayName,
+                                    "MyDepartmentValue",
+                                    MyDepartment.Value,
+                                    "Description",
+                                    PlainText(Description),
+                                    "IncidentDate",
+                                    IncidentDate,
+                                    "Severe",
+                                    Last(
+                                        FirstN(
+                                            Split(
+                                                First(
+                                                    Filter(
+                                                        colAreaList,
+                                                        'Area/Specific Area' = "Boolean" And Lower(Title) = Text(Serious)
+                                                    )
+                                                ).Translation,
+                                                ";"
+                                            ),
+                                            varLanguageID
+                                        )
+                                    ).Result,
+                                    "ModifiedBy",
+                                    'Modified By'.DisplayName,
+                                    "FinishedDate",
+                                    FinishedDate,
+                                    "ActionsTaken",
+                                    PlainText('Actions Taken'),
+                                    "Supplier",
+                                    Supplier.Value,
+                                    "SupportFunctionValue",
+                                    SupportFunction.Value,
+                                    "AuthorName",
+                                    'Created By'.DisplayName
+                                )
+                            )
+                        )
+                    LayoutMinHeight: =640
+                    LayoutMinWidth: =640
+                    SortRotate: =If(Self.ButtonSortValue = locSortColumn && locSortDirection, 180, Self.ButtonSortValue = locSortColumn && locSortDirection = false, 0)
+                    Width: =190
+                    X: =
+                    ZIndex: =13
+
+                hdrObsDate_1 As TableHeader:
+                    ButtonIsSelected: =Self.ButtonSortValue = locSortColumn
+                    ButtonOnSelect: |-
+                        =UpdateContext({locSortColumn: Self.ButtonSortValue});UpdateContext({locSortDirection: !locSortDirection})
+                    ButtonSortValue: ="IncidentDate"
+                    ButtonText: =LookUp(colTranslations, language.Value = varLanguage And key = "form_label_obsdate").Title
+                    FilterIsSelected: =If(Self.ButtonSortValue = locFilterIsSelected.column, locFilterIsSelected.selected, false)
+                    FilterOnSelect: |-
+                        =UpdateContext(
+                            {
+                                locFilterIsSelected: {
+                                    column: Self.ButtonSortValue,
+                                    selected: !locFilterIsSelected.selected
+                                }
+                            }
+                        );
+                        ClearCollect(
+                            colTableFilter,
+                            AddColumns(
+                                colTableData,
+                                "helper",
+                                Switch(
+                                    locFilterIsSelected.column,
+                                    "Type",
+                                    Switch(
+                                        First(
+                                            Split(
+                                                Title,
+                                                "_"
+                                            )
+                                        ).Result,
+                                        "IM",
+                                        First(
+                                            Filter(
+                                                DeviationSystemTranslations,
+                                                key = "button_newimprovement" && language.Value = varLanguage
+                                            )
+                                        ).Title,
+                                        "DV",
+                                        First(
+                                            Filter(
+                                                DeviationSystemTranslations,
+                                                key = "button_newdeviation" && language.Value = varLanguage
+                                            )
+                                        ).Title
+                                    ),
+                                    "Title",
+                                    Title,
+                                    "Created",
+                                    Created,
+                                    "AssigneeName",
+                                    Responsible.DisplayName,
+                                    "AreaValue",
+                                    Last(
+                                        FirstN(
+                                            Split(
+                                                First(
+                                                    Filter(
+                                                        colAreaList,
+                                                        ('Area/Specific Area' = "Area" Or 'Area/Specific Area' = "OldArea") And Title = Area.Value
+                                                    )
+                                                ).Translation,
+                                                ";"
+                                            ),
+                                            varLanguageID
+                                        )
+                                    ).Result,
+                                    "SpecificAreaValue",
+                                    Last(
+                                        FirstN(
+                                            Split(
+                                                First(
+                                                    Filter(
+                                                        colAreaList,
+                                                        'Area/Specific Area' = "Specific Area" And Title = 'Specific Area'.Value
+                                                    )
+                                                ).Translation,
+                                                ";"
+                                            ),
+                                            varLanguageID
+                                        )
+                                    ).Result,
+                                    "OtherClinicValue",
+                                    Location.Value,
+                                    "OperationsManagerName",
+                                    'Operations Manager'.DisplayName,
+                                    "OwnerName",
+                                    Owner.DisplayName,
+                                    "MyDepartmentValue",
+                                    MyDepartment.Value,
+                                    "Description",
+                                    PlainText(Description),
+                                    "IncidentDate",
+                                    IncidentDate,
+                                    "Severe",
+                                    Last(
+                                        FirstN(
+                                            Split(
+                                                First(
+                                                    Filter(
+                                                        colAreaList,
+                                                        'Area/Specific Area' = "Boolean" And Lower(Title) = Text(Serious)
+                                                    )
+                                                ).Translation,
+                                                ";"
+                                            ),
+                                            varLanguageID
+                                        )
+                                    ).Result,
+                                    "ModifiedBy",
+                                    'Modified By'.DisplayName,
+                                    "FinishedDate",
+                                    FinishedDate,
+                                    "ActionsTaken",
+                                    PlainText('Actions Taken'),
+                                    "Supplier",
+                                    Supplier.Value,
+                                    "SupportFunctionValue",
+                                    SupportFunction.Value,
+                                    "AuthorName",
+                                    'Created By'.DisplayName
+                                )
+                            )
+                        )
+                    LayoutMinHeight: =640
+                    LayoutMinWidth: =640
+                    SortRotate: =If(Self.ButtonSortValue = locSortColumn && locSortDirection, 180, Self.ButtonSortValue = locSortColumn && locSortDirection = false, 0)
+                    Width: =190
+                    X: =
+                    ZIndex: =14
+
+                hdrMyDepartment_1 As TableHeader:
+                    ButtonIsSelected: =Self.ButtonSortValue = locSortColumn
+                    ButtonOnSelect: |-
+                        =UpdateContext({locSortColumn: Self.ButtonSortValue});UpdateContext({locSortDirection: !locSortDirection})
+                    ButtonSortValue: ="MyDepartmentValue"
+                    ButtonText: =LookUp(colTranslations, language.Value = varLanguage And key = "form_label_mydepartment").Title
+                    FilterIsSelected: =If(Self.ButtonSortValue = locFilterIsSelected.column, locFilterIsSelected.selected, false)
+                    FilterOnSelect: |-
+                        =UpdateContext(
+                            {
+                                locFilterIsSelected: {
+                                    column: Self.ButtonSortValue,
+                                    selected: !locFilterIsSelected.selected
+                                }
+                            }
+                        );
+                        ClearCollect(
+                            colTableFilter,
+                            AddColumns(
+                                colTableData,
+                                "helper",
+                                Switch(
+                                    locFilterIsSelected.column,
+                                    "Type",
+                                    Switch(
+                                        First(
+                                            Split(
+                                                Title,
+                                                "_"
+                                            )
+                                        ).Result,
+                                        "IM",
+                                        First(
+                                            Filter(
+                                                DeviationSystemTranslations,
+                                                key = "button_newimprovement" && language.Value = varLanguage
+                                            )
+                                        ).Title,
+                                        "DV",
+                                        First(
+                                            Filter(
+                                                DeviationSystemTranslations,
+                                                key = "button_newdeviation" && language.Value = varLanguage
+                                            )
+                                        ).Title
+                                    ),
+                                    "Title",
+                                    Title,
+                                    "Created",
+                                    Created,
+                                    "AssigneeName",
+                                    Responsible.DisplayName,
+                                    "AreaValue",
+                                    Last(
+                                        FirstN(
+                                            Split(
+                                                First(
+                                                    Filter(
+                                                        colAreaList,
+                                                        ('Area/Specific Area' = "Area" Or 'Area/Specific Area' = "OldArea") And Title = Area.Value
+                                                    )
+                                                ).Translation,
+                                                ";"
+                                            ),
+                                            varLanguageID
+                                        )
+                                    ).Result,
+                                    "SpecificAreaValue",
+                                    Last(
+                                        FirstN(
+                                            Split(
+                                                First(
+                                                    Filter(
+                                                        colAreaList,
+                                                        'Area/Specific Area' = "Specific Area" And Title = 'Specific Area'.Value
+                                                    )
+                                                ).Translation,
+                                                ";"
+                                            ),
+                                            varLanguageID
+                                        )
+                                    ).Result,
+                                    "OtherClinicValue",
+                                    Location.Value,
+                                    "OperationsManagerName",
+                                    'Operations Manager'.DisplayName,
+                                    "OwnerName",
+                                    Owner.DisplayName,
+                                    "MyDepartmentValue",
+                                    MyDepartment.Value,
+                                    "Description",
+                                    PlainText(Description),
+                                    "IncidentDate",
+                                    IncidentDate,
+                                    "Severe",
+                                    Last(
+                                        FirstN(
+                                            Split(
+                                                First(
+                                                    Filter(
+                                                        colAreaList,
+                                                        'Area/Specific Area' = "Boolean" And Lower(Title) = Text(Serious)
+                                                    )
+                                                ).Translation,
+                                                ";"
+                                            ),
+                                            varLanguageID
+                                        )
+                                    ).Result,
+                                    "ModifiedBy",
+                                    'Modified By'.DisplayName,
+                                    "FinishedDate",
+                                    FinishedDate,
+                                    "ActionsTaken",
+                                    PlainText('Actions Taken'),
+                                    "Supplier",
+                                    Supplier.Value,
+                                    "SupportFunctionValue",
+                                    SupportFunction.Value,
+                                    "AuthorName",
+                                    'Created By'.DisplayName
+                                )
+                            )
+                        )
+                    LayoutMinHeight: =640
+                    LayoutMinWidth: =640
+                    SortRotate: =If(Self.ButtonSortValue = locSortColumn && locSortDirection, 180, Self.ButtonSortValue = locSortColumn && locSortDirection = false, 0)
+                    Width: =190
+                    X: =1240
+                    ZIndex: =15
+
+                hdrOwner_1 As TableHeader:
+                    ButtonIsSelected: =Self.ButtonSortValue = locSortColumn
+                    ButtonOnSelect: |-
+                        =UpdateContext({locSortColumn: Self.ButtonSortValue});UpdateContext({locSortDirection: !locSortDirection})
+                    ButtonSortValue: ="OwnerName"
+                    ButtonText: ="Owner"//LookUp(colTranslations, language.Value = varLanguage And key = "form_label_owner").Title
+                    FilterIsSelected: =If(Self.ButtonSortValue = locFilterIsSelected.column, locFilterIsSelected.selected, false)
+                    FilterOnSelect: |-
+                        =UpdateContext(
+                            {
+                                locFilterIsSelected: {
+                                    column: Self.ButtonSortValue,
+                                    selected: !locFilterIsSelected.selected
+                                }
+                            }
+                        );
+                        ClearCollect(
+                            colTableFilter,
+                            AddColumns(
+                                colTableData,
+                                "helper",
+                                Switch(
+                                    locFilterIsSelected.column,
+                                    "Type",
+                                    Switch(
+                                        First(
+                                            Split(
+                                                Title,
+                                                "_"
+                                            )
+                                        ).Result,
+                                        "IM",
+                                        First(
+                                            Filter(
+                                                DeviationSystemTranslations,
+                                                key = "button_newimprovement" && language.Value = varLanguage
+                                            )
+                                        ).Title,
+                                        "DV",
+                                        First(
+                                            Filter(
+                                                DeviationSystemTranslations,
+                                                key = "button_newdeviation" && language.Value = varLanguage
+                                            )
+                                        ).Title
+                                    ),
+                                    "Title",
+                                    Title,
+                                    "Created",
+                                    Created,
+                                    "AssigneeName",
+                                    Responsible.DisplayName,
+                                    "AreaValue",
+                                    Last(
+                                        FirstN(
+                                            Split(
+                                                First(
+                                                    Filter(
+                                                        colAreaList,
+                                                        ('Area/Specific Area' = "Area" Or 'Area/Specific Area' = "OldArea") And Title = Area.Value
+                                                    )
+                                                ).Translation,
+                                                ";"
+                                            ),
+                                            varLanguageID
+                                        )
+                                    ).Result,
+                                    "SpecificAreaValue",
+                                    Last(
+                                        FirstN(
+                                            Split(
+                                                First(
+                                                    Filter(
+                                                        colAreaList,
+                                                        'Area/Specific Area' = "Specific Area" And Title = 'Specific Area'.Value
+                                                    )
+                                                ).Translation,
+                                                ";"
+                                            ),
+                                            varLanguageID
+                                        )
+                                    ).Result,
+                                    "OtherClinicValue",
+                                    Location.Value,
+                                    "OperationsManagerName",
+                                    'Operations Manager'.DisplayName,
+                                    "OwnerName",
+                                    Owner.DisplayName,
+                                    "MyDepartmentValue",
+                                    MyDepartment.Value,
+                                    "Description",
+                                    PlainText(Description),
+                                    "IncidentDate",
+                                    IncidentDate,
+                                    "Severe",
+                                    Last(
+                                        FirstN(
+                                            Split(
+                                                First(
+                                                    Filter(
+                                                        colAreaList,
+                                                        'Area/Specific Area' = "Boolean" And Lower(Title) = Text(Serious)
+                                                    )
+                                                ).Translation,
+                                                ";"
+                                            ),
+                                            varLanguageID
+                                        )
+                                    ).Result,
+                                    "ModifiedBy",
+                                    'Modified By'.DisplayName,
+                                    "FinishedDate",
+                                    FinishedDate,
+                                    "ActionsTaken",
+                                    PlainText('Actions Taken'),
+                                    "Supplier",
+                                    Supplier.Value,
+                                    "SupportFunctionValue",
+                                    SupportFunction.Value,
+                                    "AuthorName",
+                                    'Created By'.DisplayName
+                                )
+                            )
+                        )
+                    LayoutMinHeight: =640
+                    LayoutMinWidth: =640
+                    SortRotate: =If(Self.ButtonSortValue = locSortColumn && locSortDirection, 180, Self.ButtonSortValue = locSortColumn && locSortDirection = false, 0)
+                    Width: =190
+                    X: =1090
+                    ZIndex: =16
+
+                hdrManager_1 As TableHeader:
+                    ButtonIsSelected: =Self.ButtonSortValue = locSortColumn
+                    ButtonOnSelect: |-
+                        =UpdateContext({locSortColumn: Self.ButtonSortValue});UpdateContext({locSortDirection: !locSortDirection})
+                    ButtonSortValue: ="OperationsManagerName"
+                    ButtonText: =LookUp(colTranslations, language.Value = varLanguage And key = "form_label_manager").Title
+                    FilterIsSelected: =If(Self.ButtonSortValue = locFilterIsSelected.column, locFilterIsSelected.selected, false)
+                    FilterOnSelect: |-
+                        =UpdateContext(
+                            {
+                                locFilterIsSelected: {
+                                    column: Self.ButtonSortValue,
+                                    selected: !locFilterIsSelected.selected
+                                }
+                            }
+                        );
+                        ClearCollect(
+                            colTableFilter,
+                            AddColumns(
+                                colTableData,
+                                "helper",
+                                Switch(
+                                    locFilterIsSelected.column,
+                                    "Type",
+                                    Switch(
+                                        First(
+                                            Split(
+                                                Title,
+                                                "_"
+                                            )
+                                        ).Result,
+                                        "IM",
+                                        First(
+                                            Filter(
+                                                DeviationSystemTranslations,
+                                                key = "button_newimprovement" && language.Value = varLanguage
+                                            )
+                                        ).Title,
+                                        "DV",
+                                        First(
+                                            Filter(
+                                                DeviationSystemTranslations,
+                                                key = "button_newdeviation" && language.Value = varLanguage
+                                            )
+                                        ).Title
+                                    ),
+                                    "Title",
+                                    Title,
+                                    "Created",
+                                    Created,
+                                    "AssigneeName",
+                                    Responsible.DisplayName,
+                                    "AreaValue",
+                                    Last(
+                                        FirstN(
+                                            Split(
+                                                First(
+                                                    Filter(
+                                                        colAreaList,
+                                                        ('Area/Specific Area' = "Area" Or 'Area/Specific Area' = "OldArea") And Title = Area.Value
+                                                    )
+                                                ).Translation,
+                                                ";"
+                                            ),
+                                            varLanguageID
+                                        )
+                                    ).Result,
+                                    "SpecificAreaValue",
+                                    Last(
+                                        FirstN(
+                                            Split(
+                                                First(
+                                                    Filter(
+                                                        colAreaList,
+                                                        'Area/Specific Area' = "Specific Area" And Title = 'Specific Area'.Value
+                                                    )
+                                                ).Translation,
+                                                ";"
+                                            ),
+                                            varLanguageID
+                                        )
+                                    ).Result,
+                                    "OtherClinicValue",
+                                    Location.Value,
+                                    "OperationsManagerName",
+                                    'Operations Manager'.DisplayName,
+                                    "OwnerName",
+                                    Owner.DisplayName,
+                                    "MyDepartmentValue",
+                                    MyDepartment.Value,
+                                    "Description",
+                                    PlainText(Description),
+                                    "IncidentDate",
+                                    IncidentDate,
+                                    "Severe",
+                                    Last(
+                                        FirstN(
+                                            Split(
+                                                First(
+                                                    Filter(
+                                                        colAreaList,
+                                                        'Area/Specific Area' = "Boolean" And Lower(Title) = Text(Serious)
+                                                    )
+                                                ).Translation,
+                                                ";"
+                                            ),
+                                            varLanguageID
+                                        )
+                                    ).Result,
+                                    "ModifiedBy",
+                                    'Modified By'.DisplayName,
+                                    "FinishedDate",
+                                    FinishedDate,
+                                    "ActionsTaken",
+                                    PlainText('Actions Taken'),
+                                    "Supplier",
+                                    Supplier.Value,
+                                    "SupportFunctionValue",
+                                    SupportFunction.Value,
+                                    "AuthorName",
+                                    'Created By'.DisplayName
+                                )
+                            )
+                        )
+                    LayoutMinHeight: =640
+                    LayoutMinWidth: =640
+                    SortRotate: =If(Self.ButtonSortValue = locSortColumn && locSortDirection, 180, Self.ButtonSortValue = locSortColumn && locSortDirection = false, 0)
+                    Width: =190
+                    X: =940
+                    ZIndex: =17
+
+                hdrOtherClinic_1 As TableHeader:
+                    ButtonIsSelected: =Self.ButtonSortValue = locSortColumn
+                    ButtonOnSelect: |-
+                        =UpdateContext({locSortColumn: Self.ButtonSortValue});UpdateContext({locSortDirection: !locSortDirection})
+                    ButtonSortValue: ="OtherClinicValue"
+                    ButtonText: =LookUp(colTranslations, language.Value = varLanguage And key = "form_option_recdep_otherclinic").Title
+                    FilterIsSelected: =If(Self.ButtonSortValue = locFilterIsSelected.column, locFilterIsSelected.selected, false)
+                    FilterOnSelect: |-
+                        =UpdateContext(
+                            {
+                                locFilterIsSelected: {
+                                    column: Self.ButtonSortValue,
+                                    selected: !locFilterIsSelected.selected
+                                }
+                            }
+                        );
+                        ClearCollect(
+                            colTableFilter,
+                            AddColumns(
+                                colTableData,
+                                "helper",
+                                Switch(
+                                    locFilterIsSelected.column,
+                                    "Type",
+                                    Switch(
+                                        First(
+                                            Split(
+                                                Title,
+                                                "_"
+                                            )
+                                        ).Result,
+                                        "IM",
+                                        First(
+                                            Filter(
+                                                DeviationSystemTranslations,
+                                                key = "button_newimprovement" && language.Value = varLanguage
+                                            )
+                                        ).Title,
+                                        "DV",
+                                        First(
+                                            Filter(
+                                                DeviationSystemTranslations,
+                                                key = "button_newdeviation" && language.Value = varLanguage
+                                            )
+                                        ).Title
+                                    ),
+                                    "Title",
+                                    Title,
+                                    "Created",
+                                    Created,
+                                    "AssigneeName",
+                                    Responsible.DisplayName,
+                                    "AreaValue",
+                                    Last(
+                                        FirstN(
+                                            Split(
+                                                First(
+                                                    Filter(
+                                                        colAreaList,
+                                                        ('Area/Specific Area' = "Area" Or 'Area/Specific Area' = "OldArea") And Title = Area.Value
+                                                    )
+                                                ).Translation,
+                                                ";"
+                                            ),
+                                            varLanguageID
+                                        )
+                                    ).Result,
+                                    "SpecificAreaValue",
+                                    Last(
+                                        FirstN(
+                                            Split(
+                                                First(
+                                                    Filter(
+                                                        colAreaList,
+                                                        'Area/Specific Area' = "Specific Area" And Title = 'Specific Area'.Value
+                                                    )
+                                                ).Translation,
+                                                ";"
+                                            ),
+                                            varLanguageID
+                                        )
+                                    ).Result,
+                                    "OtherClinicValue",
+                                    Location.Value,
+                                    "OperationsManagerName",
+                                    'Operations Manager'.DisplayName,
+                                    "OwnerName",
+                                    Owner.DisplayName,
+                                    "MyDepartmentValue",
+                                    MyDepartment.Value,
+                                    "Description",
+                                    PlainText(Description),
+                                    "IncidentDate",
+                                    IncidentDate,
+                                    "Severe",
+                                    Last(
+                                        FirstN(
+                                            Split(
+                                                First(
+                                                    Filter(
+                                                        colAreaList,
+                                                        'Area/Specific Area' = "Boolean" And Lower(Title) = Text(Serious)
+                                                    )
+                                                ).Translation,
+                                                ";"
+                                            ),
+                                            varLanguageID
+                                        )
+                                    ).Result,
+                                    "ModifiedBy",
+                                    'Modified By'.DisplayName,
+                                    "FinishedDate",
+                                    FinishedDate,
+                                    "ActionsTaken",
+                                    PlainText('Actions Taken'),
+                                    "Supplier",
+                                    Supplier.Value,
+                                    "SupportFunctionValue",
+                                    SupportFunction.Value,
+                                    "AuthorName",
+                                    'Created By'.DisplayName
+                                )
+                            )
+                        )
+                    LayoutMinHeight: =640
+                    LayoutMinWidth: =640
+                    SortRotate: =If(Self.ButtonSortValue = locSortColumn && locSortDirection, 180, Self.ButtonSortValue = locSortColumn && locSortDirection = false, 0)
+                    Width: =190
+                    X: =790
+                    ZIndex: =18
+
+                hdrSupplier_1 As TableHeader:
+                    ButtonIsSelected: =Self.ButtonSortValue = locSortColumn
+                    ButtonOnSelect: |-
+                        =UpdateContext({locSortColumn: Self.ButtonSortValue});UpdateContext({locSortDirection: !locSortDirection})
+                    ButtonSortValue: ="SupplierValue"
+                    ButtonText: =LookUp(colTranslations, language.Value = varLanguage And key = "form_option_recdep_supplier").Title
+                    FilterIsSelected: =If(Self.ButtonSortValue = locFilterIsSelected.column, locFilterIsSelected.selected, false)
+                    FilterOnSelect: |-
+                        =UpdateContext(
+                            {
+                                locFilterIsSelected: {
+                                    column: Self.ButtonSortValue,
+                                    selected: !locFilterIsSelected.selected
+                                }
+                            }
+                        );
+                        ClearCollect(
+                            colTableFilter,
+                            AddColumns(
+                                colTableData,
+                                "helper",
+                                Switch(
+                                    locFilterIsSelected.column,
+                                    "Type",
+                                    Switch(
+                                        First(
+                                            Split(
+                                                Title,
+                                                "_"
+                                            )
+                                        ).Result,
+                                        "IM",
+                                        First(
+                                            Filter(
+                                                DeviationSystemTranslations,
+                                                key = "button_newimprovement" && language.Value = varLanguage
+                                            )
+                                        ).Title,
+                                        "DV",
+                                        First(
+                                            Filter(
+                                                DeviationSystemTranslations,
+                                                key = "button_newdeviation" && language.Value = varLanguage
+                                            )
+                                        ).Title
+                                    ),
+                                    "Title",
+                                    Title,
+                                    "Created",
+                                    Created,
+                                    "AssigneeName",
+                                    Responsible.DisplayName,
+                                    "AreaValue",
+                                    Last(
+                                        FirstN(
+                                            Split(
+                                                First(
+                                                    Filter(
+                                                        colAreaList,
+                                                        ('Area/Specific Area' = "Area" Or 'Area/Specific Area' = "OldArea") And Title = Area.Value
+                                                    )
+                                                ).Translation,
+                                                ";"
+                                            ),
+                                            varLanguageID
+                                        )
+                                    ).Result,
+                                    "SpecificAreaValue",
+                                    Last(
+                                        FirstN(
+                                            Split(
+                                                First(
+                                                    Filter(
+                                                        colAreaList,
+                                                        'Area/Specific Area' = "Specific Area" And Title = 'Specific Area'.Value
+                                                    )
+                                                ).Translation,
+                                                ";"
+                                            ),
+                                            varLanguageID
+                                        )
+                                    ).Result,
+                                    "OtherClinicValue",
+                                    Location.Value,
+                                    "OperationsManagerName",
+                                    'Operations Manager'.DisplayName,
+                                    "OwnerName",
+                                    Owner.DisplayName,
+                                    "MyDepartmentValue",
+                                    MyDepartment.Value,
+                                    "Description",
+                                    PlainText(Description),
+                                    "IncidentDate",
+                                    IncidentDate,
+                                    "Severe",
+                                    Last(
+                                        FirstN(
+                                            Split(
+                                                First(
+                                                    Filter(
+                                                        colAreaList,
+                                                        'Area/Specific Area' = "Boolean" And Lower(Title) = Text(Serious)
+                                                    )
+                                                ).Translation,
+                                                ";"
+                                            ),
+                                            varLanguageID
+                                        )
+                                    ).Result,
+                                    "ModifiedBy",
+                                    'Modified By'.DisplayName,
+                                    "FinishedDate",
+                                    FinishedDate,
+                                    "ActionsTaken",
+                                    PlainText('Actions Taken'),
+                                    "Supplier",
+                                    Supplier.Value,
+                                    "SupportFunctionValue",
+                                    SupportFunction.Value,
+                                    "AuthorName",
+                                    'Created By'.DisplayName
+                                )
+                            )
+                        )
+                    LayoutMinHeight: =640
+                    LayoutMinWidth: =640
+                    SortRotate: =If(Self.ButtonSortValue = locSortColumn && locSortDirection, 180, Self.ButtonSortValue = locSortColumn && locSortDirection = false, 0)
+                    Width: =190
+                    X: =
+                    ZIndex: =19
+
+                hdrSupportFunction_1 As TableHeader:
+                    ButtonIsSelected: =Self.ButtonSortValue = locSortColumn
+                    ButtonOnSelect: |-
+                        =UpdateContext({locSortColumn: Self.ButtonSortValue});UpdateContext({locSortDirection: !locSortDirection})
+                    ButtonSortValue: ="SupportFunctionValue"
+                    ButtonText: =LookUp(colTranslations, language.Value = varLanguage And key = "form_option_recdep_supportfunction").Title
+                    FilterIsSelected: =If(Self.ButtonSortValue = locFilterIsSelected.column, locFilterIsSelected.selected, false)
+                    FilterOnSelect: |-
+                        =UpdateContext(
+                            {
+                                locFilterIsSelected: {
+                                    column: Self.ButtonSortValue,
+                                    selected: !locFilterIsSelected.selected
+                                }
+                            }
+                        );
+                        ClearCollect(
+                            colTableFilter,
+                            AddColumns(
+                                colTableData,
+                                "helper",
+                                Switch(
+                                    locFilterIsSelected.column,
+                                    "Type",
+                                    Switch(
+                                        First(
+                                            Split(
+                                                Title,
+                                                "_"
+                                            )
+                                        ).Result,
+                                        "IM",
+                                        First(
+                                            Filter(
+                                                DeviationSystemTranslations,
+                                                key = "button_newimprovement" && language.Value = varLanguage
+                                            )
+                                        ).Title,
+                                        "DV",
+                                        First(
+                                            Filter(
+                                                DeviationSystemTranslations,
+                                                key = "button_newdeviation" && language.Value = varLanguage
+                                            )
+                                        ).Title
+                                    ),
+                                    "Title",
+                                    Title,
+                                    "Created",
+                                    Created,
+                                    "AssigneeName",
+                                    Responsible.DisplayName,
+                                    "AreaValue",
+                                    Last(
+                                        FirstN(
+                                            Split(
+                                                First(
+                                                    Filter(
+                                                        colAreaList,
+                                                        ('Area/Specific Area' = "Area" Or 'Area/Specific Area' = "OldArea") And Title = Area.Value
+                                                    )
+                                                ).Translation,
+                                                ";"
+                                            ),
+                                            varLanguageID
+                                        )
+                                    ).Result,
+                                    "SpecificAreaValue",
+                                    Last(
+                                        FirstN(
+                                            Split(
+                                                First(
+                                                    Filter(
+                                                        colAreaList,
+                                                        'Area/Specific Area' = "Specific Area" And Title = 'Specific Area'.Value
+                                                    )
+                                                ).Translation,
+                                                ";"
+                                            ),
+                                            varLanguageID
+                                        )
+                                    ).Result,
+                                    "OtherClinicValue",
+                                    Location.Value,
+                                    "OperationsManagerName",
+                                    'Operations Manager'.DisplayName,
+                                    "OwnerName",
+                                    Owner.DisplayName,
+                                    "MyDepartmentValue",
+                                    MyDepartment.Value,
+                                    "Description",
+                                    PlainText(Description),
+                                    "IncidentDate",
+                                    IncidentDate,
+                                    "Severe",
+                                    Last(
+                                        FirstN(
+                                            Split(
+                                                First(
+                                                    Filter(
+                                                        colAreaList,
+                                                        'Area/Specific Area' = "Boolean" And Lower(Title) = Text(Serious)
+                                                    )
+                                                ).Translation,
+                                                ";"
+                                            ),
+                                            varLanguageID
+                                        )
+                                    ).Result,
+                                    "ModifiedBy",
+                                    'Modified By'.DisplayName,
+                                    "FinishedDate",
+                                    FinishedDate,
+                                    "ActionsTaken",
+                                    PlainText('Actions Taken'),
+                                    "Supplier",
+                                    Supplier.Value,
+                                    "SupportFunctionValue",
+                                    SupportFunction.Value,
+                                    "AuthorName",
+                                    'Created By'.DisplayName
+                                )
+                            )
+                        )
+                    LayoutMinHeight: =640
+                    LayoutMinWidth: =640
+                    SortRotate: =If(Self.ButtonSortValue = locSortColumn && locSortDirection, 180, Self.ButtonSortValue = locSortColumn && locSortDirection = false, 0)
+                    Width: =190
+                    X: =
+                    ZIndex: =20
+
+    Label2_15 As label:
+        Align: =Align.Center
+        BorderColor: =RGBA(0, 0, 0, 0)
+        BorderStyle: =BorderStyle.None
+        BorderThickness: =2
+        Color: =RGBA(51, 51, 51, 1)
+        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        FocusedBorderThickness: =4
+        Font: =Font.'Segoe UI'
+        FontWeight: =FontWeight.Semibold
+        Size: =15.65
+        Text: =LookUp(colTranslations, language.Value = varLanguage And key = "label_byme").Title & " (" & If(varClosedView = 0, LookUp(colTranslations, language.Value = varLanguage And key = "button_inprogress").Title, LookUp(colTranslations, language.Value = varLanguage And key = "button_closed").Title) & ")"
+        Width: =400
+        X: =Parent.Width / 2 - Self.Width / 2
+        Y: =Icon1_21.Y + Icon1_21.Height / 2 - Self.Height / 2
+        ZIndex: =3
+
+    dropdownFilters_1 As combobox:
+        BorderColor: =RGBA(166, 166, 166, 1)
+        BorderThickness: =1
+        ChevronBackground: =RGBA(255, 255, 255, 1)
+        ChevronDisabledBackground: =RGBA(244, 244, 244, 1)
+        ChevronDisabledFill: =RGBA(166, 166, 166, 1)
+        ChevronFill: =RGBA(33, 33, 33, 1)
+        ChevronHoverBackground: =RGBA(212, 212, 212, 1)
+        ChevronHoverFill: =RGBA(33, 33, 33, 1)
+        Color: =RGBA(51, 51, 51, 1)
+        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        DisabledFill: =RGBA(244, 244, 244, 1)
+        DisplayFields: =["Result"]
+        FocusedBorderThickness: =0
+        Font: =Font.'Segoe UI'
+        HoverBorderColor: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+        HoverColor: =RGBA(51, 51, 51, 1)
+        HoverFill: =RGBA(212, 212, 212, 1)
+        InputTextPlaceholder: =LookUp(colTranslations, language.Value = varLanguage And key = "placeholder_dropdownFilters").Title
+        IsSearchable: =false
+        Items: |-
+            =Split(
+                Concat(
+                    Distinct(
+                        Filter(
+                            Filter(
+                                colTableFilter,
+                                Switch(
+                                    varClosedView,
+                                    0,
+                                    Finished = false,
+                                    1,
+                                    Finished = true
+                                )
+                            ),
+                                'Created By'.DisplayName = First(colUser).DisplayName
+                        ),
+                        helper
+                    ),
+                    Result,
+                    ";"
+                ),
+                ";"
+            )
+        NoSelectionText: =LookUp(colTranslations, language.Value = varLanguage And key = "placeholder_dropdownFilters").Title
+        PressedBorderColor: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+        PressedColor: =RGBA(255, 255, 255, 1)
+        PressedFill: =RGBA(105, 121, 126, 1)
+        Reset: =locFilterIsSelected.selected = false
+        SearchFields: =["Result"]
+        SearchItems: =[]
+        SelectionFill: =RGBA(105, 121, 126, 1)
+        Size: =10
+        Visible: =locFilterIsSelected.selected
+        Width: =Parent.Width * .5
+        X: =Container4_1.X + Container4_1.Width - Self.Width
+        Y: =Container4_1.Y - Self.Height - 10
+        ZIndex: =4
+
+    clearFilters_1 As icon.Cancel:
+        BorderColor: =RGBA(166, 166, 166, 1)
+        Color: =RGBA(105, 121, 126, 1)
+        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+        DisabledColor: =RGBA(220, 220, 220, 1)
+        DisabledFill: =RGBA(0, 0, 0, 0)
+        FocusedBorderThickness: =4
+        Height: =40
+        HoverBorderColor: =RGBA(0, 0, 0, 0)
+        HoverColor: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+        HoverFill: =RGBA(0, 0, 0, 0)
+        Icon: =Icon.Cancel
+        OnSelect: |-
+            =UpdateContext({locFilterIsSelected: { selected: false }})
+        PaddingBottom: =10
+        PaddingLeft: =10
+        PaddingRight: =10
+        PaddingTop: =10
+        PressedBorderColor: =RGBA(0, 0, 0, 0)
+        PressedColor: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+        PressedFill: =RGBA(0, 0, 0, 0)
+        Visible: =locFilterIsSelected.selected
+        Width: =40
+        X: =dropdownFilters_1.X - Self.Width
+        Y: =Container4_1.Y - Self.Height - 10
+        ZIndex: =5
+
+    Label2_16 As label:
+        Align: =Align.Center
+        BorderColor: =RGBA(0, 0, 0, 0)
+        BorderStyle: =BorderStyle.None
+        BorderThickness: =2
+        Color: =RGBA(51, 51, 51, 1)
+        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        FocusedBorderThickness: =4
+        Font: =Font.'Segoe UI'
+        FontWeight: =FontWeight.Semibold
+        Height: =20
+        Size: =9.25
+        Text: =If(IsBlank(First(Filter(colData, First(colUser).Department = Location)).'Parent'), First(colUser).Department, First(Filter(colData, First(colUser).Department = Location)).'Parent')
+        Width: =267.51
+        X: =Parent.Width / 2 - Self.Width / 2
+        Y: =Label2_15.Y + Label2_15.Height
+        ZIndex: =6
+
+    PreLoader_7 As groupContainer:
+        Fill: =RGBA(255, 255, 255, 0.7)
+        Height: =Parent.Height
+        Visible: =varPreLoader
+        Width: =Parent.Width
+        X: =Parent.Width / 2 - Self.Width / 2
+        Y: =Parent.Height / 2 - Self.Height / 2
+        ZIndex: =7
+
+        loadingSpinner_3 As image:
+            BorderColor: =RGBA(0, 0, 0, 0)
+            BorderStyle: =BorderStyle.None
+            BorderThickness: =2
+            DisabledBorderColor: =RGBA(0, 0, 0, 0)
+            DisabledFill: =RGBA(0, 0, 0, 0)
+            FocusedBorderThickness: =4
+            HoverBorderColor: =RGBA(0, 0, 0, 0)
+            HoverFill: =RGBA(0, 0, 0, 0)
+            Image: ='icons8-loading-circle'
+            PressedBorderColor: =RGBA(0, 0, 0, 0)
+            PressedFill: =RGBA(0, 0, 0, 0)
+            X: =Parent.Width / 2 - Self.Width / 2
+            Y: =Parent.Height / 2 - Self.Height / 2
+            ZIndex: =3
+
+    Icon1_21 As icon.Cancel:
+        BorderColor: =RGBA(166, 166, 166, 1)
+        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+        DisabledColor: =RGBA(220, 220, 220, 1)
+        DisabledFill: =RGBA(0, 0, 0, 0)
+        FocusedBorderThickness: =4
+        Height: =Parent.Height * 0.06
+        HoverBorderColor: =RGBA(0, 0, 0, 0)
+        HoverColor: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+        HoverFill: =RGBA(0, 0, 0, 0)
+        Icon: =Icon.Cancel
+        OnSelect: =ResetForm(Form1);Navigate(Start)
+        PressedBorderColor: =RGBA(0, 0, 0, 0)
+        PressedColor: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+        PressedFill: =RGBA(0, 0, 0, 0)
+        Width: =46.1
+        X: =Self.Y
+        Y: =Self.Height / 2
+        ZIndex: =8
+

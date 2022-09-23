@@ -1,0 +1,61 @@
+"'97420c34-7588-4edd-b9f8-a96205363c19' As TestSuite":
+    Description: =""
+    DisplayName: ="Suite"
+
+    "'35a324ef-6a26-41c6-afad-ad45b502dffc' As TestCase":
+        Description: =""
+        DisplayName: ="TEST NEW DEVIATION"
+
+        Step10 As TestStep:
+            Description: ="Select 'Button1_21'"
+            Value: =Select(Button1_21)
+
+        Step2 As TestStep:
+            Description: |-
+                ="Set 'DataCardValue3'.SelectedItems to Table({'Value':""Processes and Routines""})"
+            Screen: =Form
+            Value: |-
+                =SetProperty(DataCardValue3.SelectedItems, Table({Value:"Processes and Routines"}))
+
+        Step3 As TestStep:
+            Description: ="Select 'DataCardValue3'"
+            Screen: =Form
+            Value: =Select(DataCardValue3)
+
+        Step4 As TestStep:
+            Description: ="Set 'Radio1'.Selected to ""Other Clinic"""
+            Screen: =Form
+            Value: =SetProperty(Radio1.Selected, "Other Clinic")
+
+        Step5 As TestStep:
+            Description: |-
+                ="Set 'DataCardValue21'.SelectedItems to Table({'@odata.type':""#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference"",'Id':64,'Value':""DEVTEST""})"
+            Screen: =Form
+            Value: |-
+                =SetProperty(DataCardValue21.SelectedItems, Table({'@odata.type':"#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference",Id:64,Value:"DEVTEST"}))
+
+        Step6 As TestStep:
+            Description: ="Select 'DataCardValue21'"
+            Screen: =Form
+            Value: =Select(DataCardValue21)
+
+        Step7 As TestStep:
+            Description: ="Set 'DataCardValue18'.HtmlText to ""<p>TEST</p>"""
+            Screen: =Form
+            Value: =SetProperty(DataCardValue18.HtmlText, "<p>TEST</p>")
+
+        Step8 As TestStep:
+            Description: ="Set 'TextInput2'.Text to ""TEST"""
+            Screen: =Form
+            Value: =SetProperty(TextInput2.Text, "TEST")
+
+        Step9 As TestStep:
+            Description: ="Set 'DataCardValue54'.Text to ""TEST"""
+            Screen: =Form
+            Value: =SetProperty(DataCardValue54.Text, "TEST")
+
+        Step1 As TestStep:
+            Description: ="Select 'Button2'"
+            Screen: =Form
+            Value: =Select(Button2)
+

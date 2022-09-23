@@ -1,0 +1,90 @@
+{
+  "92befc6b-c690-4691-945b-1a91de693151": {
+    "connectionParameters": {
+      "sku": "Enterprise"
+    },
+    "connectionRef": {
+      "apiTier": "Standard",
+      "displayName": "Office 365 Users",
+      "iconUri": "https://connectoricons-prod.azureedge.net/releases/v1.0.1593/1.0.1593.2980/office365users/icon.png",
+      "id": "/providers/microsoft.powerapps/apis/shared_office365users",
+      "parameterHints": {},
+      "parameterHintsV2": {}
+    },
+    "datasets": {},
+    "dataSources": [
+      "Office365-användare"
+    ],
+    "dependencies": {},
+    "dependents": [],
+    "id": "92befc6b-c690-4691-945b-1a91de693151"
+  },
+  "b08d1f91-3263-49e7-93ff-e408d05ef83f": {
+    "connectionParameters": {
+      "sku": "Enterprise"
+    },
+    "connectionRef": {
+      "apiTier": "Standard",
+      "displayName": "Office 365 Outlook",
+      "iconUri": "https://connectoricons-prod.azureedge.net/releases/v1.0.1596/1.0.1596.2995/office365/icon.png",
+      "id": "/providers/microsoft.powerapps/apis/shared_office365",
+      "parameterHints": {},
+      "parameterHintsV2": {}
+    },
+    "datasets": {},
+    "dataSources": [
+      "Office365Outlook"
+    ],
+    "dependencies": {},
+    "dependents": [],
+    "id": "b08d1f91-3263-49e7-93ff-e408d05ef83f"
+  },
+  "b7a66ac6-8fd4-4aa3-8669-63e43305d191": {
+    "connectionParameters": {
+      "sku": "Enterprise"
+    },
+    "connectionRef": {
+      "apiTier": "Standard",
+      "displayName": "SharePoint",
+      "iconUri": "https://connectoricons-prod.azureedge.net/releases/v1.0.1591/1.0.1591.2961/sharepointonline/icon.png",
+      "id": "/providers/microsoft.powerapps/apis/shared_sharepointonline",
+      "parameterHints": {},
+      "parameterHintsV2": {}
+    },
+    "datasets": {
+      "https://ossur.sharepoint.com/sites/Clinics/scandinavia/ops/quality": {
+        "dataSources": {
+          "AvvikelseForbattringAreas": {
+            "tableName": "696ce2e3-4e3b-47b3-93c5-05f3448493c3"
+          },
+          "AvvikelseForbattringFeedback": {
+            "tableName": "25ac4857-afc6-4451-9c5e-c820feb59d8b"
+          },
+          "AvvikelseForbattringssystemDATA": {
+            "tableName": "a8a1a99e-47fc-4f2b-bd01-23099ea35dda"
+          },
+          "ClinicsDeviationSystem": {
+            "tableName": "4dc43649-8261-4c68-870f-4e0a8ed0f8b9"
+          },
+          "DeviationSystemProducts": {
+            "tableName": "0799f331-0476-4cde-a639-3a5f1abbd8d7"
+          },
+          "DeviationSystemTranslations": {
+            "tableName": "ac8df65f-bad2-4a3f-84b8-d6716ecaf9b9"
+          }
+        }
+      }
+    },
+    "dataSources": [
+      "AvvikelseForbattringssystemDATA",
+      "AvvikelseForbattringFeedback",
+      "DeviationSystemProducts",
+      "ClinicsDeviationSystem",
+      "DeviationSystemTranslations",
+      "AvvikelseForbattringAreas"
+    ],
+    "dependencies": {},
+    "dependents": [],
+    "id": "b7a66ac6-8fd4-4aa3-8669-63e43305d191"
+  }
+}

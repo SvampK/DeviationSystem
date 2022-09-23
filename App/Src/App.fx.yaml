@@ -1,0 +1,257 @@
+App As appinfo:
+    BackEnabled: =true
+    OnError: =false//Trace(Concat(AllErrors, Message,";"),TraceSeverity.Error)
+    OnStart: |
+        =Set(
+            varAdminMode,
+            0
+        );
+        Set(
+            varLangVisible,
+            false
+        );
+        Set(
+            varLanguageParam,
+            {
+                language: Param("language"),
+                id: Param("langID")
+            }
+        );
+        
+        If(
+            IsBlank(varLanguageParam.language),
+            //If no langage is specified in the URL parameters, use language based on locale (browser/phone settings)
+            Set(
+                varLanguage,
+                Switch(
+                    Language(),
+                    "sv-SE",
+                    "se",
+                    "nb-NO",
+                    "no",
+                    "en"
+                )
+            );
+            Set(
+                varLanguageID,
+                Switch(
+                    Language(),
+                    "sv-SE",
+                    2,
+                    "nb-NO",
+                    3,
+                    1
+                )
+            ),
+            //Otherwise, use the specified URL parameter language. Eg. '?language=en&langID=1'
+            Set(
+                varLanguage,
+                varLanguageParam.language
+            );
+            Set(
+                varLanguageID,
+                Value(varLanguageParam.id)
+            )
+        );
+        Set(
+            varCollectDataCheck,
+            false
+        );
+        ClearCollect(
+            colUser,
+            {
+                Image: User().Image,
+                DisplayName: 'Office365-användare'.MyProfileV2().displayName,
+                Department: 'Office365-användare'.MyProfileV2().department,
+                City: 'Office365-användare'.MyProfileV2().city,
+                Country: 'Office365-användare'.MyProfileV2().country,
+                Email: 'Office365-användare'.MyProfileV2().userPrincipalName,
+                ParentDATA: ""
+            }
+        );
+        Set(
+            varUserPrincipalName,
+            First(colUser).Email
+        );
+        Set(
+            varUserDirectReport,
+            First('Office365-användare'.DirectReportsV2(varUserPrincipalName).value)
+        );
+        Set(
+            varUserManager,
+            'Office365-användare'.ManagerV2(varUserPrincipalName)
+        );
+        Set(
+            varFirstLastID,
+            {
+                first: First(
+                    Sort(
+                        ClinicsDeviationSystem,
+                        ID,
+                        Ascending
+                    )
+                ).ID,
+                last: First(
+                    Sort(
+                        ClinicsDeviationSystem,
+                        ID,
+                        Descending
+                    )
+                ).ID
+            }
+        );
+        ClearCollect(
+            colSystem,
+            ClinicsDeviationSystem
+        );
+        Concurrent(
+            ClearCollect(
+                colData,
+                AvvikelseForbattringssystemDATA
+            ),
+            ClearCollect(
+                colTranslations,
+                Filter(
+                    DeviationSystemTranslations,
+                    language.Value = varLanguage
+                )
+            ),
+            ClearCollect(
+                colFilterMainReported,
+                Filter(
+                    colSystem,
+                    'Created By'.DisplayName = First(colUser).DisplayName
+                )
+            ),
+            ClearCollect(
+                colFilterMainAssigned,
+                Filter(
+                    colSystem,
+                    Responsible.DisplayName = First(colUser).DisplayName,
+                    Phase.Value = "Ongoing"
+                )
+            ),
+            ClearCollect(
+                colFilterMainDrafts,
+                Filter(
+                    colSystem,
+                    'Modified By'.DisplayName = First(colUser).DisplayName,
+                    Phase.Value = "DraftNew" Or Phase.Value = "DraftEdit"
+                )
+            )
+        );
+        Patch(
+            colUser,
+            First(colUser),
+            {ParentDATA: LookUp(colData,Location = First(colUser).Department And (City = First(colUser).City Or IsBlank(City))).'Parent'}
+        );
+        Set(varIsResponsible, First(colUser).DisplayName in Concat(colData,'Operationally Responsible'.DisplayName,";"));
+        Set(
+            varParentDepartment,
+            ForAll(
+                Filter(
+                    colData,
+                    'Parent' = LookUp(
+                        colData,
+                        Location = First(colUser).Department And (City = First(colUser).City Or IsBlank(City))
+                    ).'Parent'
+                ),
+                {Location: Location, ID: ID}
+            )
+        );
+        ClearCollect(
+            colAreaList,
+            AvvikelseForbattringAreas
+        );
+        Set(
+            varHelpInfo,
+            true
+        );
+        Set(
+            varScreenParam,
+            Param("screenTarget")
+        );
+        If(
+            varScreenParam = "Edit_ID",
+            ClearCollect(
+                colUser,
+                {
+                    Image: User().Image,
+                    DisplayName: 'Office365-användare'.MyProfileV2().displayName,
+                    Department: 'Office365-användare'.MyProfileV2().department,
+                    City: 'Office365-användare'.MyProfileV2().city,
+                    Country: 'Office365-användare'.MyProfileV2().country
+                }
+            );
+            Set(
+                varFormID,
+                Param("ID")
+            );
+            Set(
+                varDataTableEdit,
+                LookUp(
+                    colSystem,
+                    ID = Value(varFormID)
+                )
+            );
+            If(
+                LookUp(
+                    colSystem,
+                    varDataTableEdit.ID = ID
+                ).Responsible.DisplayName = First(colUser).DisplayName,
+                Set(
+                    varFormMode,
+                    "Edit"
+                ),
+                Set(
+                    varFormMode,
+                    "View"
+                )
+            );
+            //Collect Previous Messages
+        ClearCollect(
+                colProcessFeedback,
+                Split(
+                    LookUp(
+                        colSystem,
+                        ID = Value(varFormID),
+                        'Process Feedback'
+                    ),
+                    Char(10)
+                )
+            );
+            Set(
+                varPhaseDraft,
+                LookUp(
+                    colSystem,
+                    Value(varFormID) = ID,
+                    Phase.Value
+                )
+            );
+            EditForm(Form1)
+        );
+        /*
+        Set(
+            varCompanyForAreaFilter,
+            {
+                company: LookUp(
+                    colData,
+                    Location = First(colUser).Department
+                ).Company,
+                department: First(colUser).Department
+            }
+        );*/
+        ClearCollect(
+            colManufacturingProducts,
+            DeviationSystemProducts
+        );
+    StartScreen: |-
+        =Switch(
+            Param("screenTarget"),
+            "Edit_ID",
+            Form,
+            "New_ID",
+            Form,
+            Start
+        )
+

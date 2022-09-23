@@ -1,0 +1,391 @@
+cmpRiskAnalysis As CanvasComponent:
+    rowsOut(row1 As Number, row2 As Number, row3 As Number, row4 As Number, row5 As Number):
+        row1:
+            Default: =100
+        row2:
+            Default: =100
+        row3:
+            Default: =100
+        row4:
+            Default: =100
+        row5:
+            Default: =100
+        ThisProperty:
+            Default: =100
+    calcValueIn: =100
+    calcValueOut: =RadioRow1.Selected.Value & RadioRow2.Selected.Value & RadioRow3.Selected.Value & RadioRow4.Selected.Value & RadioRow5.Selected.Value
+    Fill: =RGBA(0, 0, 0, 0)
+    Height: =264
+    rowIn1: =100
+    rowIn2: =100
+    rowIn3: =100
+    rowIn4: =100
+    rowIn5: =100
+    Width: =600
+    X: =0
+    Y: =0
+    ZIndex: =1
+
+    HtmlText2 As htmlViewer:
+        Height: =32
+        HtmlText: ="Consequence"
+        Width: =RadioRow5.Width
+        X: =RadioRow5.X
+        Y: =RadioRow5.Y + RadioRow5.Height
+        ZIndex: =1
+
+    HtmlText2_1 As htmlViewer:
+        Height: =RadioRow5.Y + RadioRow5.Height
+        HtmlText: |-
+            ="<div style='text-align:left; position: absolute; left: "&-Round((Self.Height-Self.Width)/2,0)&"px; top: "&Round((Self.Height-Self.Width)/2,0)&"px; width: "&Self.Height&"px; height:"&Self.Width&"px; transform: rotate(270deg)'>Risk of Reoccurring</div>"
+        PaddingBottom: =0
+        PaddingLeft: =0
+        PaddingRight: =0
+        PaddingTop: =0
+        Width: =32
+        Y: =RadioRow5.Y + RadioRow5.Height - Self.Height
+        ZIndex: =2
+
+    Label14 As label:
+        BorderColor: =RGBA(0, 0, 0, 0)
+        BorderStyle: =BorderStyle.None
+        BorderThickness: =2
+        Color: =RGBA(51, 51, 51, 1)
+        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        FocusedBorderThickness: =4
+        Font: =Font.'Segoe UI'
+        FontWeight: =FontWeight.Semibold
+        Size: =13
+        Text: =RadioRow1.Selected.Value & RadioRow2.Selected.Value & RadioRow3.Selected.Value & RadioRow4.Selected.Value & RadioRow5.Selected.Value
+        Width: =277
+        X: =108
+        Y: =431
+        ZIndex: =3
+
+    RadioRow5 As radio:
+        Align: =Align.Justify
+        BorderColor: =RGBA(51, 51, 51, 1)
+        BorderStyle: =BorderStyle.None
+        Color: =RGBA(51, 51, 51, 1)
+        Default: =cmpRiskAnalysis.rowIn5
+        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        FocusedBorderThickness: =0 
+        Font: =Font.'Segoe UI'
+        Height: =40
+        HoverColor: =RGBA(51, 51, 51, 1)
+        HoverFill: =RGBA(0, 0, 0, 0)
+        Items: |-
+            =Table(
+                {
+                    Key: "Lowest",
+                    Value: 1 * 1
+                },
+                {
+                    Key: "Low",
+                    Value: 2 * 1
+                },
+                {
+                    Key: "Medium",
+                    Value: 3 * 1
+                },
+                {
+                    Key: "High",
+                    Value: 4 * 1
+                },
+                {
+                    Key: "Highest",
+                    Value: 5 * 1
+                }
+            )
+        Layout: =Layout.Horizontal
+        LineHeight: =1
+        OnSelect: =Reset(RadioRow2);Reset(RadioRow3);Reset(RadioRow4);Reset(RadioRow1)
+        PaddingBottom: =5
+        PaddingTop: =5
+        PressedColor: =RGBA(51, 51, 51, 1)
+        PressedFill: =RGBA(0, 0, 0, 0)
+        RadioBorderColor: =RGBA(51, 51, 51, 1)
+        RadioSelectionFill: =RGBA(105, 121, 126, 1)
+        RadioSize: =25//Self.Width / 20
+        Reset: =true
+        Size: =9
+        Width: =Parent.Width - Self.X
+        X: =HtmlText2_1.Width
+        Y: =RadioRow4.Y + RadioRow4.Height
+        ZIndex: =4
+
+    RadioRow4 As radio:
+        Align: =Align.Justify
+        BorderColor: =RGBA(51, 51, 51, 1)
+        BorderStyle: =BorderStyle.None
+        Color: =RGBA(51, 51, 51, 1)
+        Default: =cmpRiskAnalysis.rowIn4
+        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        FocusedBorderThickness: =0 
+        Font: =Font.'Segoe UI'
+        Height: =40
+        HoverColor: =RGBA(51, 51, 51, 1)
+        HoverFill: =RGBA(0, 0, 0, 0)
+        Items: |-
+            =Table(
+                {
+                    Key: "Lowest",
+                    Value: 1 * 2
+                },
+                {
+                    Key: "Low",
+                    Value: 2 * 2
+                },
+                {
+                    Key: "Medium",
+                    Value: 3 * 2
+                },
+                {
+                    Key: "High",
+                    Value: 4 * 2
+                },
+                {
+                    Key: "Highest",
+                    Value: 5 * 2
+                }
+            )
+        Layout: =Layout.Horizontal
+        LineHeight: =1
+        OnSelect: =Reset(RadioRow2);Reset(RadioRow3);Reset(RadioRow1);Reset(RadioRow5)
+        PaddingBottom: =5
+        PaddingTop: =5
+        PressedColor: =RGBA(51, 51, 51, 1)
+        PressedFill: =RGBA(0, 0, 0, 0)
+        RadioBorderColor: =RGBA(51, 51, 51, 1)
+        RadioSelectionFill: =RGBA(105, 121, 126, 1)
+        RadioSize: =25//Self.Width / 20
+        Reset: =true
+        Size: =9
+        Width: =Parent.Width - Self.X
+        X: =HtmlText2_1.Width
+        Y: =RadioRow3.Y + RadioRow3.Height
+        ZIndex: =5
+
+    RadioRow3 As radio:
+        Align: =Align.Justify
+        BorderColor: =RGBA(51, 51, 51, 1)
+        BorderStyle: =BorderStyle.None
+        Color: =RGBA(51, 51, 51, 1)
+        Default: =cmpRiskAnalysis.rowIn3
+        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        FocusedBorderThickness: =0 
+        Font: =Font.'Segoe UI'
+        Height: =40
+        HoverColor: =RGBA(51, 51, 51, 1)
+        HoverFill: =RGBA(0, 0, 0, 0)
+        Items: |-
+            =Table(
+                {
+                    Key: "Lowest",
+                    Value: 1 * 3
+                },
+                {
+                    Key: "Low",
+                    Value: 2 * 3
+                },
+                {
+                    Key: "Medium",
+                    Value: 3 * 3
+                },
+                {
+                    Key: "High",
+                    Value: 4 * 3
+                },
+                {
+                    Key: "Highest",
+                    Value: 5 * 3
+                }
+            )
+        Layout: =Layout.Horizontal
+        LineHeight: =1
+        OnSelect: =Reset(RadioRow2);Reset(RadioRow1);Reset(RadioRow4);Reset(RadioRow5)
+        PaddingBottom: =5
+        PaddingTop: =5
+        PressedColor: =RGBA(51, 51, 51, 1)
+        PressedFill: =RGBA(0, 0, 0, 0)
+        RadioBorderColor: =RGBA(51, 51, 51, 1)
+        RadioSelectionFill: =RGBA(105, 121, 126, 1)
+        RadioSize: =25//Self.Width / 20
+        Reset: =true
+        Size: =9
+        Width: =Parent.Width - Self.X
+        X: =HtmlText2_1.Width
+        Y: =RadioRow2.Y + RadioRow2.Height
+        ZIndex: =6
+
+    RadioRow2 As radio:
+        Align: =Align.Justify
+        BorderColor: =RGBA(51, 51, 51, 1)
+        BorderStyle: =BorderStyle.None
+        Color: =RGBA(51, 51, 51, 1)
+        Default: =cmpRiskAnalysis.rowIn2
+        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        FocusedBorderThickness: =0 
+        Font: =Font.'Segoe UI'
+        Height: =40
+        HoverColor: =RGBA(51, 51, 51, 1)
+        HoverFill: =RGBA(0, 0, 0, 0)
+        Items: |-
+            =Table(
+                {
+                    Key: "Lowest",
+                    Value: 1 * 4
+                },
+                {
+                    Key: "Low",
+                    Value: 2 * 4
+                },
+                {
+                    Key: "Medium",
+                    Value: 3 * 4
+                },
+                {
+                    Key: "High",
+                    Value: 4 * 4
+                },
+                {
+                    Key: "Highest",
+                    Value: 5 * 4
+                }
+            )
+        Layout: =Layout.Horizontal
+        LineHeight: =1
+        OnSelect: =Reset(RadioRow1);Reset(RadioRow3);Reset(RadioRow4);Reset(RadioRow5)
+        PaddingBottom: =5
+        PaddingTop: =5
+        PressedColor: =RGBA(51, 51, 51, 1)
+        PressedFill: =RGBA(0, 0, 0, 0)
+        RadioBorderColor: =RGBA(51, 51, 51, 1)
+        RadioSelectionFill: =RGBA(105, 121, 126, 1)
+        RadioSize: =25//Self.Width / 20
+        Reset: =true
+        Size: =9
+        Width: =Parent.Width - Self.X
+        X: =HtmlText2_1.Width
+        Y: =RadioRow1.Y + RadioRow1.Height
+        ZIndex: =7
+
+    RadioRow1 As radio:
+        Align: =Align.Justify
+        BorderColor: =RGBA(51, 51, 51, 1)
+        BorderStyle: =BorderStyle.None
+        Color: =RGBA(51, 51, 51, 1)
+        Default: =cmpRiskAnalysis.rowIn1
+        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        FocusedBorderThickness: =0 
+        Font: =Font.'Segoe UI'
+        Height: =40
+        HoverColor: =RGBA(51, 51, 51, 1)
+        HoverFill: =RGBA(0, 0, 0, 0)
+        Items: |-
+            =Table(
+                {
+                    Key: "Lowest",
+                    Value: 1 * 5
+                },
+                {
+                    Key: "Low",
+                    Value: 2 * 5
+                },
+                {
+                    Key: "Medium",
+                    Value: 3 * 5
+                },
+                {
+                    Key: "Medium - High",
+                    Value: 4 * 5
+                },
+                {
+                    Key: "Highest",
+                    Value: 5 * 5
+                }
+            )
+        Layout: =Layout.Horizontal
+        LineHeight: =1
+        OnSelect: =Reset(RadioRow2);Reset(RadioRow3);Reset(RadioRow4);Reset(RadioRow5)
+        PaddingBottom: =5
+        PaddingTop: =5
+        PressedColor: =RGBA(51, 51, 51, 1)
+        PressedFill: =RGBA(0, 0, 0, 0)
+        RadioBorderColor: =RGBA(51, 51, 51, 1)
+        RadioSelectionFill: =RGBA(105, 121, 126, 1)
+        RadioSize: =25//Self.Width / 20
+        Reset: =true
+        Size: =9
+        Width: =Parent.Width - Self.X
+        X: =HtmlText2_1.Width
+        Y: =32
+        ZIndex: =8
+
+    Label10 As label:
+        BorderColor: =RGBA(0, 0, 0, 0)
+        BorderStyle: =BorderStyle.None
+        BorderThickness: =2
+        Color: =RGBA(54, 176, 75, 1)
+        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        FocusedBorderThickness: =4
+        Font: =Font.'Segoe UI'
+        Height: =32
+        Size: =11
+        Text: ="1. Lower"
+        Width: =RadioRow5.Width / 2
+        X: =HtmlText2_1.Width
+        ZIndex: =9
+
+    Label10_1 As label:
+        Align: =Align.Center
+        BorderColor: =RGBA(0, 0, 0, 0)
+        BorderStyle: =BorderStyle.None
+        BorderThickness: =2
+        Color: =RGBA(184, 0, 0, 1)
+        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        FocusedBorderThickness: =4
+        Font: =Font.'Segoe UI'
+        Height: =32
+        Size: =11
+        Text: ="5. Higher"
+        Width: =RadioRow5.Width / 2
+        X: =Label10.X + Label10.Width
+        ZIndex: =10
+
+    HtmlText2_2 As htmlViewer:
+        Color: =RGBA(54, 176, 75, 1)
+        Height: =HtmlText2_3.Height - HtmlText2_3.Y
+        HtmlText: |-
+            ="<div style='text-align:right; position: absolute; left: "&-Round((Self.Height-Self.Width)/2,0)&"px; top: "&Round((Self.Height-Self.Width)/2,0)&"px; width: "&Self.Height&"px; height:"&Self.Width&"px; transform: rotate(90deg)'>1. Lower</div>"
+        PaddingBottom: =0
+        PaddingLeft: =0
+        PaddingRight: =0
+        PaddingTop: =0
+        Width: =32
+        X: =RadioRow5.X + RadioRow5.Width - Self.Width
+        Y: =RadioRow5.Y + RadioRow5.Height - Self.Height
+        ZIndex: =11
+
+    HtmlText2_3 As htmlViewer:
+        Color: =RGBA(184, 0, 0, 1)
+        Height: =(RadioRow5.Y + RadioRow5.Height) / 2
+        HtmlText: |-
+            ="<div style='text-align:left; position: absolute; left: "&-Round((Self.Height-Self.Width)/2,0)&"px; top: "&Round((Self.Height-Self.Width)/2,0)&"px; width: "&Self.Height&"px; height:"&Self.Width&"px; transform: rotate(90deg)'>5. Higher</div>"
+        PaddingBottom: =0
+        PaddingLeft: =0
+        PaddingRight: =0
+        PaddingTop: =0
+        Width: =32
+        X: =RadioRow5.X + RadioRow5.Width - Self.Width
+        Y: =RadioRow1.Y
+        ZIndex: =12
+

@@ -1,0 +1,136 @@
+FollowUp As screen:
+    LoadingSpinnerColor: =RGBA(105, 121, 126, 1)
+
+    Button8_3 As button:
+        BorderColor: =RGBA(0, 0, 0, 0)
+        BorderStyle: =BorderStyle.None
+        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        DisabledFill: =RGBA(244, 244, 244, 1)
+        DisplayMode: =DisplayMode.View
+        Fill: =RGBA(0, 130, 196, 1)
+        Font: =Font.'Segoe UI'
+        FontWeight: =FontWeight.Semibold
+        Height: =((Parent.Height * 0.06) + (Parent.Height * 0.06) / 2)
+        HoverBorderColor: =RGBA(0, 0, 0, 0)
+        HoverColor: =RGBA(255, 255, 255, 1)
+        HoverFill: =ColorFade(RGBA(105, 121, 126, 1), -10%)
+        PressedBorderColor: =ColorFade(RGBA(105, 121, 126, 1), -50%)
+        PressedColor: =RGBA(255, 255, 255, 1)
+        PressedFill: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+        RadiusBottomLeft: =0
+        RadiusBottomRight: =0
+        RadiusTopLeft: =0
+        RadiusTopRight: =0
+        Size: =10.67
+        Text: =""
+        Width: =Parent.Width
+        ZIndex: =1
+
+    Label2_1 As label:
+        Align: =Align.Center
+        BorderColor: =RGBA(0, 0, 0, 0)
+        BorderStyle: =BorderStyle.None
+        BorderThickness: =2
+        Color: =RGBA(255, 255, 255, 1)
+        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        FocusedBorderThickness: =4
+        Font: =Font.'Segoe UI'
+        FontWeight: =FontWeight.Semibold
+        Height: =Button8_3.Height
+        Size: =15.65
+        Text: =If(varFormMode = "New",LookUp(colTranslations, language.Value = varLanguage And key = "label_new").Title & " " & Lower(SetVarFormTypeName), varFormMode = "Edit", "Edit " & Lower(SetVarFormTypeName), "View " & Lower(SetVarFormTypeName))
+        Width: =267.51
+        X: =Parent.Width / 2 - Self.Width / 2
+        ZIndex: =2
+
+    Icon1_1 As icon.Cancel:
+        BorderColor: =RGBA(166, 166, 166, 1)
+        Color: =If(varPreLoader,RGBA(0, 0, 0, 1),RGBA(255, 255, 255, 1))
+        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+        DisabledColor: =RGBA(220, 220, 220, 1)
+        DisabledFill: =RGBA(0, 0, 0, 0)
+        FocusedBorderThickness: =4
+        Height: =Button8_3.Height * 0.6
+        HoverBorderColor: =RGBA(0, 0, 0, 0)
+        HoverColor: =ColorFade(RGBA(105, 121, 126, 1), -100%)
+        HoverFill: =RGBA(0, 0, 0, 0)
+        Icon: =Icon.Cancel
+        OnSelect: |-
+            =UpdateContext({varPreLoader: true});
+            //Collect changes made to form and check with opening state
+            ClearCollect(
+                colFormEdited,
+                {
+                    'Actions Taken': DataCardValue26.HtmlText,
+                    Assignee: DataCardValue22.Selected.DisplayName,
+                    Area: DataCardValue3.Selected.Value,
+                    Closed: DataCardValue7.Value,
+                    Department: DataCardValue21.Selected.Value,
+                    Description: DataCardValue18.HtmlText,
+                    ItemCategory: DataCardValue4.Selected.Value,
+                    NoActionReason: DataCardValue51.Selected.Value,
+                    NoActionTaken: DataCardValue50.Value,
+                    ProductFromManufacturing: DataCardValue49.Selected.Value,
+                    ProductManufacturingDescription: DataCardValue55.Text,
+                    ProductToManufacturing: DataCardValue52.Selected.Value,
+                    'Recommended Actions': TextInput2.Text,
+                    ReferenceNumber: DataCardValue54.Text,
+                    RootCause: DataCardValue56.Text,
+                    Severe: DataCardValue9.Value,
+                    'Specific Area': DataCardValue2.Selected.Value,
+                    Supplier: DataCardValue1.Selected.Value,
+                    SupportFunction: DataCardValue27.Selected.Value,
+                    DateExpirationAssignee: DataCardValue10.SelectedDate
+                }
+            );
+            Set(
+                varSaveCheck,
+                If(
+                    Concat(
+                        colFormOpened,
+                        'Actions Taken' & Responsible.DisplayName & Area.Value & Finished & Location.Value & Description & ItemCategory.Value & NoActionReason.Value & NoActionTaken & ProductFromManufacturing.Value & ProductManufacturingDescription & ProductToManufacturing.Value & 'Recommended Actions' & ReferenceNumber & RootCause & Serious & 'Specific Area'.Value & Supplier.Value & SupportFunction.Value & DateExpirationAssignee,
+                        "|"
+                    ) = Concat(
+                        colFormEdited,
+                        'Actions Taken' & Assignee & Area & Closed & Department & Description & ItemCategory & NoActionReason & NoActionTaken & ProductFromManufacturing & ProductManufacturingDescription & ProductToManufacturing & 'Recommended Actions' & ReferenceNumber & RootCause & Severe & 'Specific Area' & Supplier & SupportFunction & DateExpirationAssignee,
+                        "|"
+                    ),
+                    true,
+                    false
+                )
+            );
+            If(varSaveCheck = false And varFormMode <> "View",
+                Set(
+                    varVisibilitySave,
+                    true
+                ),
+                If(
+                    varScreenParam = "Edit_ID",
+                    Set(varScreenParam, Blank());
+                    Set(varFormID, Blank());
+                    Navigate(Start),
+                    Back()
+                );
+                ResetForm(Form1)
+            )
+            /*
+            Switch(
+                    varScreenParam;
+                    "Edit_ID";
+                    Navigate(Start);
+                    Back()
+                );;ResetForm(Form1)*/
+        PaddingBottom: =5
+        PaddingLeft: =5
+        PaddingRight: =5
+        PaddingTop: =5
+        PressedBorderColor: =RGBA(0, 0, 0, 0)
+        PressedColor: =ColorFade(RGBA(105, 121, 126, 1), -30%)
+        PressedFill: =RGBA(0, 0, 0, 0)
+        Width: =Self.Height
+        X: =Self.Y
+        Y: =Button8_3.Height / 2 - Self.Height / 2
+        ZIndex: =3
+

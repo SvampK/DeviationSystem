@@ -1,0 +1,1041 @@
+cmpRiskAnalysis_CheckBox As CanvasComponent:
+    calcValueIn: =
+    calcValueOut: =Coalesce(Value(First(Split(checkBoxValue, "_")).Result) * Value(Last(Split(checkBoxValue, "_")).Result), 0)
+    defaultValueIn: ="Text"
+    displayMode: ="Text"
+    Fill: =RGBA(0, 0, 0, 0)
+    Height: =400
+    lblConsequence: ="Consequence"
+    lblGreater: ="Greater"
+    lblHigher: ="Higher"
+    lblLesser: ="Lesser"
+    lblLower: ="Lower"
+    lblRiskOfReoccurring: ="Risk of Reoccurring"
+    OnReset: |-
+        =Reset(chk5_5);
+        Reset(chk5_4);
+        Reset(chk5_3);
+        Reset(chk5_2);
+        Reset(chk5_1);
+        Reset(chk4_5);
+        Reset(chk4_4);
+        Reset(chk4_3);
+        Reset(chk4_2);
+        Reset(chk4_1);
+        Reset(chk3_5);
+        Reset(chk3_4);
+        Reset(chk3_3);
+        Reset(chk3_2);
+        Reset(chk3_1);
+        Reset(chk2_5);
+        Reset(chk2_4);
+        Reset(chk2_3);
+        Reset(chk2_2);
+        Reset(chk2_1);
+        Reset(chk1_5);
+        Reset(chk1_4);
+        Reset(chk1_3);
+        Reset(chk1_2);
+        Reset(chk1_1);
+        Set(checkBoxValue, cmpRiskAnalysis_CheckBox.defaultValueIn)
+    resetCheckbox: =false
+    valueOut: =checkBoxValue
+    Width: =400
+    X: =0
+    Y: =0
+    ZIndex: =1
+
+    HtmlText2_7 As htmlViewer:
+        Font: =Font.'Segoe UI'
+        Height: =32
+        HtmlText: |-
+            ="<div style=' text-align: center; font-weight: Semi Bold'>" & cmpRiskAnalysis_CheckBox.lblConsequence & "</div>"
+        Size: =11.5
+        Width: =Container3.Width
+        X: =Container3.X
+        Y: =Parent.Height - Self.Height
+        ZIndex: =1
+
+    HtmlText2_4 As htmlViewer:
+        Font: =Font.'Segoe UI'
+        Height: =Container3.Height
+        HtmlText: |-
+            ="<div style='text-align:center; position: absolute; left: "&-Round((Self.Height-Self.Width)/2,0)&"px; top: "&Round((Self.Height-Self.Width)/2,0)&"px; width: "&Self.Height&"px; height:"&Self.Width&"px; transform: rotate(270deg); font-weight: Semi Bold'>" & cmpRiskAnalysis_CheckBox.lblRiskOfReoccurring & "</div>"
+        PaddingBottom: =0
+        PaddingLeft: =0
+        PaddingRight: =0
+        PaddingTop: =0
+        Size: =12
+        Width: =32
+        Y: =Container3.Y + Container3.Height - Self.Height
+        ZIndex: =2
+
+    Label14_1 As label:
+        BorderColor: =RGBA(0, 0, 0, 0)
+        BorderStyle: =BorderStyle.None
+        BorderThickness: =2
+        Color: =RGBA(51, 51, 51, 1)
+        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        FocusedBorderThickness: =4
+        Font: =Font.'Segoe UI'
+        FontWeight: =FontWeight.Semibold
+        Size: =13
+        Text: =
+        Width: =277
+        X: =108
+        Y: =431
+        ZIndex: =3
+
+    Label10_2 As label:
+        BorderColor: =RGBA(0, 0, 0, 0)
+        BorderStyle: =BorderStyle.None
+        BorderThickness: =2
+        Color: =RGBA(54, 176, 75, 1)
+        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        FocusedBorderThickness: =4
+        Font: =Font.'Segoe UI'
+        FontWeight: =FontWeight.Bold
+        Height: =32
+        Size: =11.5
+        Text: ="1. " & cmpRiskAnalysis_CheckBox.lblLesser
+        Width: =Container3.Width / 2
+        X: =Container3.X
+        Y: =HtmlText2_7.Y - Self.Height
+        ZIndex: =9
+
+    Label10_3 As label:
+        Align: =Align.Right
+        BorderColor: =RGBA(0, 0, 0, 0)
+        BorderStyle: =BorderStyle.None
+        BorderThickness: =2
+        Color: =RGBA(184, 0, 0, 1)
+        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+        DisabledColor: =RGBA(166, 166, 166, 1)
+        FocusedBorderThickness: =4
+        Font: =Font.'Segoe UI'
+        FontWeight: =FontWeight.Bold
+        Height: =32
+        Size: =11.5
+        Text: ="5. " & cmpRiskAnalysis_CheckBox.lblGreater
+        Width: =Container3.Width / 2
+        X: =Label10_2.X + Label10_2.Width
+        Y: =HtmlText2_7.Y - Self.Height
+        ZIndex: =10
+
+    HtmlText2_6 As htmlViewer:
+        Color: =RGBA(54, 176, 75, 1)
+        Font: =Font.'Segoe UI'
+        Height: =HtmlText2_5.Height - HtmlText2_5.Y
+        HtmlText: |-
+            ="<div style='text-align:left; position: absolute; left: "&-Round((Self.Height-Self.Width)/2,0)&"px; top: "&Round((Self.Height-Self.Width)/2,0)&"px; width: "&Self.Height&"px; height:"&Self.Width&"px; transform: rotate(270deg); font-weight: Semi Bold'>" & "1. " & cmpRiskAnalysis_CheckBox.lblLower & "</div>"
+        PaddingBottom: =0
+        PaddingLeft: =0
+        PaddingRight: =0
+        PaddingTop: =0
+        Size: =12
+        Width: =32
+        X: =HtmlText2_4.Width
+        Y: =Container3.Y + Container3.Height - Self.Height
+        ZIndex: =11
+
+    HtmlText2_5 As htmlViewer:
+        Color: =RGBA(184, 0, 0, 1)
+        Font: =Font.'Segoe UI'
+        Height: =(Container3.Y + Container3.Height) / 2
+        HtmlText: |-
+            ="<div style='text-align:right; position: absolute; left: "&-Round((Self.Height-Self.Width)/2,0)&"px; top: "&Round((Self.Height-Self.Width)/2,0)&"px; width: "&Self.Height&"px; height:"&Self.Width&"px; transform: rotate(270deg); font-weight: Semi Bold'>" & "5. " & cmpRiskAnalysis_CheckBox.lblHigher & "</div>"
+        PaddingBottom: =0
+        PaddingLeft: =0
+        PaddingRight: =0
+        PaddingTop: =0
+        Size: =12
+        Width: =32
+        X: =HtmlText2_4.Width
+        Y: =Container3.Y + 10
+        ZIndex: =12
+
+    Container3 As groupContainer.verticalAutoLayoutContainer:
+        BorderThickness: =2
+        Height: =Self.Width
+        LayoutDirection: =LayoutDirection.Vertical
+        LayoutMode: =LayoutMode.Auto
+        Width: =Parent.Width - Self.X
+        X: =HtmlText2_5.X + HtmlText2_5.Width
+        ZIndex: =14
+
+        Container1 As groupContainer.horizontalAutoLayoutContainer:
+            Fill: =RGBA(237, 237, 237, 1)
+            Height: =40
+            LayoutAlignItems: =LayoutAlignItems.Center
+            LayoutJustifyContent: =LayoutJustifyContent.SpaceBetween
+            LayoutMinHeight: =40
+            LayoutMinWidth: =250
+            LayoutMode: =LayoutMode.Auto
+            LayoutOverflowX: =LayoutOverflow.Scroll
+            LayoutWrap: =true
+            X: =40
+            Y: =40
+            ZIndex: =1
+
+            chk5_1 As checkbox:
+                BorderColor: =RGBA(0, 0, 0, 0)
+                BorderStyle: =BorderStyle.None
+                BorderThickness: =2
+                CheckboxBorderColor: =RGBA(102, 102, 102, 1)
+                CheckboxSize: =30
+                CheckmarkFill: =RGBA(105, 121, 126, 1)
+                Color: =RGBA(51, 51, 51, 1)
+                Default: =cmpRiskAnalysis_CheckBox.calcValueIn = "5_1" And cmpRiskAnalysis_CheckBox.defaultValueIn = "5_1"
+                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisplayMode: =Switch(cmpRiskAnalysis_CheckBox.displayMode, "Edit", Edit, "View", View)
+                Fill: =RGBA(252, 235, 207, 1)
+                FocusedBorderThickness: =4
+                Font: =Font.'Segoe UI'
+                Height: =Parent.Height
+                HoverBorderColor: =RGBA(0, 0, 0, 0)
+                HoverColor: =RGBA(51, 51, 51, 1)
+                HoverFill: =Self.Fill
+                LayoutMinWidth: =60
+                OnCheck: |
+                    =Set(checkBoxValue, "5_1");
+                    Set(varReset, true);Set(varReset, false)
+                PaddingLeft: =4
+                PressedBorderColor: =RGBA(0, 0, 0, 0)
+                PressedColor: =RGBA(51, 51, 51, 1)
+                PressedFill: =RGBA(0, 0, 0, 0)
+                Reset: =varReset And cmpRiskAnalysis_CheckBox.valueOut <> "5_1"
+                Size: =9
+                Text: ="5"
+                Width: =Parent.Width / 5
+                ZIndex: =1
+
+            chk5_2 As checkbox:
+                BorderColor: =RGBA(0, 0, 0, 0)
+                BorderStyle: =BorderStyle.None
+                BorderThickness: =2
+                CheckboxBorderColor: =RGBA(102, 102, 102, 1)
+                CheckboxSize: =30
+                CheckmarkFill: =RGBA(105, 121, 126, 1)
+                Color: =RGBA(51, 51, 51, 1)
+                Default: =cmpRiskAnalysis_CheckBox.calcValueIn = "5_2" And cmpRiskAnalysis_CheckBox.defaultValueIn = "5_2"
+                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisplayMode: =Switch(cmpRiskAnalysis_CheckBox.displayMode, "Edit", Edit, "View", View)
+                Fill: =RGBA(251, 188, 159, 1)
+                FocusedBorderThickness: =4
+                Font: =Font.'Segoe UI'
+                Height: =Parent.Height
+                HoverBorderColor: =RGBA(0, 0, 0, 0)
+                HoverColor: =RGBA(51, 51, 51, 1)
+                HoverFill: =Self.Fill
+                OnCheck: |
+                    =Set(checkBoxValue, "5_2");
+                    Set(varReset, true);Set(varReset, false)
+                PaddingLeft: =4
+                PressedBorderColor: =RGBA(0, 0, 0, 0)
+                PressedColor: =RGBA(51, 51, 51, 1)
+                PressedFill: =RGBA(0, 0, 0, 0)
+                Reset: =varReset And cmpRiskAnalysis_CheckBox.valueOut <> "5_2"
+                Size: =9
+                Text: =""
+                Width: =Parent.Width / 5
+                ZIndex: =2
+
+            chk5_3 As checkbox:
+                BorderColor: =RGBA(0, 0, 0, 0)
+                BorderThickness: =2
+                CheckboxBorderColor: =RGBA(102, 102, 102, 1)
+                CheckboxSize: =30
+                CheckmarkFill: =RGBA(105, 121, 126, 1)
+                Color: =RGBA(51, 51, 51, 1)
+                Default: =cmpRiskAnalysis_CheckBox.calcValueIn = "5_3" And cmpRiskAnalysis_CheckBox.defaultValueIn = "5_3"
+                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisplayMode: =Switch(cmpRiskAnalysis_CheckBox.displayMode, "Edit", Edit, "View", View)
+                Fill: =RGBA(250, 155, 112, 1)
+                FocusedBorderThickness: =4
+                Font: =Font.'Segoe UI'
+                Height: =Parent.Height
+                HoverBorderColor: =RGBA(0, 0, 0, 0)
+                HoverColor: =RGBA(51, 51, 51, 1)
+                HoverFill: =Self.Fill
+                OnCheck: |
+                    =Set(checkBoxValue, "5_3");
+                    Set(varReset, true);Set(varReset, false)
+                PaddingLeft: =4
+                PressedBorderColor: =RGBA(0, 0, 0, 0)
+                PressedColor: =RGBA(51, 51, 51, 1)
+                PressedFill: =RGBA(0, 0, 0, 0)
+                Reset: =varReset And cmpRiskAnalysis_CheckBox.valueOut <> "5_3"
+                Size: =9
+                Text: =""
+                Width: =Parent.Width / 5
+                ZIndex: =3
+
+            chk5_4 As checkbox:
+                BorderColor: =RGBA(0, 0, 0, 0)
+                BorderStyle: =BorderStyle.None
+                BorderThickness: =2
+                CheckboxBorderColor: =RGBA(102, 102, 102, 1)
+                CheckboxSize: =30
+                CheckmarkFill: =RGBA(105, 121, 126, 1)
+                Color: =RGBA(51, 51, 51, 1)
+                Default: =cmpRiskAnalysis_CheckBox.calcValueIn = "5_4" And cmpRiskAnalysis_CheckBox.defaultValueIn = "5_4"
+                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisplayMode: =Switch(cmpRiskAnalysis_CheckBox.displayMode, "Edit", Edit, "View", View)
+                Fill: =RGBA(221, 79, 14, 1)
+                FocusedBorderThickness: =4
+                Font: =Font.'Segoe UI'
+                Height: =Parent.Height
+                HoverBorderColor: =RGBA(0, 0, 0, 0)
+                HoverColor: =RGBA(51, 51, 51, 1)
+                HoverFill: =Self.Fill
+                OnCheck: |-
+                    =Set(checkBoxValue, "5_4");
+                    Set(varReset, true);Set(varReset, false)
+                PaddingLeft: =4
+                PressedBorderColor: =RGBA(0, 0, 0, 0)
+                PressedColor: =RGBA(51, 51, 51, 1)
+                PressedFill: =RGBA(0, 0, 0, 0)
+                Reset: =varReset And cmpRiskAnalysis_CheckBox.valueOut <> "5_4"
+                Size: =9
+                Text: =""
+                Width: =Parent.Width / 5
+                ZIndex: =4
+
+            chk5_5 As checkbox:
+                BorderColor: =RGBA(0, 0, 0, 0)
+                BorderStyle: =BorderStyle.None
+                BorderThickness: =2
+                CheckboxBorderColor: =RGBA(102, 102, 102, 1)
+                CheckboxSize: =30
+                CheckmarkFill: =RGBA(105, 121, 126, 1)
+                Color: =RGBA(51, 51, 51, 1)
+                Default: =cmpRiskAnalysis_CheckBox.calcValueIn = "5_5" And cmpRiskAnalysis_CheckBox.defaultValueIn = "5_5"
+                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisplayMode: =Switch(cmpRiskAnalysis_CheckBox.displayMode, "Edit", Edit, "View", View)
+                Fill: =RGBA(172, 62, 11, 1)
+                FocusedBorderThickness: =4
+                Font: =Font.'Segoe UI'
+                Height: =Parent.Height
+                HoverBorderColor: =RGBA(0, 0, 0, 0)
+                HoverColor: =RGBA(51, 51, 51, 1)
+                HoverFill: =Self.Fill
+                OnCheck: |-
+                    =Set(checkBoxValue, "5_5");
+                    Set(varReset, true);Set(varReset, false)
+                PaddingLeft: =4
+                PressedBorderColor: =RGBA(0, 0, 0, 0)
+                PressedColor: =RGBA(51, 51, 51, 1)
+                PressedFill: =RGBA(0, 0, 0, 0)
+                Reset: =varReset And cmpRiskAnalysis_CheckBox.valueOut <> "5_5"
+                Size: =9
+                Text: =""
+                Width: =Parent.Width / 5
+                ZIndex: =5
+
+        Container1_1 As groupContainer.horizontalAutoLayoutContainer:
+            Fill: =RGBA(255, 255, 255, 1)
+            Height: =40
+            LayoutAlignItems: =LayoutAlignItems.Center
+            LayoutJustifyContent: =LayoutJustifyContent.SpaceBetween
+            LayoutMinHeight: =40
+            LayoutMinWidth: =250
+            LayoutMode: =LayoutMode.Auto
+            LayoutOverflowX: =LayoutOverflow.Scroll
+            LayoutWrap: =true
+            X: =40
+            Y: =40
+            ZIndex: =2
+
+            chk4_1 As checkbox:
+                BorderColor: =RGBA(0, 0, 0, 0)
+                BorderStyle: =BorderStyle.None
+                BorderThickness: =2
+                CheckboxBorderColor: =RGBA(102, 102, 102, 1)
+                CheckboxSize: =30
+                CheckmarkFill: =RGBA(105, 121, 126, 1)
+                Color: =RGBA(51, 51, 51, 1)
+                Default: =cmpRiskAnalysis_CheckBox.calcValueIn = "4_1" And cmpRiskAnalysis_CheckBox.defaultValueIn = "4_1"
+                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisplayMode: =Switch(cmpRiskAnalysis_CheckBox.displayMode, "Edit", Edit, "View", View)
+                Fill: =RGBA(232, 244, 217, 1)
+                FocusedBorderThickness: =4
+                Font: =Font.'Segoe UI'
+                Height: =Parent.Height
+                HoverBorderColor: =RGBA(0, 0, 0, 0)
+                HoverColor: =RGBA(51, 51, 51, 1)
+                HoverFill: =Self.Fill
+                LayoutMinWidth: =60
+                OnCheck: |
+                    =Set(checkBoxValue, "4_1");
+                    Set(varReset, true);Set(varReset, false)
+                PaddingLeft: =4
+                PressedBorderColor: =RGBA(0, 0, 0, 0)
+                PressedColor: =RGBA(51, 51, 51, 1)
+                PressedFill: =RGBA(0, 0, 0, 0)
+                Reset: =varReset And cmpRiskAnalysis_CheckBox.valueOut <> "4_1"
+                Size: =9
+                Text: ="4"
+                Width: =Parent.Width / 5
+                ZIndex: =1
+
+            chk4_2 As checkbox:
+                BorderColor: =RGBA(0, 0, 0, 0)
+                BorderStyle: =BorderStyle.None
+                BorderThickness: =2
+                CheckboxBorderColor: =RGBA(102, 102, 102, 1)
+                CheckboxSize: =30
+                CheckmarkFill: =RGBA(105, 121, 126, 1)
+                Color: =RGBA(51, 51, 51, 1)
+                Default: =cmpRiskAnalysis_CheckBox.calcValueIn = "4_2" And cmpRiskAnalysis_CheckBox.defaultValueIn = "4_2"
+                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisplayMode: =Switch(cmpRiskAnalysis_CheckBox.displayMode, "Edit", Edit, "View", View)
+                Fill: =RGBA(252, 235, 207, 1)
+                FocusedBorderThickness: =4
+                Font: =Font.'Segoe UI'
+                Height: =Parent.Height
+                HoverBorderColor: =RGBA(0, 0, 0, 0)
+                HoverColor: =RGBA(51, 51, 51, 1)
+                HoverFill: =Self.Fill
+                OnCheck: |
+                    =Set(checkBoxValue, "4_2");
+                    Set(varReset, true);Set(varReset, false)
+                PaddingLeft: =4
+                PressedBorderColor: =RGBA(0, 0, 0, 0)
+                PressedColor: =RGBA(51, 51, 51, 1)
+                PressedFill: =RGBA(0, 0, 0, 0)
+                Reset: =varReset And cmpRiskAnalysis_CheckBox.valueOut <> "4_2"
+                Size: =9
+                Text: =""
+                Width: =Parent.Width / 5
+                ZIndex: =2
+
+            chk4_3 As checkbox:
+                BorderColor: =RGBA(0, 0, 0, 0)
+                BorderStyle: =BorderStyle.None
+                BorderThickness: =2
+                CheckboxBorderColor: =RGBA(102, 102, 102, 1)
+                CheckboxSize: =30
+                CheckmarkFill: =RGBA(105, 121, 126, 1)
+                Color: =RGBA(51, 51, 51, 1)
+                Default: =cmpRiskAnalysis_CheckBox.calcValueIn = "4_3" And cmpRiskAnalysis_CheckBox.defaultValueIn = "4_3"
+                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisplayMode: =Switch(cmpRiskAnalysis_CheckBox.displayMode, "Edit", Edit, "View", View)
+                Fill: =RGBA(251, 188, 159, 1)
+                FocusedBorderThickness: =4
+                Font: =Font.'Segoe UI'
+                Height: =Parent.Height
+                HoverBorderColor: =RGBA(0, 0, 0, 0)
+                HoverColor: =RGBA(51, 51, 51, 1)
+                HoverFill: =Self.Fill
+                OnCheck: |
+                    =Set(checkBoxValue, "4_3");
+                    Set(varReset, true);Set(varReset, false)
+                PaddingLeft: =4
+                PressedBorderColor: =RGBA(0, 0, 0, 0)
+                PressedColor: =RGBA(51, 51, 51, 1)
+                PressedFill: =RGBA(0, 0, 0, 0)
+                Reset: =varReset And cmpRiskAnalysis_CheckBox.valueOut <> "4_3"
+                Size: =9
+                Text: =""
+                Width: =Parent.Width / 5
+                ZIndex: =3
+
+            chk4_4 As checkbox:
+                BorderColor: =RGBA(0, 0, 0, 0)
+                BorderStyle: =BorderStyle.None
+                BorderThickness: =2
+                CheckboxBorderColor: =RGBA(102, 102, 102, 1)
+                CheckboxSize: =30
+                CheckmarkFill: =RGBA(105, 121, 126, 1)
+                Color: =RGBA(51, 51, 51, 1)
+                Default: =cmpRiskAnalysis_CheckBox.calcValueIn = "4_4" And cmpRiskAnalysis_CheckBox.defaultValueIn = "4_4"
+                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisplayMode: =Switch(cmpRiskAnalysis_CheckBox.displayMode, "Edit", Edit, "View", View)
+                Fill: =RGBA(250, 155, 112, 1)
+                FocusedBorderThickness: =4
+                Font: =Font.'Segoe UI'
+                Height: =Parent.Height
+                HoverBorderColor: =RGBA(0, 0, 0, 0)
+                HoverColor: =RGBA(51, 51, 51, 1)
+                HoverFill: =Self.Fill
+                OnCheck: |
+                    =Set(checkBoxValue, "4_4");
+                    Set(varReset, true);Set(varReset, false)
+                PaddingLeft: =4
+                PressedBorderColor: =RGBA(0, 0, 0, 0)
+                PressedColor: =RGBA(51, 51, 51, 1)
+                PressedFill: =RGBA(0, 0, 0, 0)
+                Reset: =varReset And cmpRiskAnalysis_CheckBox.valueOut <> "4_4"
+                Size: =9
+                Text: =""
+                Width: =Parent.Width / 5
+                ZIndex: =4
+
+            chk4_5 As checkbox:
+                BorderColor: =RGBA(0, 0, 0, 0)
+                BorderStyle: =BorderStyle.None
+                BorderThickness: =2
+                CheckboxBorderColor: =RGBA(102, 102, 102, 1)
+                CheckboxSize: =30
+                CheckmarkFill: =RGBA(105, 121, 126, 1)
+                Color: =RGBA(51, 51, 51, 1)
+                Default: =cmpRiskAnalysis_CheckBox.calcValueIn = "4_5" And cmpRiskAnalysis_CheckBox.defaultValueIn = "4_5"
+                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisplayMode: =Switch(cmpRiskAnalysis_CheckBox.displayMode, "Edit", Edit, "View", View)
+                Fill: =RGBA(221, 79, 14, 1)
+                FocusedBorderThickness: =4
+                Font: =Font.'Segoe UI'
+                Height: =Parent.Height
+                HoverBorderColor: =RGBA(0, 0, 0, 0)
+                HoverColor: =RGBA(51, 51, 51, 1)
+                HoverFill: =Self.Fill
+                OnCheck: |
+                    =Set(checkBoxValue, "4_5");
+                    Set(varReset, true);Set(varReset, false)
+                PaddingLeft: =4
+                PressedBorderColor: =RGBA(0, 0, 0, 0)
+                PressedColor: =RGBA(51, 51, 51, 1)
+                PressedFill: =RGBA(0, 0, 0, 0)
+                Reset: =varReset And cmpRiskAnalysis_CheckBox.valueOut <> "4_5"
+                Size: =9
+                Text: =""
+                Width: =Parent.Width / 5
+                ZIndex: =5
+
+        Container1_2 As groupContainer.horizontalAutoLayoutContainer:
+            Fill: =RGBA(237, 237, 237, 1)
+            Height: =40
+            LayoutAlignItems: =LayoutAlignItems.Center
+            LayoutJustifyContent: =LayoutJustifyContent.SpaceBetween
+            LayoutMinHeight: =40
+            LayoutMinWidth: =250
+            LayoutMode: =LayoutMode.Auto
+            LayoutOverflowX: =LayoutOverflow.Scroll
+            LayoutWrap: =true
+            X: =40
+            Y: =40
+            ZIndex: =3
+
+            chk3_1 As checkbox:
+                BorderColor: =RGBA(0, 0, 0, 0)
+                BorderStyle: =BorderStyle.None
+                BorderThickness: =2
+                CheckboxBorderColor: =RGBA(102, 102, 102, 1)
+                CheckboxSize: =30
+                CheckmarkFill: =RGBA(105, 121, 126, 1)
+                Color: =RGBA(51, 51, 51, 1)
+                Default: =cmpRiskAnalysis_CheckBox.calcValueIn = "3_1" And cmpRiskAnalysis_CheckBox.defaultValueIn = "3_1"
+                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisplayMode: =Switch(cmpRiskAnalysis_CheckBox.displayMode, "Edit", Edit, "View", View)
+                Fill: =RGBA(232, 244, 217, 1)
+                FocusedBorderThickness: =4
+                Font: =Font.'Segoe UI'
+                Height: =Parent.Height
+                HoverBorderColor: =RGBA(0, 0, 0, 0)
+                HoverColor: =RGBA(51, 51, 51, 1)
+                HoverFill: =Self.Fill
+                LayoutMinWidth: =60
+                OnCheck: |
+                    =Set(checkBoxValue, "3_1");
+                    Set(varReset, true);Set(varReset, false)
+                PaddingLeft: =4
+                PressedBorderColor: =RGBA(0, 0, 0, 0)
+                PressedColor: =RGBA(51, 51, 51, 1)
+                PressedFill: =RGBA(0, 0, 0, 0)
+                Reset: =varReset And cmpRiskAnalysis_CheckBox.valueOut <> "3_1"
+                Size: =9
+                Text: ="3"
+                Width: =Parent.Width / 5
+                ZIndex: =1
+
+            chk3_2 As checkbox:
+                BorderColor: =RGBA(0, 0, 0, 0)
+                BorderStyle: =BorderStyle.None
+                BorderThickness: =2
+                CheckboxBorderColor: =RGBA(102, 102, 102, 1)
+                CheckboxSize: =30
+                CheckmarkFill: =RGBA(105, 121, 126, 1)
+                Color: =RGBA(51, 51, 51, 1)
+                Default: =cmpRiskAnalysis_CheckBox.calcValueIn = "3_2" And cmpRiskAnalysis_CheckBox.defaultValueIn = "3_2"
+                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisplayMode: =Switch(cmpRiskAnalysis_CheckBox.displayMode, "Edit", Edit, "View", View)
+                Fill: =RGBA(252, 235, 207, 1)
+                FocusedBorderThickness: =4
+                Font: =Font.'Segoe UI'
+                Height: =Parent.Height
+                HoverBorderColor: =RGBA(0, 0, 0, 0)
+                HoverColor: =RGBA(51, 51, 51, 1)
+                HoverFill: =Self.Fill
+                OnCheck: |-
+                    =Set(checkBoxValue, "3_2");
+                    Set(varReset, true);Set(varReset, false)
+                PaddingLeft: =4
+                PressedBorderColor: =RGBA(0, 0, 0, 0)
+                PressedColor: =RGBA(51, 51, 51, 1)
+                PressedFill: =RGBA(0, 0, 0, 0)
+                Reset: =varReset And cmpRiskAnalysis_CheckBox.valueOut <> "3_2"
+                Size: =9
+                Text: =""
+                Width: =Parent.Width / 5
+                ZIndex: =2
+
+            chk3_3 As checkbox:
+                BorderColor: =RGBA(0, 0, 0, 0)
+                BorderStyle: =BorderStyle.None
+                BorderThickness: =2
+                CheckboxBorderColor: =RGBA(102, 102, 102, 1)
+                CheckboxSize: =30
+                CheckmarkFill: =RGBA(105, 121, 126, 1)
+                Color: =RGBA(51, 51, 51, 1)
+                Default: =cmpRiskAnalysis_CheckBox.calcValueIn = "3_3" And cmpRiskAnalysis_CheckBox.defaultValueIn = "3_3"
+                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisplayMode: =Switch(cmpRiskAnalysis_CheckBox.displayMode, "Edit", Edit, "View", View)
+                Fill: =RGBA(252, 235, 207, 1)
+                FocusedBorderThickness: =4
+                Font: =Font.'Segoe UI'
+                Height: =Parent.Height
+                HoverBorderColor: =RGBA(0, 0, 0, 0)
+                HoverColor: =RGBA(51, 51, 51, 1)
+                HoverFill: =Self.Fill
+                OnCheck: |-
+                    =Set(checkBoxValue, "3_3");
+                    Set(varReset, true);Set(varReset, false)
+                PaddingLeft: =4
+                PressedBorderColor: =RGBA(0, 0, 0, 0)
+                PressedColor: =RGBA(51, 51, 51, 1)
+                PressedFill: =RGBA(0, 0, 0, 0)
+                Reset: =varReset And cmpRiskAnalysis_CheckBox.valueOut <> "3_3"
+                Size: =9
+                Text: =""
+                Width: =Parent.Width / 5
+                ZIndex: =3
+
+            chk3_4 As checkbox:
+                BorderColor: =RGBA(0, 0, 0, 0)
+                BorderStyle: =BorderStyle.None
+                BorderThickness: =2
+                CheckboxBorderColor: =RGBA(102, 102, 102, 1)
+                CheckboxSize: =30
+                CheckmarkFill: =RGBA(105, 121, 126, 1)
+                Color: =RGBA(51, 51, 51, 1)
+                Default: =cmpRiskAnalysis_CheckBox.calcValueIn = "3_4" And cmpRiskAnalysis_CheckBox.defaultValueIn = "3_4"
+                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisplayMode: =Switch(cmpRiskAnalysis_CheckBox.displayMode, "Edit", Edit, "View", View)
+                Fill: =RGBA(251, 188, 159, 1)
+                FocusedBorderThickness: =4
+                Font: =Font.'Segoe UI'
+                Height: =Parent.Height
+                HoverBorderColor: =RGBA(0, 0, 0, 0)
+                HoverColor: =RGBA(51, 51, 51, 1)
+                HoverFill: =Self.Fill
+                OnCheck: |
+                    =Set(checkBoxValue, "3_4");
+                    Set(varReset, true);Set(varReset, false)
+                PaddingLeft: =4
+                PressedBorderColor: =RGBA(0, 0, 0, 0)
+                PressedColor: =RGBA(51, 51, 51, 1)
+                PressedFill: =RGBA(0, 0, 0, 0)
+                Reset: =varReset And cmpRiskAnalysis_CheckBox.valueOut <> "3_4"
+                Size: =9
+                Text: =""
+                Width: =Parent.Width / 5
+                ZIndex: =4
+
+            chk3_5 As checkbox:
+                BorderColor: =RGBA(0, 0, 0, 0)
+                BorderStyle: =BorderStyle.None
+                BorderThickness: =2
+                CheckboxBorderColor: =RGBA(102, 102, 102, 1)
+                CheckboxSize: =30
+                CheckmarkFill: =RGBA(105, 121, 126, 1)
+                Color: =RGBA(51, 51, 51, 1)
+                Default: =cmpRiskAnalysis_CheckBox.calcValueIn = "3_5" And cmpRiskAnalysis_CheckBox.defaultValueIn = "3_5"
+                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisplayMode: =Switch(cmpRiskAnalysis_CheckBox.displayMode, "Edit", Edit, "View", View)
+                Fill: =RGBA(250, 155, 112, 1)
+                FocusedBorderThickness: =4
+                Font: =Font.'Segoe UI'
+                Height: =Parent.Height
+                HoverBorderColor: =RGBA(0, 0, 0, 0)
+                HoverColor: =RGBA(51, 51, 51, 1)
+                HoverFill: =Self.Fill
+                OnCheck: |
+                    =Set(checkBoxValue, "3_5");
+                    Set(varReset, true);Set(varReset, false)
+                PaddingLeft: =4
+                PressedBorderColor: =RGBA(0, 0, 0, 0)
+                PressedColor: =RGBA(51, 51, 51, 1)
+                PressedFill: =RGBA(0, 0, 0, 0)
+                Reset: =varReset And cmpRiskAnalysis_CheckBox.valueOut <> "3_5"
+                Size: =9
+                Text: =""
+                Width: =Parent.Width / 5
+                ZIndex: =5
+
+        Container1_3 As groupContainer.horizontalAutoLayoutContainer:
+            Fill: =RGBA(255, 255, 255, 1)
+            Height: =40
+            LayoutAlignItems: =LayoutAlignItems.Center
+            LayoutJustifyContent: =LayoutJustifyContent.SpaceBetween
+            LayoutMinHeight: =40
+            LayoutMinWidth: =250
+            LayoutMode: =LayoutMode.Auto
+            LayoutOverflowX: =LayoutOverflow.Scroll
+            LayoutWrap: =true
+            X: =40
+            Y: =40
+            ZIndex: =4
+
+            chk2_1 As checkbox:
+                BorderColor: =RGBA(0, 0, 0, 0)
+                BorderStyle: =BorderStyle.None
+                BorderThickness: =2
+                CheckboxBorderColor: =RGBA(102, 102, 102, 1)
+                CheckboxSize: =30
+                CheckmarkFill: =RGBA(105, 121, 126, 1)
+                Color: =RGBA(51, 51, 51, 1)
+                Default: =cmpRiskAnalysis_CheckBox.calcValueIn = "2_1" And cmpRiskAnalysis_CheckBox.defaultValueIn = "2_1"
+                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisplayMode: =Switch(cmpRiskAnalysis_CheckBox.displayMode, "Edit", Edit, "View", View)
+                Fill: =RGBA(232, 244, 217, 1)
+                FocusedBorderThickness: =4
+                Font: =Font.'Segoe UI'
+                Height: =Parent.Height
+                HoverBorderColor: =RGBA(0, 0, 0, 0)
+                HoverColor: =RGBA(51, 51, 51, 1)
+                HoverFill: =Self.Fill
+                LayoutMinWidth: =60
+                OnCheck: |
+                    =Set(checkBoxValue, "2_1");
+                    Set(varReset, true);Set(varReset, false)
+                PaddingLeft: =4
+                PressedBorderColor: =RGBA(0, 0, 0, 0)
+                PressedColor: =RGBA(51, 51, 51, 1)
+                PressedFill: =RGBA(0, 0, 0, 0)
+                Reset: =varReset And cmpRiskAnalysis_CheckBox.valueOut <> "2_1"
+                Size: =9
+                Text: ="2"
+                Width: =Parent.Width / 5
+                ZIndex: =1
+
+            chk2_2 As checkbox:
+                BorderColor: =RGBA(0, 0, 0, 0)
+                BorderStyle: =BorderStyle.None
+                BorderThickness: =2
+                CheckboxBorderColor: =RGBA(102, 102, 102, 1)
+                CheckboxSize: =30
+                CheckmarkFill: =RGBA(105, 121, 126, 1)
+                Color: =RGBA(51, 51, 51, 1)
+                Default: =cmpRiskAnalysis_CheckBox.calcValueIn = "2_2" And cmpRiskAnalysis_CheckBox.defaultValueIn = "2_2"
+                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisplayMode: =Switch(cmpRiskAnalysis_CheckBox.displayMode, "Edit", Edit, "View", View)
+                Fill: =RGBA(232, 244, 217, 1)
+                FocusedBorderThickness: =4
+                Font: =Font.'Segoe UI'
+                Height: =Parent.Height
+                HoverBorderColor: =RGBA(0, 0, 0, 0)
+                HoverColor: =RGBA(51, 51, 51, 1)
+                HoverFill: =Self.Fill
+                OnCheck: |
+                    =Set(checkBoxValue, "2_2");
+                    Set(varReset, true);Set(varReset, false)
+                PaddingLeft: =4
+                PressedBorderColor: =RGBA(0, 0, 0, 0)
+                PressedColor: =RGBA(51, 51, 51, 1)
+                PressedFill: =RGBA(0, 0, 0, 0)
+                Reset: =varReset And cmpRiskAnalysis_CheckBox.valueOut <> "2_2"
+                Size: =9
+                Text: =""
+                Width: =Parent.Width / 5
+                ZIndex: =2
+
+            chk2_3 As checkbox:
+                BorderColor: =RGBA(0, 0, 0, 0)
+                BorderStyle: =BorderStyle.None
+                BorderThickness: =2
+                CheckboxBorderColor: =RGBA(102, 102, 102, 1)
+                CheckboxSize: =30
+                CheckmarkFill: =RGBA(105, 121, 126, 1)
+                Color: =RGBA(51, 51, 51, 1)
+                Default: =cmpRiskAnalysis_CheckBox.calcValueIn = "2_3" And cmpRiskAnalysis_CheckBox.defaultValueIn = "2_3"
+                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisplayMode: =Switch(cmpRiskAnalysis_CheckBox.displayMode, "Edit", Edit, "View", View)
+                Fill: =RGBA(252, 235, 207, 1)
+                FocusedBorderThickness: =4
+                Font: =Font.'Segoe UI'
+                Height: =Parent.Height
+                HoverBorderColor: =RGBA(0, 0, 0, 0)
+                HoverColor: =RGBA(51, 51, 51, 1)
+                HoverFill: =Self.Fill
+                OnCheck: |-
+                    =Set(checkBoxValue, "2_3");
+                    Set(varReset, true);Set(varReset, false)
+                PaddingLeft: =4
+                PressedBorderColor: =RGBA(0, 0, 0, 0)
+                PressedColor: =RGBA(51, 51, 51, 1)
+                PressedFill: =RGBA(0, 0, 0, 0)
+                Reset: =varReset And cmpRiskAnalysis_CheckBox.valueOut <> "2_3"
+                Size: =9
+                Text: =""
+                Width: =Parent.Width / 5
+                ZIndex: =3
+
+            chk2_4 As checkbox:
+                BorderColor: =RGBA(0, 0, 0, 0)
+                BorderStyle: =BorderStyle.None
+                BorderThickness: =2
+                CheckboxBorderColor: =RGBA(102, 102, 102, 1)
+                CheckboxSize: =30
+                CheckmarkFill: =RGBA(105, 121, 126, 1)
+                Color: =RGBA(51, 51, 51, 1)
+                Default: =cmpRiskAnalysis_CheckBox.calcValueIn = "2_4" And cmpRiskAnalysis_CheckBox.defaultValueIn = "2_4"
+                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisplayMode: =Switch(cmpRiskAnalysis_CheckBox.displayMode, "Edit", Edit, "View", View)
+                Fill: =RGBA(252, 235, 207, 1)
+                FocusedBorderThickness: =4
+                Font: =Font.'Segoe UI'
+                Height: =Parent.Height
+                HoverBorderColor: =RGBA(0, 0, 0, 0)
+                HoverColor: =RGBA(51, 51, 51, 1)
+                HoverFill: =Self.Fill
+                OnCheck: |
+                    =Set(checkBoxValue, "2_4");
+                    Set(varReset, true);Set(varReset, false)
+                PaddingLeft: =4
+                PressedBorderColor: =RGBA(0, 0, 0, 0)
+                PressedColor: =RGBA(51, 51, 51, 1)
+                PressedFill: =RGBA(0, 0, 0, 0)
+                Reset: =varReset And cmpRiskAnalysis_CheckBox.valueOut <> "2_4"
+                Size: =9
+                Text: =""
+                Width: =Parent.Width / 5
+                ZIndex: =4
+
+            chk2_5 As checkbox:
+                BorderColor: =RGBA(0, 0, 0, 0)
+                BorderStyle: =BorderStyle.None
+                BorderThickness: =2
+                CheckboxBorderColor: =RGBA(102, 102, 102, 1)
+                CheckboxSize: =30
+                CheckmarkFill: =RGBA(105, 121, 126, 1)
+                Color: =RGBA(51, 51, 51, 1)
+                Default: =cmpRiskAnalysis_CheckBox.calcValueIn = "2_5" And cmpRiskAnalysis_CheckBox.defaultValueIn = "2_5"
+                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisplayMode: =Switch(cmpRiskAnalysis_CheckBox.displayMode, "Edit", Edit, "View", View)
+                Fill: =RGBA(251, 188, 159, 1)
+                FocusedBorderThickness: =4
+                Font: =Font.'Segoe UI'
+                Height: =Parent.Height
+                HoverBorderColor: =RGBA(0, 0, 0, 0)
+                HoverColor: =RGBA(51, 51, 51, 1)
+                HoverFill: =Self.Fill
+                OnCheck: |
+                    =Set(checkBoxValue, "2_5");
+                    Set(varReset, true);Set(varReset, false)
+                PaddingLeft: =4
+                PressedBorderColor: =RGBA(0, 0, 0, 0)
+                PressedColor: =RGBA(51, 51, 51, 1)
+                PressedFill: =RGBA(0, 0, 0, 0)
+                Reset: =varReset And cmpRiskAnalysis_CheckBox.valueOut <> "2_5"
+                Size: =9
+                Text: =""
+                Width: =Parent.Width / 5
+                ZIndex: =5
+
+        Container1_4 As groupContainer.horizontalAutoLayoutContainer:
+            Fill: =RGBA(237, 237, 237, 1)
+            Height: =40
+            LayoutAlignItems: =LayoutAlignItems.Center
+            LayoutJustifyContent: =LayoutJustifyContent.SpaceBetween
+            LayoutMinHeight: =40
+            LayoutMinWidth: =250
+            LayoutMode: =LayoutMode.Auto
+            LayoutOverflowX: =LayoutOverflow.Scroll
+            LayoutWrap: =true
+            X: =40
+            Y: =40
+            ZIndex: =5
+
+            chk1_1 As checkbox:
+                BorderColor: =RGBA(0, 0, 0, 0)
+                BorderStyle: =BorderStyle.None
+                BorderThickness: =2
+                CheckboxBorderColor: =RGBA(102, 102, 102, 1)
+                CheckboxSize: =30
+                CheckmarkFill: =RGBA(105, 121, 126, 1)
+                Color: =RGBA(51, 51, 51, 1)
+                Default: =cmpRiskAnalysis_CheckBox.calcValueIn = "1_1" And cmpRiskAnalysis_CheckBox.defaultValueIn = "1_1"
+                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisplayMode: =Switch(cmpRiskAnalysis_CheckBox.displayMode, "Edit", Edit, "View", View)
+                Fill: =RGBA(232, 244, 217, 1)
+                FocusedBorderThickness: =4
+                Font: =Font.'Segoe UI'
+                Height: =Parent.Height
+                HoverBorderColor: =RGBA(0, 0, 0, 0)
+                HoverColor: =RGBA(51, 51, 51, 1)
+                HoverFill: =Self.Fill
+                LayoutMinWidth: =60
+                OnCheck: |
+                    =Set(checkBoxValue, "1_1");
+                    Set(varReset, true);Set(varReset, false)
+                PaddingLeft: =4
+                PressedBorderColor: =RGBA(0, 0, 0, 0)
+                PressedColor: =RGBA(51, 51, 51, 1)
+                PressedFill: =RGBA(0, 0, 0, 0)
+                Reset: =varReset And cmpRiskAnalysis_CheckBox.valueOut <> "1_1"
+                Size: =9
+                Text: ="1"
+                Width: =Parent.Width / 5
+                ZIndex: =1
+
+            chk1_2 As checkbox:
+                BorderColor: =RGBA(0, 0, 0, 0)
+                BorderStyle: =BorderStyle.None
+                BorderThickness: =2
+                CheckboxBorderColor: =RGBA(102, 102, 102, 1)
+                CheckboxSize: =30
+                CheckmarkFill: =RGBA(105, 121, 126, 1)
+                Color: =RGBA(51, 51, 51, 1)
+                Default: =cmpRiskAnalysis_CheckBox.calcValueIn = "1_2" And cmpRiskAnalysis_CheckBox.defaultValueIn = "1_2"
+                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisplayMode: =Switch(cmpRiskAnalysis_CheckBox.displayMode, "Edit", Edit, "View", View)
+                Fill: =RGBA(232, 244, 217, 1)
+                FocusedBorderThickness: =4
+                Font: =Font.'Segoe UI'
+                Height: =Parent.Height
+                HoverBorderColor: =RGBA(0, 0, 0, 0)
+                HoverColor: =RGBA(51, 51, 51, 1)
+                HoverFill: =Self.Fill
+                OnCheck: |
+                    =Set(checkBoxValue, "1_2");
+                    Set(varReset, true);Set(varReset, false)
+                PaddingLeft: =4
+                PressedBorderColor: =RGBA(0, 0, 0, 0)
+                PressedColor: =RGBA(51, 51, 51, 1)
+                PressedFill: =RGBA(0, 0, 0, 0)
+                Reset: =varReset And cmpRiskAnalysis_CheckBox.valueOut <> "1_2"
+                Size: =9
+                Text: ="2"
+                Width: =Parent.Width / 5
+                ZIndex: =2
+
+            chk1_3 As checkbox:
+                BorderColor: =RGBA(0, 0, 0, 0)
+                BorderStyle: =BorderStyle.None
+                BorderThickness: =2
+                CheckboxBorderColor: =RGBA(102, 102, 102, 1)
+                CheckboxSize: =30
+                CheckmarkFill: =RGBA(105, 121, 126, 1)
+                Color: =RGBA(51, 51, 51, 1)
+                Default: =cmpRiskAnalysis_CheckBox.calcValueIn = "1_3" And cmpRiskAnalysis_CheckBox.defaultValueIn = "1_3"
+                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisplayMode: =Switch(cmpRiskAnalysis_CheckBox.displayMode, "Edit", Edit, "View", View)
+                Fill: =RGBA(232, 244, 217, 1)
+                FocusedBorderThickness: =4
+                Font: =Font.'Segoe UI'
+                Height: =Parent.Height
+                HoverBorderColor: =RGBA(0, 0, 0, 0)
+                HoverColor: =RGBA(51, 51, 51, 1)
+                HoverFill: =Self.Fill
+                OnCheck: |
+                    =Set(checkBoxValue, "1_3");
+                    Set(varReset, true);Set(varReset, false)
+                PaddingLeft: =4
+                PressedBorderColor: =RGBA(0, 0, 0, 0)
+                PressedColor: =RGBA(51, 51, 51, 1)
+                PressedFill: =RGBA(0, 0, 0, 0)
+                Reset: =varReset And cmpRiskAnalysis_CheckBox.valueOut <> "1_3"
+                Size: =9
+                Text: ="3"
+                Width: =Parent.Width / 5
+                ZIndex: =3
+
+            chk1_4 As checkbox:
+                BorderColor: =RGBA(0, 0, 0, 0)
+                BorderStyle: =BorderStyle.None
+                BorderThickness: =2
+                CheckboxBorderColor: =RGBA(102, 102, 102, 1)
+                CheckboxSize: =30
+                CheckmarkFill: =RGBA(105, 121, 126, 1)
+                Color: =RGBA(51, 51, 51, 1)
+                Default: =cmpRiskAnalysis_CheckBox.calcValueIn = "1_4" And cmpRiskAnalysis_CheckBox.defaultValueIn = "1_4"
+                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisplayMode: =Switch(cmpRiskAnalysis_CheckBox.displayMode, "Edit", Edit, "View", View)
+                Fill: =RGBA(232, 244, 217, 1)
+                FocusedBorderThickness: =4
+                Font: =Font.'Segoe UI'
+                Height: =Parent.Height
+                HoverBorderColor: =RGBA(0, 0, 0, 0)
+                HoverColor: =RGBA(51, 51, 51, 1)
+                HoverFill: =Self.Fill
+                OnCheck: |
+                    =Set(checkBoxValue, "1_4");
+                    Set(varReset, true);Set(varReset, false)
+                PaddingLeft: =4
+                PressedBorderColor: =RGBA(0, 0, 0, 0)
+                PressedColor: =RGBA(51, 51, 51, 1)
+                PressedFill: =RGBA(0, 0, 0, 0)
+                Reset: =varReset And cmpRiskAnalysis_CheckBox.valueOut <> "1_4"
+                Size: =9
+                Text: ="4"
+                Width: =Parent.Width / 5
+                ZIndex: =4
+
+            chk1_5 As checkbox:
+                BorderColor: =RGBA(0, 0, 0, 0)
+                BorderStyle: =BorderStyle.None
+                BorderThickness: =2
+                CheckboxBorderColor: =RGBA(102, 102, 102, 1)
+                CheckboxSize: =30
+                CheckmarkFill: =RGBA(105, 121, 126, 1)
+                Color: =RGBA(51, 51, 51, 1)
+                Default: =cmpRiskAnalysis_CheckBox.calcValueIn = "1_5" And cmpRiskAnalysis_CheckBox.defaultValueIn = "1_5"
+                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                DisabledColor: =RGBA(166, 166, 166, 1)
+                DisplayMode: =Switch(cmpRiskAnalysis_CheckBox.displayMode, "Edit", Edit, "View", View)
+                Fill: =RGBA(252, 235, 207, 1)
+                FocusedBorderThickness: =4
+                Font: =Font.'Segoe UI'
+                Height: =Parent.Height
+                HoverBorderColor: =RGBA(0, 0, 0, 0)
+                HoverColor: =RGBA(51, 51, 51, 1)
+                HoverFill: =Self.Fill
+                OnCheck: |
+                    =Set(checkBoxValue, "1_5");
+                    Set(varReset, true);Set(varReset, false)
+                PaddingLeft: =4
+                PressedBorderColor: =RGBA(0, 0, 0, 0)
+                PressedColor: =RGBA(51, 51, 51, 1)
+                PressedFill: =RGBA(0, 0, 0, 0)
+                Reset: =varReset And cmpRiskAnalysis_CheckBox.valueOut <> "1_5"
+                Size: =9
+                Text: ="5"
+                Width: =Parent.Width / 5
+                ZIndex: =5
+
