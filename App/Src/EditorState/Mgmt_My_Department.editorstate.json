@@ -199,7 +199,7 @@
       "LayoutName": "",
       "MetaDataIDKey": "",
       "Name": "Checkbox1",
-      "ParentIndex": 1,
+      "ParentIndex": 2,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -615,7 +615,7 @@
       "LayoutName": "",
       "MetaDataIDKey": "",
       "Name": "Checkbox1_1",
-      "ParentIndex": 2,
+      "ParentIndex": 1,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -1759,7 +1759,7 @@
       "LayoutName": "",
       "MetaDataIDKey": "",
       "Name": "checkboxesContainer",
-      "ParentIndex": 9,
+      "ParentIndex": 6,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -1969,7 +1969,7 @@
       "LayoutName": "",
       "MetaDataIDKey": "",
       "Name": "clearFilters",
-      "ParentIndex": 1,
+      "ParentIndex": 7,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -2526,7 +2526,7 @@
       "LayoutName": "",
       "MetaDataIDKey": "",
       "Name": "collectMyDepartment",
-      "ParentIndex": 3,
+      "ParentIndex": 2,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -2815,7 +2815,7 @@
       "LayoutName": "",
       "MetaDataIDKey": "",
       "Name": "Container4",
-      "ParentIndex": 6,
+      "ParentIndex": 9,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -3286,7 +3286,7 @@
       "LayoutName": "",
       "MetaDataIDKey": "",
       "Name": "dropdownFilters",
-      "ParentIndex": 2,
+      "ParentIndex": 8,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -3726,7 +3726,7 @@
       },
       "MetaDataIDKey": "",
       "Name": "hdrActionsTaken",
-      "ParentIndex": 4,
+      "ParentIndex": 3,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -4990,7 +4990,7 @@
       },
       "MetaDataIDKey": "",
       "Name": "hdrFinishedDate",
-      "ParentIndex": 2,
+      "ParentIndex": 1,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -5420,7 +5420,7 @@
       },
       "MetaDataIDKey": "",
       "Name": "hdrModifiedBy",
-      "ParentIndex": 3,
+      "ParentIndex": 2,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -7516,7 +7516,7 @@
       },
       "MetaDataIDKey": "",
       "Name": "hdrTitle",
-      "ParentIndex": 1,
+      "ParentIndex": 4,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -7906,7 +7906,7 @@
       "LayoutName": "",
       "MetaDataIDKey": "",
       "Name": "Icon1_11",
-      "ParentIndex": 4,
+      "ParentIndex": 1,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -8700,7 +8700,7 @@
       "LayoutName": "",
       "MetaDataIDKey": "",
       "Name": "Label11",
-      "ParentIndex": 8,
+      "ParentIndex": 5,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -9033,7 +9033,7 @@
       "LayoutName": "",
       "MetaDataIDKey": "",
       "Name": "Label2_13",
-      "ParentIndex": 5,
+      "ParentIndex": 3,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -9364,7 +9364,7 @@
       "LayoutName": "",
       "MetaDataIDKey": "",
       "Name": "Label2_14",
-      "ParentIndex": 7,
+      "ParentIndex": 4,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -10544,7 +10544,7 @@
       "LayoutName": "",
       "MetaDataIDKey": "",
       "Name": "tblActionsTaken",
-      "ParentIndex": 4,
+      "ParentIndex": 3,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -13251,7 +13251,7 @@
       "LayoutName": "",
       "MetaDataIDKey": "",
       "Name": "tblFinishedDate",
-      "ParentIndex": 2,
+      "ParentIndex": 1,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -13646,7 +13646,7 @@
       "LayoutName": "",
       "MetaDataIDKey": "",
       "Name": "tblModifiedBy",
-      "ParentIndex": 3,
+      "ParentIndex": 2,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
@@ -17445,7 +17445,7 @@
       "LayoutName": "",
       "MetaDataIDKey": "",
       "Name": "tblTitle",
-      "ParentIndex": 1,
+      "ParentIndex": 4,
       "PersistMetaDataIDKey": false,
       "Properties": [
         {
