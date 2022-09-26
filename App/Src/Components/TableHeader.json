@@ -1153,7 +1153,7 @@
       },
       "FilterOnSelect"
     ],
-    "LastModifiedTimestamp": "637995344326535000",
+    "LastModifiedTimestamp": "637997703604307029",
     "Name": "TableHeader",
     "Rules": [
       {
@@ -1318,7 +1318,7 @@
   "IsPcfControl": false,
   "IsPremiumPcfControl": false,
   "IsWidgetTemplate": false,
-  "LastModifiedTimestamp": "637995344326535000",
+  "LastModifiedTimestamp": "637997703604307029",
   "Name": "7220e3f12999461885b9764ee87e2f2d",
   "OverridableProperties": {},
   "Version": "637725869228806505"

@@ -743,7 +743,7 @@
                   },
                   {
                     "Category": "Behavior",
-                    "InvariantScript": "Set(checkBoxValue, \"5_1\");\nSet(varReset, true);Set(varReset, false)\n",
+                    "InvariantScript": "Set(checkBoxValue, \"5_1\");\r\nSet(varReset, true);Set(varReset, false)\r\n",
                     "Property": "OnCheck",
                     "RuleProviderType": "Unknown"
                   },
@@ -1221,7 +1221,7 @@
                   },
                   {
                     "Category": "Behavior",
-                    "InvariantScript": "Set(checkBoxValue, \"5_2\");\nSet(varReset, true);Set(varReset, false)\n",
+                    "InvariantScript": "Set(checkBoxValue, \"5_2\");\r\nSet(varReset, true);Set(varReset, false)\r\n",
                     "Property": "OnCheck",
                     "RuleProviderType": "Unknown"
                   },
@@ -1706,7 +1706,7 @@
                   },
                   {
                     "Category": "Behavior",
-                    "InvariantScript": "Set(checkBoxValue, \"5_3\");\nSet(varReset, true);Set(varReset, false)\n",
+                    "InvariantScript": "Set(checkBoxValue, \"5_3\");\r\nSet(varReset, true);Set(varReset, false)\r\n",
                     "Property": "OnCheck",
                     "RuleProviderType": "Unknown"
                   },
@@ -2184,7 +2184,7 @@
                   },
                   {
                     "Category": "Behavior",
-                    "InvariantScript": "Set(checkBoxValue, \"5_4\");\nSet(varReset, true);Set(varReset, false)",
+                    "InvariantScript": "Set(checkBoxValue, \"5_4\");\r\nSet(varReset, true);Set(varReset, false)",
                     "Property": "OnCheck",
                     "RuleProviderType": "Unknown"
                   },
@@ -2662,7 +2662,7 @@
                   },
                   {
                     "Category": "Behavior",
-                    "InvariantScript": "Set(checkBoxValue, \"5_5\");\nSet(varReset, true);Set(varReset, false)",
+                    "InvariantScript": "Set(checkBoxValue, \"5_5\");\r\nSet(varReset, true);Set(varReset, false)",
                     "Property": "OnCheck",
                     "RuleProviderType": "Unknown"
                   },
@@ -3402,7 +3402,7 @@
                   },
                   {
                     "Category": "Behavior",
-                    "InvariantScript": "Set(checkBoxValue, \"4_1\");\nSet(varReset, true);Set(varReset, false)\n",
+                    "InvariantScript": "Set(checkBoxValue, \"4_1\");\r\nSet(varReset, true);Set(varReset, false)\r\n",
                     "Property": "OnCheck",
                     "RuleProviderType": "Unknown"
                   },
@@ -3880,7 +3880,7 @@
                   },
                   {
                     "Category": "Behavior",
-                    "InvariantScript": "Set(checkBoxValue, \"4_2\");\nSet(varReset, true);Set(varReset, false)\n",
+                    "InvariantScript": "Set(checkBoxValue, \"4_2\");\r\nSet(varReset, true);Set(varReset, false)\r\n",
                     "Property": "OnCheck",
                     "RuleProviderType": "Unknown"
                   },
@@ -4358,7 +4358,7 @@
                   },
                   {
                     "Category": "Behavior",
-                    "InvariantScript": "Set(checkBoxValue, \"4_3\");\nSet(varReset, true);Set(varReset, false)\n",
+                    "InvariantScript": "Set(checkBoxValue, \"4_3\");\r\nSet(varReset, true);Set(varReset, false)\r\n",
                     "Property": "OnCheck",
                     "RuleProviderType": "Unknown"
                   },
@@ -4836,7 +4836,7 @@
                   },
                   {
                     "Category": "Behavior",
-                    "InvariantScript": "Set(checkBoxValue, \"4_4\");\nSet(varReset, true);Set(varReset, false)\n",
+                    "InvariantScript": "Set(checkBoxValue, \"4_4\");\r\nSet(varReset, true);Set(varReset, false)\r\n",
                     "Property": "OnCheck",
                     "RuleProviderType": "Unknown"
                   },
@@ -5314,7 +5314,7 @@
                   },
                   {
                     "Category": "Behavior",
-                    "InvariantScript": "Set(checkBoxValue, \"4_5\");\nSet(varReset, true);Set(varReset, false)\n",
+                    "InvariantScript": "Set(checkBoxValue, \"4_5\");\r\nSet(varReset, true);Set(varReset, false)\r\n",
                     "Property": "OnCheck",
                     "RuleProviderType": "Unknown"
                   },
@@ -6047,7 +6047,7 @@
                   },
                   {
                     "Category": "Behavior",
-                    "InvariantScript": "Set(checkBoxValue, \"3_1\");\nSet(varReset, true);Set(varReset, false)\n",
+                    "InvariantScript": "Set(checkBoxValue, \"3_1\");\r\nSet(varReset, true);Set(varReset, false)\r\n",
                     "Property": "OnCheck",
                     "RuleProviderType": "Unknown"
                   },
@@ -6518,7 +6518,7 @@
                   },
                   {
                     "Category": "Behavior",
-                    "InvariantScript": "Set(checkBoxValue, \"3_2\");\nSet(varReset, true);Set(varReset, false)",
+                    "InvariantScript": "Set(checkBoxValue, \"3_2\");\r\nSet(varReset, true);Set(varReset, false)",
                     "Property": "OnCheck",
                     "RuleProviderType": "Unknown"
                   },
@@ -6989,7 +6989,7 @@
                   },
                   {
                     "Category": "Behavior",
-                    "InvariantScript": "Set(checkBoxValue, \"3_3\");\nSet(varReset, true);Set(varReset, false)",
+                    "InvariantScript": "Set(checkBoxValue, \"3_3\");\r\nSet(varReset, true);Set(varReset, false)",
                     "Property": "OnCheck",
                     "RuleProviderType": "Unknown"
                   },
@@ -7460,7 +7460,7 @@
                   },
                   {
                     "Category": "Behavior",
-                    "InvariantScript": "Set(checkBoxValue, \"3_4\");\nSet(varReset, true);Set(varReset, false)\n",
+                    "InvariantScript": "Set(checkBoxValue, \"3_4\");\r\nSet(varReset, true);Set(varReset, false)\r\n",
                     "Property": "OnCheck",
                     "RuleProviderType": "Unknown"
                   },
@@ -7931,7 +7931,7 @@
                   },
                   {
                     "Category": "Behavior",
-                    "InvariantScript": "Set(checkBoxValue, \"3_5\");\nSet(varReset, true);Set(varReset, false)\n",
+                    "InvariantScript": "Set(checkBoxValue, \"3_5\");\r\nSet(varReset, true);Set(varReset, false)\r\n",
                     "Property": "OnCheck",
                     "RuleProviderType": "Unknown"
                   },
@@ -8664,7 +8664,7 @@
                   },
                   {
                     "Category": "Behavior",
-                    "InvariantScript": "Set(checkBoxValue, \"2_1\");\nSet(varReset, true);Set(varReset, false)\n",
+                    "InvariantScript": "Set(checkBoxValue, \"2_1\");\r\nSet(varReset, true);Set(varReset, false)\r\n",
                     "Property": "OnCheck",
                     "RuleProviderType": "Unknown"
                   },
@@ -9135,7 +9135,7 @@
                   },
                   {
                     "Category": "Behavior",
-                    "InvariantScript": "Set(checkBoxValue, \"2_2\");\nSet(varReset, true);Set(varReset, false)\n",
+                    "InvariantScript": "Set(checkBoxValue, \"2_2\");\r\nSet(varReset, true);Set(varReset, false)\r\n",
                     "Property": "OnCheck",
                     "RuleProviderType": "Unknown"
                   },
@@ -9606,7 +9606,7 @@
                   },
                   {
                     "Category": "Behavior",
-                    "InvariantScript": "Set(checkBoxValue, \"2_3\");\nSet(varReset, true);Set(varReset, false)",
+                    "InvariantScript": "Set(checkBoxValue, \"2_3\");\r\nSet(varReset, true);Set(varReset, false)",
                     "Property": "OnCheck",
                     "RuleProviderType": "Unknown"
                   },
@@ -10077,7 +10077,7 @@
                   },
                   {
                     "Category": "Behavior",
-                    "InvariantScript": "Set(checkBoxValue, \"2_4\");\nSet(varReset, true);Set(varReset, false)\n",
+                    "InvariantScript": "Set(checkBoxValue, \"2_4\");\r\nSet(varReset, true);Set(varReset, false)\r\n",
                     "Property": "OnCheck",
                     "RuleProviderType": "Unknown"
                   },
@@ -10548,7 +10548,7 @@
                   },
                   {
                     "Category": "Behavior",
-                    "InvariantScript": "Set(checkBoxValue, \"2_5\");\nSet(varReset, true);Set(varReset, false)\n",
+                    "InvariantScript": "Set(checkBoxValue, \"2_5\");\r\nSet(varReset, true);Set(varReset, false)\r\n",
                     "Property": "OnCheck",
                     "RuleProviderType": "Unknown"
                   },
@@ -11281,7 +11281,7 @@
                   },
                   {
                     "Category": "Behavior",
-                    "InvariantScript": "Set(checkBoxValue, \"1_1\");\nSet(varReset, true);Set(varReset, false)\n",
+                    "InvariantScript": "Set(checkBoxValue, \"1_1\");\r\nSet(varReset, true);Set(varReset, false)\r\n",
                     "Property": "OnCheck",
                     "RuleProviderType": "Unknown"
                   },
@@ -11752,7 +11752,7 @@
                   },
                   {
                     "Category": "Behavior",
-                    "InvariantScript": "Set(checkBoxValue, \"1_2\");\nSet(varReset, true);Set(varReset, false)\n",
+                    "InvariantScript": "Set(checkBoxValue, \"1_2\");\r\nSet(varReset, true);Set(varReset, false)\r\n",
                     "Property": "OnCheck",
                     "RuleProviderType": "Unknown"
                   },
@@ -12223,7 +12223,7 @@
                   },
                   {
                     "Category": "Behavior",
-                    "InvariantScript": "Set(checkBoxValue, \"1_3\");\nSet(varReset, true);Set(varReset, false)\n",
+                    "InvariantScript": "Set(checkBoxValue, \"1_3\");\r\nSet(varReset, true);Set(varReset, false)\r\n",
                     "Property": "OnCheck",
                     "RuleProviderType": "Unknown"
                   },
@@ -12694,7 +12694,7 @@
                   },
                   {
                     "Category": "Behavior",
-                    "InvariantScript": "Set(checkBoxValue, \"1_4\");\nSet(varReset, true);Set(varReset, false)\n",
+                    "InvariantScript": "Set(checkBoxValue, \"1_4\");\r\nSet(varReset, true);Set(varReset, false)\r\n",
                     "Property": "OnCheck",
                     "RuleProviderType": "Unknown"
                   },
@@ -13165,7 +13165,7 @@
                   },
                   {
                     "Category": "Behavior",
-                    "InvariantScript": "Set(checkBoxValue, \"1_5\");\nSet(varReset, true);Set(varReset, false)\n",
+                    "InvariantScript": "Set(checkBoxValue, \"1_5\");\r\nSet(varReset, true);Set(varReset, false)\r\n",
                     "Property": "OnCheck",
                     "RuleProviderType": "Unknown"
                   },
@@ -15585,7 +15585,7 @@
       },
       "defaultValueIn"
     ],
-    "LastModifiedTimestamp": "637995344326636287",
+    "LastModifiedTimestamp": "637997703604413934",
     "Name": "cmpRiskAnalysis_CheckBox",
     "Rules": [
       {
@@ -15831,7 +15831,7 @@
   "IsPcfControl": false,
   "IsPremiumPcfControl": false,
   "IsWidgetTemplate": false,
-  "LastModifiedTimestamp": "637995344326636287",
+  "LastModifiedTimestamp": "637997703604413934",
   "Name": "91007e52c065421791e52c5999966b16",
   "OverridableProperties": {},
   "TemplateOriginalName": "c8501110d10b4686bbb7886ef8be620c",
