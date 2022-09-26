@@ -189,7 +189,7 @@ Mgmt_My_Department As screen:
                 Height: =Parent.Height - Self.Y - 20 //Self.TemplateHeight * CountRows(MgmtTable.AllItems)
                 Items: |-
                     =SortByColumns(
-                        colMyDepartment,
+                        Filter(colMyDepartment, Secrecy = false || AuthorName = First(colUser).DisplayName),
                         If(
                             locSortColumn = "Type",
                             "Title",
