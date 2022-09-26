@@ -1732,7 +1732,7 @@ Start As screen:
 
     "'TEST department' As groupContainer":
         Height: =189
-        Visible: =User().FullName = "Patrik Goodwin" Or User().FullName = "Tilda Taubert" Or (User().FullName = "Anton Störling" And varAdminMode = 5)
+        Visible: =User().FullName = "Patrik Goodwin" Or User().FullName = "Tilda Taubert" Or User().FullName = "Kesing Huang" Or (User().FullName = "Anton Störling" And varAdminMode = 5)
         Width: =613
         Y: =Button8.Y + Button8.Height
         ZIndex: =20
